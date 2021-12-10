@@ -15,8 +15,6 @@
     "@testing-library/user-event": "^10.1.2",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
     "closest": "^0.0.1",
     "dagre": "^0.8.5",
     "immer": "^9.0.1",
@@ -80,6 +78,8 @@
   },
   "peerDependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11"
   }
 }
