@@ -7,11 +7,11 @@ import {enableMapSet} from "immer";
 enableMapSet();
 
 function initStore() {
+    // @ts-ignore
     return createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 }
 
 function AppModule() {
-    // @ts-ignore
     const store = useState(initStore())[0];
     return (
         <AppContainer store={store}/>
