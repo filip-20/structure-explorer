@@ -33,7 +33,7 @@ function AppComponent(props: {instance: any, onStateChange: () => void}) {
     );
 }
 
-export {
+export default {
   prepare,
   AppComponent,
 };
