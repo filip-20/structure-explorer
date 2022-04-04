@@ -41,7 +41,7 @@
     "eject": "react-scripts eject",
     "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",
-    "build-module": "npx del-cli lib/dist/ && npx babel --extensions '.ts,.tsx,.js' src/ --out-dir lib/dist && copyfiles -u 2 'public/webfonts/*' lib/dist/static/webfonts && npx isolate-css-cli -p fol-graphexplorer-cYTZ7LnVXZ -u 1 -o lib/dist/static public/css/ && copyfiles -u 2 'public/css/google-fonts.css' 'lib/dist/static/css/'",
+    "build-module": "node buildModule.js",
     "prepare": "npm run build-module"
   },
   "eslintConfig": {
@@ -70,7 +70,6 @@
     "@types/react-toggle": "^4.0.2",
     "babel-plugin-transform-import-css": "^1.0.0-alpha.11",
     "copyfiles": "^2.4.1",
-    "del-cli": "^4.0.1",
     "gh-pages": "^3.2.2",
     "isolate-css": "github:4zzz/isolate-css",
     "lodash": "latest",
