@@ -6,6 +6,11 @@ import {enableMapSet} from "immer";
 import { stateToJSON } from './stateToJSON';
 import { importAppState } from './redux/actions';
 
+import './static/css/all.iso.css';
+import './static/css/bootstrap.iso.css';
+import './static/css/index.iso.css';
+import './static/css/google-fonts.css';
+
 enableMapSet();
 
 function prepare(initialState: any) {
@@ -29,7 +34,9 @@ function AppComponent(props: {instance: any, onStateChange: () => void}) {
     const store = props.instance.store;
     store.subscribe(() => props.onStateChange())
     return (
-        <AppContainer store={store}/>
+        <div className="fol-graphexplorer-cYTZ7LnVXZ">
+          <AppContainer store={store}/>
+        </div>
     );
 }
 
