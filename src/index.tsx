@@ -6,11 +6,6 @@ import {createStore} from "redux";
 import reducer from "./redux/reducers";
 import {enableMapSet} from "immer";
 
-import '../public/css/all.css';
-import '../public/css/bootstrap.css';
-import '../public/css/index.css';
-import '../public/css/google-fonts.css';
-
 enableMapSet();
 
 // @ts-ignore
