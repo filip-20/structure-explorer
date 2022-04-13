@@ -29,7 +29,7 @@ class Formula extends Expression {
     return [];
   }
 
-  substitute(from, to){
+  substitute(_from, _to, _bound) {
     //nothing
   }
 

@@ -44,7 +44,7 @@ class Constant extends Term {
     return new Constant(this.name);
   }
 
-  substitute(from, to){
+  substitute(_from, _to, _bound){
     return this.createCopy();
   }
 

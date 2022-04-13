@@ -41,9 +41,7 @@ class Conjunction extends Formula {
   }
 
   createCopy(){
-    let subLeft = this.subLeft.createCopy();
-    let subRight = this.subRight.createCopy();
-    return new Conjunction(subLeft, subRight);
+    return new Conjunction(this.subLeft.createCopy(), this.subRight.createCopy());
   }
 
   getType(commitment){
@@ -54,8 +52,8 @@ class Conjunction extends Formula {
     return [this.subLeft, this.subRight];
   }
 
-  substitute(from, to){
-    return new Conjunction(this.subLeft.substitute(from, to), this.subRight.substitute(from, to));
+  substitute(from, to, bound){
+    return new Conjunction(this.subLeft.substitute(from, to, bound), this.subRight.substitute(from, to, bound));
   }
 
   getSubFormulasCommitment(commitment){

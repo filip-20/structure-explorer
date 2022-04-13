@@ -45,9 +45,7 @@ class Equivalence extends Formula {
     }
 
     createCopy(){
-        let subLeft = this.subLeft.createCopy();
-        let subRight = this.subRight.createCopy();
-        return new Equivalence(subLeft, subRight);
+        return new Equivalence(this.subLeft.createCopy(), this.subRight.createCopy());
     }
 
     getType(commitment){
@@ -60,8 +58,8 @@ class Equivalence extends Formula {
         return [toRightImpl, toLeftImpl];
     }
 
-    substitute(from, to){
-        return new Equivalence(this.subLeft.substitute(from, to), this.subRight.substitute(from, to));
+    substitute(from, to, bound){
+        return new Equivalence(this.subLeft.substitute(from, to, bound), this.subRight.substitute(from, to, bound));
     }
 
     getSubFormulasCommitment(commitment){

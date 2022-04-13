@@ -54,8 +54,8 @@ class Implication extends Formula {
     return [this.subLeft, this.subRight];
   }
 
-  substitute(from, to){
-    return new Implication(this.subLeft.substitute(from, to), this.subRight.substitute(from, to));
+  substitute(from, to, bound){
+    return new Implication(this.subLeft.substitute(from, to, bound), this.subRight.substitute(from, to, bound));
   }
 
   getSubFormulasCommitment(commitment){

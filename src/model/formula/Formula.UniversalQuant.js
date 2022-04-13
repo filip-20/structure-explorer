@@ -46,9 +46,7 @@ class UniversalQuant extends Formula {
   }
 
   createCopy(){
-    let subFormula = this.subFormula.createCopy();
-    let variableName = this.variableName;
-    return new UniversalQuant(variableName, subFormula);
+    return new UniversalQuant(this.variableName, this.subFormula.createCopy());
   }
 
   getType(commitment){
@@ -59,9 +57,9 @@ class UniversalQuant extends Formula {
     return [this.subFormula];
   }
 
-  substitute(from, to){
+  substitute(from, to, bound){
     if (this.variableName !== from) {
-      return new UniversalQuant(to, this.subFormula.substitute(from, to));
+      return new UniversalQuant(this.variableName, this.subFormula.substitute(from, to, new Set([this.variableName,...(bound ?? [])])));
     }
     return this.createCopy();
   }

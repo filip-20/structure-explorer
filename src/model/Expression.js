@@ -14,11 +14,11 @@ class Expression {
 
   }
 
-  eval(structure, e) {
+  eval(_structure, _e) {
     return null;
   }
 
-  substitute(from, to){
+  substitute(_from, _to, _bound) {
     //nothing
   }
 

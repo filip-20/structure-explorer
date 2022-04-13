@@ -39,9 +39,7 @@ class EqualityAtom extends Formula {
   }
 
   createCopy(){
-    let subLeft = this.subLeft.createCopy();
-    let subRight = this.subRight.createCopy();
-    return new EqualityAtom(subLeft, subRight);
+    return new EqualityAtom(this.subLeft.createCopy(), this.subRight.createCopy());
   }
 
   getType(commitment){
@@ -52,8 +50,8 @@ class EqualityAtom extends Formula {
     return [];
   }
 
-  substitute(from, to){
-    return new EqualityAtom(this.subLeft.substitute(from, to), this.subRight.substitute(from, to));
+  substitute(from, to, bound){
+    return new EqualityAtom(this.subLeft.substitute(from, to, bound), this.subRight.substitute(from, to, bound));
   }
 
   getSubFormulasCommitment(commitment){

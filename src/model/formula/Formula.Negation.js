@@ -37,8 +37,7 @@ class Negation extends Formula {
   }
 
   createCopy(){
-    let subFormula = this.subFormula.createCopy();
-    return new Negation(subFormula);
+    return new Negation(this.subFormula.createCopy());
   }
 
   getType(commitment){
@@ -49,8 +48,8 @@ class Negation extends Formula {
     return [this.subFormula];
   }
 
-  substitute(from, to){
-    return new Negation(this.subFormula.substitute(from, to));
+  substitute(from, to, bound){
+    return new Negation(this.subFormula.substitute(from, to, bound));
   }
 
   getSubFormulasCommitment(commitment){

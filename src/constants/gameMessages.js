@@ -1,4 +1,5 @@
-export const FIRST_QUESTION = (params) => `Aký je tvoj predpoklad o formule ${params} ?`;
+import React from "react";
+export const FIRST_QUESTION = (params) => `Čo predpokladáš o pravdivosti formuly ${params} v štruktúre ℳ pri ohodnotení e?`;
 export const ENTRY_SENTENCE = (formula, truth) => `Predpokladáš, že formula ${formula} je ${truth}.`;
 export const EVALUATED_PREDICATE_IN = (formula, formulaName) => `${formula} ∈ i(${formulaName})`;
 export const EVALUATED_PREDICATE_NOT_IN = (formula, formulaName) => `${formula} ∉ i(${formulaName})`;
@@ -6,13 +7,23 @@ export const EVALUATED_EQUALITY = (term1, term2) => `(${term1}) = (${term2})`;
 export const EVALUATED_INEQUALITY = (term1, term2) => `(${term1}) ≠ (${term2})`;
 
 export const WIN_1 = (formula, commitment, result) =>
-    `Vyhral/a si! ${formula} je naozaj ${commitment}, pretože ${result}`;
+    [
+        <strong>Vyhral/a si!</strong>,
+        ` 🎉 Formula ${formula} je naozaj ${commitment}, pretože ${result}.`
+    ];
 export const WIN_2 = (formula, commitment) =>
     `Tvoj úvodný predpoklad, že formula ${formula} je ${commitment}, bol správny.`
 
-export const LOSS = (formula, commitment, result) => `Vyhral/a si! ${formula} je ${commitment}, pretože ${result}`;
+export const LOSS = (formula, commitment, result) =>
+    [
+        <strong>Prehral/a si!</strong>,
+        ` 😞 Formula ${formula} je ${commitment}, pretože ${result}.`
+    ];
 export const COULD_WON = (formula, commitment) =>
-    `Mohol/mohla si však vyhrať. Tvoj úvodný predpoklad, že formula ${formula} je ${commitment}, je správny. Nájdi chybnú odpoveď a zmeň ju!`;
+    [
+        <strong>Mohol/mohla si však vyhrať.</strong>,
+        ` 🤔 Tvoj úvodný predpoklad, že formula ${formula} je ${commitment}, je správny. Nájdi chybnú odpoveď a zmeň ju!`
+    ];
 export const COULD_NOT_WON = (formula, commitment) =>
     `Tvoj úvodný predpoklad, že formula ${formula} je ${commitment}, je chybný.`;
 

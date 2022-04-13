@@ -36,23 +36,25 @@ export class HenkinHintikkaGame extends React.Component {
     }
 
     render(){
+        const { gameHistory, variableIndex } = this.props.formula;
+        const lastHistoryItem = gameHistory[gameHistory.length - 1];
         return(
             <Container>
                 <MessageAreaContainer>
-                    {this.props.formula.gameHistory.map((history, index) =>
+                    {gameHistory.map((history, index) =>
                         history.gameMessages.map(message =>
                             <GameMessageBubble>
                                 {message}
                             </GameMessageBubble>).concat(
                         history.userMessages.map(message => <UserMessageBubble onClick={() => this.props.goBack(this.props.index, index)}>{message}</UserMessageBubble>))
                     )}
-                    {this.generateMessage(this.props.formula.gameHistory[this.props.formula.gameHistory.length - 1], this.props.formula.variableIndex)
+                    {this.generateMessage(lastHistoryItem, variableIndex)
                                         .map(message => <GameMessageBubble>{message}</GameMessageBubble>)}
                 </MessageAreaContainer>
                 <Form.Group>
-                    {this.getChoice(this.props.formula.gameHistory[this.props.formula.gameHistory.length - 1], this.props.formula.variableIndex)}
+                    {this.getChoice(lastHistoryItem, variableIndex)}
                 </Form.Group>
-                {this.toggleVariables(this.props.formula.gameHistory[this.props.formula.gameHistory.length - 1])}
+                {this.toggleVariables(lastHistoryItem)}
             </Container>
         );
     }
@@ -161,7 +163,7 @@ export class HenkinHintikkaGame extends React.Component {
     }
 
     getChoice(entry, variableIndex){
-        const messages = this.generateMessage(entry);
+        const messages = this.generateMessage(entry, variableIndex);
         if(entry.gameCommitment === null){
             return this.chooseCommitment(messages);
         } else {

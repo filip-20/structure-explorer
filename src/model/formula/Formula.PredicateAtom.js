@@ -56,12 +56,7 @@ class PredicateAtom extends Formula {
   }
 
   createCopy(){
-    let terms = [];
-    for(let term of this.terms){
-        terms.push(term.createCopy());
-    }
-    let name = this.name;
-    return new PredicateAtom(name, terms);
+    return new PredicateAtom(this.name, this.terms.map( (term) => term.createCopy() ));
   }
 
   getType(commitment){
@@ -72,8 +67,8 @@ class PredicateAtom extends Formula {
     return [];
   }
 
-  substitute(from, to){
-    return new PredicateAtom(this.name, this.terms.map(term => term.substitute(from, to)));
+  substitute(from, to, bound){
+    return new PredicateAtom(this.name, this.terms.map( (term) => term.substitute(from, to, bound) ));
   }
 
   getSubFormulasCommitment(commitment){

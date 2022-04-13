@@ -46,9 +46,7 @@ class ExistentialQuant extends Formula {
   }
 
   createCopy(){
-    let subFormula = this.subFormula.createCopy();
-    let variableName = this.variableName;
-    return new ExistentialQuant(variableName, subFormula);
+    return new ExistentialQuant(this.variableName, this.subFormula.createCopy());
   }
 
   getType(commitment){
@@ -59,9 +57,9 @@ class ExistentialQuant extends Formula {
     return [this.subFormula];
   }
 
-  substitute(from, to) {
+  substitute(from, to, bound) {
     if (this.variableName !== from) {
-      return new ExistentialQuant(to, this.subFormula.substitute(from, to));
+      return new ExistentialQuant(this.variableName, this.subFormula.substitute(from, to, new Set([this.variableName,...(bound ?? [])])));
     }
     return this.createCopy();
   }

@@ -53,16 +53,11 @@ class FunctionTerm extends Term {
   }
 
   createCopy(){
-    let terms = [];
-    for(let term of this.terms){
-      terms.push(term.createCopy());
-    }
-    let name = this.name;
-    return new FunctionTerm(name, terms);
+    return new FunctionTerm(this.name, this.terms.map( (term) => term.createCopy() ));
   }
 
-  substitute(from, to){
-    return new FunctionTerm(this.name, this.terms.map(term => term.substitute(from, to)));
+  substitute(from, to, bound){
+    return new FunctionTerm(this.name, this.terms.map( (term) => term.substitute(from, to, bound) ));
   }
 
   getVariables(){
