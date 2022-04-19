@@ -30,12 +30,14 @@ function prepare(initialState: any) {
     };
 }
 
-function AppComponent(props: {instance: any, onStateChange: () => void}) {
+function AppComponent(props: {instance: any, onStateChange: () => void, isEdited: boolean}) {
     const store = props.instance.store;
     store.subscribe(() => props.onStateChange())
     return (
-        <div className="fol-graphexplorer-cYTZ7LnVXZ">
-          <AppContainer store={store}/>
+        <div className={"fol-graphexplorer-cYTZ7LnVXZ"}>
+            <div className={!props.isEdited ? ' viewMode' : ''}>
+               <AppContainer store={store}/>
+            </div>
         </div>
     );
 }

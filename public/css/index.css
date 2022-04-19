@@ -39,6 +39,14 @@ body{
     padding-left: 15px;
 }
 
+.viewMode .vh-pane-left {
+    height: unset !important;
+}
+
+.viewMode .vh-pane-right {
+    height: unset !important;
+}
+
 @media all and (max-width: 991px) {
     .vh-pane-left{
         height: calc((100vh - 75px)/2);
