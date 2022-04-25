@@ -8,7 +8,7 @@ export const EVALUATED_INEQUALITY = (term1, term2) => `(${term1}) ≠ (${term2})
 
 export const WIN_1 = (formula, commitment, result) =>
     [
-        <strong>Vyhral/a si!</strong>,
+        <strong key={0}>Vyhral/a si!</strong>,
         ` 🎉 Formula ${formula} je naozaj ${commitment}, pretože ${result}.`
     ];
 export const WIN_2 = (formula, commitment) =>
@@ -16,12 +16,12 @@ export const WIN_2 = (formula, commitment) =>
 
 export const LOSS = (formula, commitment, result) =>
     [
-        <strong>Prehral/a si!</strong>,
+        <strong key={0}>Prehral/a si!</strong>,
         ` 😞 Formula ${formula} je ${commitment}, pretože ${result}.`
     ];
 export const COULD_WON = (formula, commitment) =>
     [
-        <strong>Mohol/mohla si však vyhrať.</strong>,
+        <strong key={0}>Mohol/mohla si však vyhrať.</strong>,
         ` 🤔 Tvoj úvodný predpoklad, že formula ${formula} je ${commitment}, je správny. Nájdi chybnú odpoveď a zmeň ju!`
     ];
 export const COULD_NOT_WON = (formula, commitment) =>
