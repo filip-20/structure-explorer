@@ -25,7 +25,7 @@ class Variable extends Term {
    */
   eval(structure, e) {
     if (!e.has(this.name)) {
-      throw new Error(`Hodnota premennej ${this.name} nie je definovaná. Je voľná, ale nie je v definičnom obore ohodnotenia e.`);
+      throw `Hodnota premennej ${this.name} nie je definovaná. Je voľná, ale nie je v definičnom obore ohodnotenia e.`;
     }
     return e.get(this.name);
   }
@@ -45,7 +45,7 @@ class Variable extends Term {
   substitute(from, to, bound){
     if (this.name === from) {
       if (bound && bound.has(to)) {
-        new Error(`Premennú ${this.name} nemožno substituovať za ${to}, vo formule, v~ktorej je ${to} viazaná.`)
+        throw `Premennú ${this.name} nemožno substituovať za ${to}, vo formule, v ktorej je ${to} viazaná.`;
       }
       return new Variable(to);
     }

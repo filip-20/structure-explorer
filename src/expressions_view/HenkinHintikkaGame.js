@@ -38,18 +38,26 @@ export class HenkinHintikkaGame extends React.Component {
     render(){
         const { gameHistory, variableIndex } = this.props.formula;
         const lastHistoryItem = gameHistory[gameHistory.length - 1];
+        const gameMessageBubble = (message, index) =>
+            <GameMessageBubble key={index}>
+                {message}
+            </GameMessageBubble>;
+        const userMessageBubble = (message, index) =>
+            <UserMessageBubble key={index}
+                onClick={() => this.props.goBack(this.props.index, index)}>
+                {message}
+            </UserMessageBubble>;
+        const historicMessages = (historyItem, index) =>
+            [
+                historyItem.gameMessages.map(gameMessageBubble),
+                historyItem.userMessages.map(userMessageBubble)
+            ]
         return(
             <Container>
                 <MessageAreaContainer>
-                    {gameHistory.map((history, index) =>
-                        history.gameMessages.map(message =>
-                            <GameMessageBubble>
-                                {message}
-                            </GameMessageBubble>).concat(
-                        history.userMessages.map(message => <UserMessageBubble onClick={() => this.props.goBack(this.props.index, index)}>{message}</UserMessageBubble>))
-                    )}
+                    {gameHistory.map(historicMessages)}
                     {this.generateMessage(lastHistoryItem, variableIndex)
-                                        .map(message => <GameMessageBubble>{message}</GameMessageBubble>)}
+                        .map(gameMessageBubble)}
                 </MessageAreaContainer>
                 <Form.Group>
                     {this.getChoice(lastHistoryItem, variableIndex)}
@@ -118,7 +126,7 @@ export class HenkinHintikkaGame extends React.Component {
             <div className={"d-flex justify-content-center"}>
                 <DropdownButton size='sm' variant="outline-primary" className={"rounded mr-3"} alignRight as={ButtonGroup} title="Vyber prvok z domény">
                     {this.props.domain.map((value, index) =>
-                        <Dropdown.Item size='sm' eventKey={index} onClick={() => this.props.setGameDomainChoice(this.props.index, value, messages, [`Premenná ${varName} označuje prvok ${value}`])}>{value}</Dropdown.Item>
+                        <Dropdown.Item size='sm' key={index} eventKey={index} onClick={() => this.props.setGameDomainChoice(this.props.index, value, messages, [`Premenná ${varName} označuje prvok ${value}`])}>{value}</Dropdown.Item>
                     )}
                 </DropdownButton>
                 {this.writeVariables()}

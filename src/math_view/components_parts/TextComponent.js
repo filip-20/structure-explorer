@@ -6,7 +6,7 @@ function TextComponent({labelText,onChangeSetFunction,onLockFunction,textData,te
     return(
         <Row>
             <Col lg={12}>
-                    <Form.Group controlId={idName}>
+                    <Form.Group>
                         <Form.Label>{labelText}</Form.Label>
                         <TextInput
                             errorProperty={errorProperty}
