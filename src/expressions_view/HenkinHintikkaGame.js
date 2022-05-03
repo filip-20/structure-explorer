@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import GameMessageBubble from "./GameMessageBubble";
 import Container from "./Container";
 import MessageAreaContainer from "./MessageAreaContainer";
@@ -36,28 +36,30 @@ export class HenkinHintikkaGame extends React.Component {
     }
 
     render(){
-        const { gameHistory, variableIndex } = this.props.formula;
-        const lastHistoryItem = gameHistory[gameHistory.length - 1];
-        const gameMessageBubble = (message, index) =>
-            <GameMessageBubble key={index}>
+        const { formula, index: formulaIndex, goBack } = this.props;
+        const { gameHistory, variableIndex } = formula;
+        const lastItemIndex = gameHistory.length - 1;
+        const lastHistoryItem = gameHistory[lastItemIndex];
+        const gameMessageBubble = (itemIndex) => (message, messageIndex) =>
+            <GameMessageBubble key={`${itemIndex}gmb${messageIndex}`}>
                 {message}
             </GameMessageBubble>;
-        const userMessageBubble = (message, index) =>
-            <UserMessageBubble key={index}
-                onClick={() => this.props.goBack(this.props.index, index)}>
+        const userMessageBubble = (itemIndex) => (message, messageIndex) =>
+            <UserMessageBubble key={`${itemIndex}umb${messageIndex}`}
+                onClick={() => goBack(formulaIndex, itemIndex)}>
                 {message}
             </UserMessageBubble>;
-        const historicMessages = (historyItem, index) =>
+        const historicMessages = (historyItem, itemIndex) =>
             [
-                historyItem.gameMessages.map(gameMessageBubble),
-                historyItem.userMessages.map(userMessageBubble)
+                historyItem.gameMessages.map(gameMessageBubble(itemIndex)),
+                historyItem.userMessages.map(userMessageBubble(itemIndex))
             ]
         return(
             <Container>
                 <MessageAreaContainer>
-                    {gameHistory.map(historicMessages)}
+                    {gameHistory.flatMap(historicMessages)}
                     {this.generateMessage(lastHistoryItem, variableIndex)
-                        .map(gameMessageBubble)}
+                        .map(gameMessageBubble(lastItemIndex))}
                 </MessageAreaContainer>
                 <Form.Group>
                     {this.getChoice(lastHistoryItem, variableIndex)}
