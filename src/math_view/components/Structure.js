@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Row
 } from "react-bootstrap";
@@ -9,35 +9,38 @@ import {ConstantInterpretation} from "../components_parts";
 import PredicateInterpretation from "../components_parts/PredicateInterpretation";
 import FunctionInterpretation from "../components_parts/FunctionInterpretation";
 import HelpButton from "../../buttons/HelpButton";
+import {Collapse} from "react-bootstrap";
 
 const help = (
-   <div className="collapse" id="help-structure">
-     <div style={{textAlign:"justify"}}>
-       Pomocou editoru štruktúry sa definuje štruktúra. Prvky <strong>domény</strong> sa oddeľujú čiarkami.
-       Pridaním nového symbolu do jazyka sa automaticky pridá vstup na zadanie interpretácie.
-       Interpretácia <strong>konštanty</strong> sa vyberá zo selectu, ktorý automaticky obsahuje prvky z
-       domény. Interpretácia <strong>predikátového symbolu</strong> s&nbsp;aritou&nbsp;<var>n</var> sa zapisuje vo
-       formáte <code>(prvok<sub>1</sub>, …, prvok<sub><var>n</var></sub>)</code>.
-       Interpretácia <strong>funkčného symbolu</strong> s&nbsp;aritou&nbsp;<var>n</var> sa zapisuje vo
-       formáte <code>(prvok<sub>1</sub>, …, prvok<sub><var>n</var></sub>, hodnota)</code>.
-     </div>
-   </div>
+  <div style={{textAlign:"justify"}}>
+    Pomocou editoru štruktúry sa definuje štruktúra. Prvky <strong>domény</strong> sa oddeľujú čiarkami.
+    Pridaním nového symbolu do jazyka sa automaticky pridá vstup na zadanie interpretácie.
+    Interpretácia <strong>konštanty</strong> sa vyberá zo selectu, ktorý automaticky obsahuje prvky z
+    domény. Interpretácia <strong>predikátového symbolu</strong> s&nbsp;aritou&nbsp;<var>n</var> sa zapisuje vo
+    formáte <code>(prvok<sub>1</sub>, …, prvok<sub><var>n</var></sub>)</code>.
+    Interpretácia <strong>funkčného symbolu</strong> s&nbsp;aritou&nbsp;<var>n</var> sa zapisuje vo
+    formáte <code>(prvok<sub>1</sub>, …, prvok<sub><var>n</var></sub>, hodnota)</code>.
+  </div>
 );
 
 function Structure({structure,setDomain,lockDomain,teacherMode,setConstantValue,structureObject,lockConstantValue,setPredicateValueText,lockPredicateValue,toggleTable,toggleDatabase,domain,setPredicateValueTable,setFunctionValueText,lockFunctionValue,setFunctionValueTable}) {
-    let constants = Object.keys(structure.constants);
-    let predicates = Object.keys(structure.predicates);
-    let functions = Object.keys(structure.functions);
+  let constants = Object.keys(structure.constants);
+  let predicates = Object.keys(structure.predicates);
+  let functions = Object.keys(structure.functions);
+
+  const [showHelp, setShowHelp] = useState(false);
 
   return (
      <Card className={"mt-3"}>
        <Card.Header as={"h5"} className={"d-flex justify-content-between"}>
            <span>Štruktúra 𝓜 = (<var>D</var>, <var>i</var>)</span>
-           <HelpButton dataTarget={"#help-structure"}/>
+           <HelpButton onClick={() => setShowHelp(p => !p)}/>
        </Card.Header>
 
        <Card.Body>
-         {help}
+         <Collapse in={showHelp}>
+          {help}
+         </Collapse>
            <Row>
                <Domain structure={structure} setDomain={setDomain} lockDomain={lockDomain} teacherMode={teacherMode} lengthOfCol={12}/>
            </Row>
