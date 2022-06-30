@@ -1,8 +1,12 @@
 {
-  "name": "fol-graphexplorer",
-  "version": "5.6.3",
-  "private": true,
-  "homepage": ".",
+  "name": "@fmfi-uk-1-ain-412/fol-graphexplorer",
+  "version": "5.6.7",
+  "main": "lib/dist/AppComponent.js",
+  "types": "lib/types/types.d.ts",
+  "homepage": "https://fmfi-uk-1-ain-412.github.io/structure-explorer",
+  "files": [
+    "lib/**"
+  ],
   "dependencies": {
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
@@ -12,28 +16,23 @@
     "@testing-library/react": "^10.0.4",
     "@testing-library/user-event": "^10.1.2",
     "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.5",
-    "@types/react": "^16.9.35",
-    "@types/react-dom": "^16.9.8",
     "closest": "^0.0.1",
     "dagre": "^0.8.5",
     "fibers": "^5.0.0",
     "immer": "^9.0.6",
+    "load-styles": "^2.0.0",
     "lodash": "latest",
     "mathjs": "^7.0.0",
     "minimist": "^1.2.5",
     "pathfinding": "^0.4.18",
     "paths-js": "^0.4.10",
-    "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
-    "react-dom": "^16.13.1",
     "react-fontawesome": "^1.7.1",
     "react-scripts": "^3.4.0",
     "react-split-pane": "^2.0.3",
     "redux": "latest",
     "reselect": "^4.0.0",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.26.5",
     "styled-components": "^5.2.1",
     "terser-webpack-plugin": "^3.0.1",
     "typescript": "^3.8.3"
@@ -44,7 +43,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "react-scripts build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "build-module": "node buildModule.js",
+    "prepare": "npm run build-module"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -62,13 +63,37 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "@fmfi-uk-1-ain-412/isolate-css": "^0.1.0",
     "@types/lodash": "^4.14.150",
     "@types/react-bootstrap": "^1.0.1",
     "@types/react-fontawesome": "^1.6.4",
     "@types/react-redux": "^7.1.8",
     "@types/react-toggle": "^4.0.2",
+    "copyfiles": "^2.4.1",
     "gh-pages": "^3.2.2",
     "lodash": "latest",
     "react-redux": "^7.2.0"
+  },
+  "peerDependencies": {
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "description": "Tento repozitár obsahuje zdrojové súbory aplikácie Prieskumník štruktúr, ktorá umožňuje vytvárať a upravovať štruktúry pre jazyky logiky prvého rádu a skúmať pravdivosť formúl a hodnoty termov v nich.",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FMFI-UK-1-AIN-412/structure-explorer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FMFI-UK-1-AIN-412/structure-explorer/issues"
   }
 }

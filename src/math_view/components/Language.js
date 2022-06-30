@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Card from "react-bootstrap/Card";
 import HelpButton from "../../buttons/HelpButton";
 import TextComponent from "../components_parts/TextComponent";
 import ComponentLockButton from "../../buttons/ComponentLockButton";
+import {Collapse} from "react-bootstrap";
 
 const help = (
-    <div className="collapse" id="help-language">
-     <div className="well">
-       Tu sa definuje jazyk. <strong>Symboly konštánt</strong> sa definujú oddelene
-       čiarkou. <strong>Symboly predikátov</strong> sa definujú oddelené čiarkami, vo
-       formáte <code>predikat/arita</code>. <strong>Symboly funkcií</strong> sa definujú oddelené čiarkami, vo
-       formáte <code>funkcia/arita</code>.
-     </div>
-   </div>
+  <div className="well">
+    Tu sa definuje jazyk. <strong>Symboly konštánt</strong> sa definujú oddelene
+    čiarkou. <strong>Symboly predikátov</strong> sa definujú oddelené čiarkami, vo
+    formáte <code>predikat/arita</code>. <strong>Symboly funkcií</strong> sa definujú oddelené čiarkami, vo
+    formáte <code>funkcia/arita</code>.
+  </div>
 );
 
 function constantComponent(props) {
@@ -75,22 +74,28 @@ function functionComponent(props) {
     }
 }
 
-const Language = (props) => (
-   <Card className={"no-border-radius"}>
-     <Card.Header as="h5" className={"d-flex justify-content-between"}>
-         <span>Jazyk 𝓛</span>
-         <div className={"d-flex justify-content-left"}>
+const Language = (props) => {
+  const [showHelp, setShowHelp] = useState(false);
+
+  return (
+    <Card className={"no-border-radius"}>
+      <Card.Header as="h5" className={"d-flex justify-content-between"}>
+          <span>Jazyk 𝓛</span>
+          <div className={"d-flex justify-content-left"}>
             <ComponentLockButton lockFn={() => props.lockLanguageComponent()} locked={props.language.lockedComponent}/>
-            <HelpButton dataTarget={"#help-language"}/>
-         </div>
-     </Card.Header>
-     <Card.Body>
-       {help}
-       {constantComponent(props)}
-       {predicateComponent(props)}
-       {functionComponent(props)}
-     </Card.Body>
-   </Card>
-);
+            <HelpButton onClick={() => setShowHelp(p => !p)} />
+          </div>
+      </Card.Header>
+      <Card.Body>
+        <Collapse in={showHelp}>
+          {help}
+        </Collapse>
+        {constantComponent(props)}
+        {predicateComponent(props)}
+        {functionComponent(props)}
+      </Card.Body>
+    </Card>
+  );
+}
 
 export default Language;

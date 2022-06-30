@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 import {Col, Row} from 'react-bootstrap';
 import {Provider} from 'react-redux';
@@ -10,6 +9,7 @@ import MathSystemContainer from './redux/containers/MathSystemContainer';
 import ButtonToolbarComponent from "./buttons/ButtonToolbarComponent";
 import HelpGraphCollapse from "./buttons/HelpGraphCollapse";
 import {DiagramSystem} from "./graph_view/DiagramSystem";
+import { stateToJSON } from './stateToJSON';
 
 interface AppProps{
   store:any;
@@ -41,7 +41,6 @@ class App extends React.Component<AppProps,AppState> {
     this.setDiagramToggledState = this.setDiagramToggledState.bind(this);
     this.setTeacherModeState = this.setTeacherModeState.bind(this);
     this.setExerciseNameState = this.setExerciseNameState.bind(this);
-    this.makeCordNodes = this.makeCordNodes.bind(this);
     this.clearGraphSelection = this.clearGraphSelection.bind(this);
     this.setCollapseHelpGraphButton = this.setCollapseHelpGraphButton.bind(this);
   }
@@ -50,42 +49,16 @@ class App extends React.Component<AppProps,AppState> {
     this.setState({collapseHelpGraphButton:bool})
   }
 
-  makeCordNodes(diagramState:any){
-    let nodeState = new Map([["domainNodes", diagramState.domainNodes],["constantNodes", diagramState.constantNodes],["ternaryNodes", diagramState.ternaryNodes],["quaternaryNodes",diagramState.quaternaryNodes]]);
-    let nodesCoords:any = {};
-
-    for(let mapName of nodeState.keys()){
-      for(let [nodeName,nodeObject] of nodeState.get(mapName).entries()){
-        if(!nodesCoords.hasOwnProperty(mapName)){
-          nodesCoords[mapName] = {};
-        }
-        let nodeNameInObject = (mapName === "domainNodes" || mapName === "constantNodes")?nodeName:nodeObject.getNodeNameCombination();
-        if(nodeNameInObject){
-          nodesCoords[mapName][nodeNameInObject] = {x:nodeObject.position.x,y:nodeObject.position.y};
-        }
-      }
-    }
-    return nodesCoords;
-  }
-
   exportState() {
     let state = this.props.store.getState();
-    let diagramCordState = this.makeCordNodes(state.diagramState);
-
-    let json = JSON.stringify({
-      common: state.common,
-      language: state.language,
-      structure: state.structure,
-      expressions: state.expressions,
-      diagramCordState: diagramCordState
-    });
+    let json = stateToJSON(state);
 
     return {
         mime: 'application/json',
         filename: this.state.exerciseName.length === 0? (DEFAULT_FILE_NAME + '.json'):(this.state.exerciseName+'.json'),
         contents: json
-      }
     }
+  }
 
   importState(e:any) {
     let file = e.target.files[0];

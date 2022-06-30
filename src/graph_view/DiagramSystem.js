@@ -3,6 +3,8 @@ import React from "react";
 import ExpressionsContainer from "../redux/containers/ExpressionsContainer";
 import DiagramModelContainer from "../redux/containers/DiagramModelContainer";
 
+import styles from "./DiagramSystem.module.css"
+
 export class DiagramSystem extends React.Component {
     constructor(props) {
         super(props);
@@ -11,7 +13,7 @@ export class DiagramSystem extends React.Component {
     render(){
         return(
             <div>
-                <Row className='reactDiagram'>
+                <Row className={styles.reactDiagram}>
                     <Col sm={12} >
                         <DiagramModelContainer store={this.props.store}/>
                     </Col>
