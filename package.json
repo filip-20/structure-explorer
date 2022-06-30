@@ -1,9 +1,9 @@
 {
   "name": "@fmfi-uk-1-ain-412/fol-graphexplorer",
-  "version": "5.6.6",
+  "version": "5.6.7",
   "main": "lib/dist/AppComponent.js",
   "types": "lib/types/types.d.ts",
-  "homepage": ".",
+  "homepage": "https://fmfi-uk-1-ain-412.github.io/structure-explorer",
   "files": [
     "lib/**"
   ],
@@ -89,11 +89,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/4zzz/structure-explorer.git"
+    "url": "git+https://github.com/FMFI-UK-1-AIN-412/structure-explorer.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/4zzz/structure-explorer/issues"
+    "url": "https://github.com/FMFI-UK-1-AIN-412/structure-explorer/issues"
   }
 }
