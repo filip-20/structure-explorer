@@ -18,7 +18,6 @@
     "@types/jest": "^25.2.1",
     "closest": "^0.0.1",
     "dagre": "^0.8.5",
-    "fibers": "^5.0.0",
     "immer": "^9.0.6",
     "load-styles": "^2.0.0",
     "lodash": "latest",
