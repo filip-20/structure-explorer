@@ -8,7 +8,7 @@ import {
     Table,
 } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import {EXPRESSION_LABEL, FORMULA, TERM} from "../constants";
+import {EXPRESSION_LABEL, FORMULA, TERM, UNSELECTED} from "../constants";
 import FontAwesome from 'react-fontawesome';
 import LockButton from '../buttons/LockButton';
 import HelpButton from "../buttons/HelpButton";
@@ -89,7 +89,7 @@ const helpTerm = (
 
 const getFormulaAnswers = () => (
    <React.Fragment>
-     <option key={'-1'} value={'-1'}>⊨/⊭?</option>
+     <option key={'unselected'} value={''}>⊨/⊭?</option>
      <option key={'true'} value={'true'}>⊨</option>
      <option key={'false'} value={'false'}>⊭</option>
    </React.Fragment>
@@ -200,7 +200,7 @@ const Expressions = (props) => {
                     </Col>
 
                     <Col className="pr-0 text-nowrap mb-1">
-                      {item.answerValue !== '' && item.answerValue !== '-1' ?
+                      {item.answerValue !== '' ?
                         (item.answerValue === item.expressionValue ?
                           <strong className="text-success pr-0"><FontAwesome
                             name='check' /><span className='d-none d-sm-inline'>&nbsp;Correct</span></strong> :

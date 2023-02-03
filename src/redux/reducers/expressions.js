@@ -308,8 +308,8 @@ function checkExpressionSyntax(expressions, state, action, variables) {
 function setExpressionAnswer(expressions, expressionType, expressionIndex, answer) {
   if (expressionType === FORMULA && expressionIndex < expressions.formulas.length) {
     let ans = (answer === 'true');
-    if (answer === '-1')
-      ans = '-1';
+    if (answer === '')
+      ans = '';
     expressions.formulas[expressionIndex].answerValue = ans;
   } else if (expressionType === TERM && expressionIndex < expressions.terms.length) {
     expressions.terms[expressionIndex].answerValue = answer;
