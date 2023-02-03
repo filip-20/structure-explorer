@@ -46,12 +46,6 @@ body {
     width: 12px !important;
 }
 
-.viewMode .split-pane,
-.viewMode .vh-pane-left,
-.viewMode .vh-pane-right {
-    height: auto !important;
-}
-
 @media all and (max-width: 991.9px) {
     .split-pane {
         /* cancel-out container-fluid's padding so that the resizer spans
@@ -86,4 +80,41 @@ body {
     .split-pane {
         height: auto !important;
     }
+}
+
+.viewMode .split-pane,
+.viewMode .vh-pane-left,
+.viewMode .vh-pane-right {
+    height: auto !important;
+}
+
+.viewMode .btn {
+    display: none;
+}
+
+.viewMode .form-control,
+.viewMode .input-group-prepend,
+.viewMode .input-group-append,
+.viewMode .input-group-text {
+    border: none;
+    background: initial;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+}
+
+.viewMode .input-group.mb-1 {
+    margin-bottom: 0 !important;
+}
+
+.viewMode .form-control {
+    height: auto !important;
+}
+
+.viewMode .form-group {
+    margin-bottom: 0.5rem;
+}
+
+.viewMode .form-label {
+    margin-bottom: 0.25rem;
 }
