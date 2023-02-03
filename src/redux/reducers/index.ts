@@ -8,15 +8,17 @@ import {defaultState as expressionsDefaultState} from "./expressions";
 import {defaultState as structureDefaultState} from "./structure";
 import {defaultState as languageDefaultState} from "./language";
 
-const defaultState = {
-    common: {
-        teacherMode: false
-    },
-    language: languageDefaultState(),
-    structure: structureDefaultState(),
-    expressions: expressionsDefaultState(),
-    diagramState:diagramDefaultState()
-};
+function defaultState() {
+    return {
+        common: {
+            teacherMode: false
+        },
+        language: languageDefaultState(),
+        structure: structureDefaultState(),
+        expressions: expressionsDefaultState(),
+        diagramState: diagramDefaultState()
+    };
+}
 
 function checkImportedState(state:any) {
     if (!state.common || !state.language || !state.structure) {
@@ -27,7 +29,7 @@ function checkImportedState(state:any) {
     }
 }
 
-function root(state = defaultState, action:any) {
+function root(state = defaultState(), action:any) {
     if (action.type === IMPORT_APP) {
         try {
             const importedState = JSON.parse(action.content);
@@ -41,18 +43,18 @@ function root(state = defaultState, action:any) {
 
     }
 
-    let common = teacherModeReducer(state.common, action);
-    let language = languageReducer(state.language, action);
-    let structure = structureReducer(state.structure, action, {language});
-    let expressions = expressionsReducer(state.expressions, action, {language, structure})
-    let diagramState = diagramReducer(state.diagramState, action, state);
+    const common = teacherModeReducer(state.common, action);
+    const language = languageReducer(state.language, action);
+    const structure = structureReducer(state.structure, action, {language});
+    const expressions = expressionsReducer(state.expressions, action, {language, structure})
+    const diagramState = diagramReducer(state.diagramState, action, state);
 
     return {
-        common: common,
-        language: language,
-        structure: structure,
-        expressions: expressions,
-        diagramState: diagramState
+        common,
+        language,
+        structure,
+        expressions,
+        diagramState
     }
 }
 

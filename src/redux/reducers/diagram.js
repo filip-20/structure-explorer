@@ -31,8 +31,8 @@ import {TernaryNodeModel} from "../../graph_view/nodes/ternary/TernaryNodeModel"
 import {QuaternaryNodeModel} from "../../graph_view/nodes/quaternary/QuaternaryNodeModel";
 import {getStructureObject} from "../selectors/structureObject";
 
-export function defaultState(){
-  let diagramModel = new DiagramModel();
+export function defaultState() {
+  const diagramModel = new DiagramModel();
   return{
     diagramModel: diagramModel,
     diagramEngine: new DiagramApplication(diagramModel).diagramEngine,
