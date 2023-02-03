@@ -5,7 +5,7 @@ import TableButton from "../../buttons/TableButton";
 import DatabaseButton from "../../buttons/DatabaseButton";
 
 const TextInput = ({onChange, onLock, textData, label, teacherMode, id, toggleTable, toggleDatabase, arity, domain,databaseEnabled,tableEnabled,errorProperty}) => (
-    <InputGroup size='sm' >
+    <InputGroup size='sm' className='has-validation'>
         <InputGroup.Prepend>
             <InputGroup.Text>{label}</InputGroup.Text>
         </InputGroup.Prepend>

@@ -9,7 +9,7 @@ export function ConstantInterpretation({structure,setConstantValue,structureObje
             <Form.Label>Interpretation of individual constants</Form.Label>
             {Object.keys(structure.constants).map((constant) =>
                 <Form.Group key={constant} >
-                    <InputGroup size='sm'>
+                    <InputGroup size='sm' className='has-validation'>
                         <InputGroup.Prepend>
                             <InputGroup.Text id={'constant-' + constant}><var>i</var>({constant}) = </InputGroup.Text>
                         </InputGroup.Prepend>
