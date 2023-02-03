@@ -123,8 +123,8 @@ const Expressions = (props) => {
   return (
     <React.Fragment>
       {prepareExpressions(props.formulas, props.terms).map(expression =>
-        <Card className={expression.expressionType == TERM ? "mt-3" : ""} key={expression.expressionType}>
-          <Card.Header as={"h5"} className={"d-flex justify-content-between"}>
+        <Card className='mb-3' key={expression.expressionType}>
+          <Card.Header as='h5' className='d-flex justify-content-between'>
             <span>{expression.panelTitle}</span>
             <HelpButton onClick={() => setShowHelp(p => {const k = expression.expressionType.toLowerCase(); p[k] = (p[k] === undefined ? true : undefined); return Object.create(p)})}/>
           </Card.Header>
@@ -134,8 +134,8 @@ const Expressions = (props) => {
             </Collapse>
             {expression.items.map((item, index) =>
               <Form key={"expression-form-" + index}>
-                <Form.Group className="mb-1">
-                  <InputGroup size='sm'>
+                <Form.Group>
+                  <InputGroup size='sm' className='mb-1 has-validation'>
                     <InputGroup.Prepend>
                       <InputGroup.Text id={expression.expressionType.toLowerCase() + '-' + index}>{EXPRESSION_LABEL[expression.expressionType]}<sub>{index + 1}</sub></InputGroup.Text>
                     </InputGroup.Prepend>
@@ -160,10 +160,8 @@ const Expressions = (props) => {
                     </InputGroup.Append>
                     <Form.Control.Feedback type={"invalid"}>{item.errorMessage}</Form.Control.Feedback>
                   </InputGroup>
-                </Form.Group>
-                <Form.Row>
-                  <Col xs={true} sm={true} md={true} lg={true}>
-                    <Form.Group>
+                  <Form.Row className='align-items-center'>
+                    <Col xs="auto" className='mb-1'>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
                           <InputGroup.Text as='label' for={expression.expressionType.toLowerCase() + '-answer-' + index}>
@@ -195,29 +193,31 @@ const Expressions = (props) => {
                           </InputGroup.Append>
                         ) : null}
                       </InputGroup>
-                    </Form.Group>
-                  </Col>
+                    </Col>
 
-                  <Col className={"pt-1 no-padding-right"}>
-                    {item.answerValue !== '' && item.answerValue !== '-1' ?
-                      (item.answerValue === item.expressionValue ?
-                        <strong className="text-success no-padding-right"><FontAwesome
-                          name='check' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Correct</span></strong> :
-                        <strong className="text-danger"><FontAwesome
-                          name='times' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Incorrect</span></strong>
-                      ) : null}
-                  </Col>
+                    <Col className="pr-0 text-nowrap mb-1">
+                      {item.answerValue !== '' && item.answerValue !== '-1' ?
+                        (item.answerValue === item.expressionValue ?
+                          <strong className="text-success pr-0"><FontAwesome
+                            name='check' />&nbsp;Correct</strong> :
+                          <strong className="text-danger"><FontAwesome
+                            name='times' />&nbsp;Incorrect</strong>
+                        ) : null}
+                    </Col>
 
-                  <Col xs={true} sm={true} md={true} lg={true} className={"no-padding-right"}>
-                    {expression.expressionType === FORMULA ?
-                      <HenkinHintikkaGameButton
-                        onClick={() => props.initiateGame(index)}
-                        enabled={item.gameEnabled} /> : null}
-                  </Col>
-                </Form.Row>
-                <Form.Row>
-                  {item.gameEnabled ? <HenkinHintikkaGameContainer formula={item} domain={props.domain} index={index} /> : null}
-                </Form.Row>
+                    <Col className="pr-0 mb-1">
+                      {expression.expressionType === FORMULA ?
+                        <HenkinHintikkaGameButton
+                          onClick={() => props.initiateGame(index)}
+                          enabled={item.gameEnabled} /> : null}
+                    </Col>
+                  </Form.Row>
+                  {item.gameEnabled
+                    ? <HenkinHintikkaGameContainer index={index}
+                          formula={item}
+                          domain={props.domain} />
+                    : null}
+                </Form.Group>
               </Form>
             )}
             <AddButton onClickAddFunction={props.addExpression} addType={expression.expressionType} />
