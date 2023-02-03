@@ -35,7 +35,7 @@ class EqualityAtom extends Formula {
    * @returns {string}
    */
   toString() {
-    return `(${this.subLeft.toString()} = ${this.subRight.toString()})`;
+    return `${this.subLeft.toString()} = ${this.subRight.toString()}`;
   }
 
   createCopy(){
