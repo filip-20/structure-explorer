@@ -1,9 +1,8 @@
 import {FUNCTION, PREDICATE, UNBINARY} from "./ConstantNames";
-import {RULE_CONSTANTS, RULE_DOMAIN} from "../../constants/parser_start_rules";
 import {DiagramEngine } from "@projectstorm/react-diagrams";
 import {getLanguageObject} from "../../redux/selectors/languageObject";
 import {getStructureObject} from "../../redux/selectors/structureObject";
-let parser = require('../../parser/grammar');
+import {parseConstants, parseDomain} from '@fmfi-uk-1-ain-412/js-fol-parser';
 
 export function canUseNameForGivenArityAndType(elementName:string,elementArity:string,reduxProps:any,type:string):boolean{
     let languageObject = getLanguageObject(reduxProps["store"].getState());
@@ -69,9 +68,12 @@ function setNodeBadNameIfStateContainsNodeWithSameName(state:Map<string,any>,new
     }
 }
 
-function parseText(name:string,setNodeBadName:any,startRule:any){
-    try{
-        parser.parse(name, {startRule: startRule});
+function parseText(name:string, setNodeBadName:any, parse:any){
+    try {
+        if (name.trim() == '' || name.includes(',')) {
+            throw Error('no or multiple identifiers')
+        }
+        parse(name);
         setNodeBadName(false);
         return false;
     }
@@ -80,16 +82,17 @@ function parseText(name:string,setNodeBadName:any,startRule:any){
         return true;
     }
 }
-export function setPredFuncBadNameIfRegexViolated(name:string,setBadName:any){
-   return parseText(name,setBadName,RULE_CONSTANTS);
+
+export function setPredFuncBadNameIfRegexViolated(name:string, setBadName:any){
+   return parseText(name, setBadName, parseConstants);
 }
 
-function setDomainBadNameIfRegexViolated(newName:string,setNodeBadName:any){
-    parseText(newName,setNodeBadName,RULE_DOMAIN)
+function setDomainBadNameIfRegexViolated(newName:string, setNodeBadName:any){
+    parseText(newName, setNodeBadName, parseDomain)
 }
 
-function setConstantsBadNameIfRegexViolated(newName:string,setNodeBadName:any){
-    parseText(newName,setNodeBadName,RULE_CONSTANTS);
+function setConstantsBadNameIfRegexViolated(newName:string, setNodeBadName:any){
+    parseText(newName, setNodeBadName, parseConstants);
 }
 
 export function canUseNameForNode(oldName:string,newName:string,setNodeBadName:any,reduxProps:any,nodeType:string){
