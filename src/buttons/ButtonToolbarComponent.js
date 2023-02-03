@@ -12,19 +12,19 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
             setCollapseHelpGraphButton(false);
         }}>
             <strong>&#123;&nbsp;&#125;</strong>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Sets</span>
+            <span className='d-none d-sm-inline'>&nbsp;Sets</span>
         </Button>
 
         <Button variant='outline-primary' title='Switch to graph view' className={diagramToggledState?' active':''} onClick={() => setDiagramToggledState(true)}>
             <FontAwesome name='fas fa-project-diagram'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Graph</span>
+            <span className='d-none d-sm-inline'>&nbsp;Graph</span>
         </Button>
         </ButtonGroup>
 
         <ButtonGroup className='mr-2'>
         <Button size="md" variant='secondary' title='Export this exercise' onClick={() => {setModelShowState(true);clearGraphSelection();}}>
             <FontAwesome name='fas fa-file-export'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Export</span>
+            <span className='d-none d-sm-inline'>&nbsp;Export</span>
         </Button>
 
         <Button variant='secondary' title='Import an exercise'
@@ -36,7 +36,7 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
                    }}
                    hidden={true}
                    style={{display: 'none'}}/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Import</span>
+            <span className='d-none d-sm-inline'>&nbsp;Import</span>
         </Button>
         </ButtonGroup>
 
@@ -51,7 +51,7 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
         {/*<ButtonGroup>
         <Button variant={'outline-success'} size='lg' title='Teacher mode' className={(teacherModeState?'active':'')} onClick={() => setTeacherModeState()}>
             <FontAwesome name='fas fa-user-edit'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Teacher mode</span>
+            <span className='d-none d-sm-inline'>&nbsp;Teacher mode</span>
         </Button>
         </ButtonGroup>*/}
     </ButtonToolbar>

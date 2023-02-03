@@ -199,9 +199,9 @@ const Expressions = (props) => {
                       {item.answerValue !== '' && item.answerValue !== '-1' ?
                         (item.answerValue === item.expressionValue ?
                           <strong className="text-success pr-0"><FontAwesome
-                            name='check' />&nbsp;Correct</strong> :
+                            name='check' /><span className='d-none d-sm-inline'>&nbsp;Correct</span></strong> :
                           <strong className="text-danger"><FontAwesome
-                            name='times' />&nbsp;Incorrect</strong>
+                            name='times' /><span className='d-none d-sm-inline'>&nbsp;Incorrect</span></strong>
                         ) : null}
                     </Col>
 

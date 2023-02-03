@@ -10,7 +10,7 @@ const HelpGraphButton = ({setCollapseHelpGraphButton,collapseHelpGraphButton}) =
                 aria-expanded={collapseHelpGraphButton}
                 active={collapseHelpGraphButton}>
             <FontAwesome name='fas fa-question'/>
-            <span className='d-none d-lg-inline'>&nbsp;Graph help</span>
+            <span className='d-none d-sm-inline'>&nbsp;Graph help</span>
         </Button>
     </div>
 );
