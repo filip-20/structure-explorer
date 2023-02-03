@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
-import GameMessageBubble from "./GameMessageBubble";
-import Container from "./Container";
+import GameContainer from "./GameContainer";
 import MessageAreaContainer from "./MessageAreaContainer";
 import {Form, Button, DropdownButton, ButtonGroup, Dropdown} from "react-bootstrap";
 import {
@@ -38,7 +37,7 @@ import {
     VAR_IS_ASSIGNED,
     WIN_1, WIN_2
 } from "../constants/gameMessages";
-import {UserMessageBubble} from "./UserMessageBubble";
+import {GameMessageBubble, UserMessageBubble} from "./MessageBubbles";
 import PredicateAtom from "../model/formula/Formula.PredicateAtom";
 import Implication from "../model/formula/Formula.Implication";
 
@@ -67,7 +66,7 @@ export class HenkinHintikkaGame extends React.Component {
                 historyItem.userMessages.map(userMessageBubble(itemIndex))
             ]
         return(
-            <Container>
+            <GameContainer className='rounded'>
                 <MessageAreaContainer>
                     {gameHistory.flatMap(historicMessages)}
                     {this.generateMessage(lastHistoryItem, variableIndex)
@@ -77,7 +76,7 @@ export class HenkinHintikkaGame extends React.Component {
                     {this.getChoice(lastHistoryItem, variableIndex)}
                 </Form.Group>
                 {this.showVariables(lastHistoryItem)}
-            </Container>
+            </GameContainer>
         );
     }
 
