@@ -6,6 +6,9 @@ import StructureContainer from "../redux/containers/StructureContainer";
 import ExpressionsContainer from "../redux/containers/ExpressionsContainer";
 import SplitPane from 'react-split-pane';
 
+const Pane = ({minSize, ...props}) =>
+    <div {...props}/>;
+
 export class MathSystem extends React.Component {
 
     state = { width: window.innerWidth };
@@ -27,17 +30,32 @@ export class MathSystem extends React.Component {
         window.removeEventListener('resize', this.updateDimensions);
     }
 
+    isSplitVertically() {
+        return this.state.width > 991.9;
+    }
+
+    paneMinSize() {
+        return this.isSplitVertically() ? '240px' : '80px';
+    }
+
     render(){
         return(
-            <SplitPane split={this.state.width > 990 ? 'vertical' : 'horizontal'} allowResize={false}>
-                <div className="overflow-auto vh-pane-left">
+            <SplitPane
+                split={this.isSplitVertically() ? 'vertical' : 'horizontal'}
+                allowResize={true}
+                className="split-pane"
+                resizerStyle={{background: 'white'}}
+                paneStyle={{background: 'white'}}>
+                <Pane minSize={this.paneMinSize()}
+                    className="overflow-auto vh-pane-left">
                     <LanguageContainer/>
                     <StructureContainer/>
                     <VariablesValueContainer/>
-                </div>
-                <div className="overflow-auto vh-pane-right">
+                </Pane>
+                <Pane minSize={this.paneMinSize()}
+                    className="overflow-auto vh-pane-right">
                     <ExpressionsContainer diagramModel={this.props.diagramModel}/>
-                </div>
+                </Pane>
             </SplitPane>
         )
     }
