@@ -35,16 +35,20 @@ const helpFormula = (
         <li>Formulas must be properly parenthesized.</li>
         <li>The following notation of logical symbols is accepted:
           <Table size='sm' striped className="my-2 border-bottom">
-            <tr><th>Symbol</th><th>Notation</th></tr>
-            <tr><td>Equality</td><td> =, ≐</td></tr>
-            <tr><td>Non-equality</td><td> !=, {'<>'}, /=, ≠</td></tr>
-            <tr><td>Negation</td><td> \neg, \lnot, -, !, ~, ¬</td></tr>
-            <tr><td>Conjunction</td><td> \wedge, \land, &&, &, /\, ∧</td></tr>
-            <tr><td>Disjunction</td><td> \vee, \lor, ||, |, \/, ∨</td></tr>
-            <tr><td>Implication</td><td> \to, \limpl, {'->'}, →</td></tr>
-            <tr><td>Equivalence</td><td> \lequiv, \leftrightarrow, {'<->'}, ↔︎</td></tr>
-            <tr><td>Existential quantifier</td><td> \exists, \e, \E, ∃</td></tr>
-            <tr><td>General quantifier</td><td> \forall, \a, \A, ∀</td></tr>
+            <thead>
+              <tr><th>Symbol</th><th>Notation</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Equality</td><td> =, ≐</td></tr>
+              <tr><td>Non-equality</td><td> !=, {'<>'}, /=, ≠</td></tr>
+              <tr><td>Negation</td><td> \neg, \lnot, -, !, ~, ¬</td></tr>
+              <tr><td>Conjunction</td><td> \wedge, \land, &&, &, /\, ∧</td></tr>
+              <tr><td>Disjunction</td><td> \vee, \lor, ||, |, \/, ∨</td></tr>
+              <tr><td>Implication</td><td> \to, \limpl, {'->'}, →</td></tr>
+              <tr><td>Equivalence</td><td> \lequiv, \leftrightarrow, {'<->'}, ↔︎</td></tr>
+              <tr><td>Existential quantifier</td><td> \exists, \e, \E, ∃</td></tr>
+              <tr><td>General quantifier</td><td> \forall, \a, \A, ∀</td></tr>
+            </tbody>
           </Table>
         </li>
         <li>The priority of logical symbols:
