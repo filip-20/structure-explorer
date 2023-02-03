@@ -2,25 +2,23 @@ import React, { useState } from 'react';
 import {Col, Form, Row} from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import TextInput from "../components_parts/TextInput";
-import HelpButton from "../../buttons/HelpButton";
+import Help from "../../buttons/Help";
 import {Collapse} from "react-bootstrap";
 
-const help = (
-    <Card id='help-assignment' border='info' className="small mb-3">
-        <Card.Body className="p-2">
-            <p>An assignment of individual variables
-              (i.e., a partial map from individual variables to the domain 𝐷)
-              is defined in this section.</p>
-            <p>Any alphanumeric symbol that is not an individual constant,
-              predicate, or function symbol is considered a variable.</p>
-            <p className='mb-0'>Elements of the assignment are comma-separated ordered pairs.
-              Each pair can be written as <code>(variable, element)</code>
-              or <code>variable ↦ element</code>.
-              The maps-to symbol <code>↦</code> can also be written as{" "}
-              <code>-></code>, <code>|-></code>, <code>\mapsto</code>,
-              or <code>⟼</code>.</p>
-        </Card.Body>
-    </Card>
+const assignmentHelp = (
+    <>
+        <p>An assignment of individual variables
+            (i.e., a partial map from individual variables to the domain 𝐷)
+            is defined in this section.</p>
+        <p>Any alphanumeric symbol that is not an individual constant,
+            predicate, or function symbol is considered a variable.</p>
+        <p className='mb-0'>Elements of the assignment are comma-separated ordered pairs.
+            Each pair can be written as <code>(variable, element)</code>
+            or <code>variable ↦ element</code>.
+            The maps-to symbol <code>↦</code> can also be written as{" "}
+            <code>-></code>, <code>|-></code>, <code>\mapsto</code>,
+            or <code>⟼</code>.</p>
+    </>
 );
 
 const VariablesValue = (props) => {
@@ -29,12 +27,12 @@ const VariablesValue = (props) => {
         <Card className={"mt-3"}>
             <Card.Header as="h5" className={"d-flex justify-content-between"}>
                 <span>Variable assignment</span>
-                <HelpButton onClick={() => setShowHelp(p => !p)}/>
+                <Help subject='language'
+                    children={assignmentHelp}
+                    onToggle={setShowHelp}
+                    show={showHelp} />
             </Card.Header>
             <Card.Body>
-                <Collapse in={showHelp}>
-                    {help}
-                </Collapse>
                 <Row>
                     <Col lg={12}>
                         <Form.Group>

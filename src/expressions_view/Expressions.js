@@ -1,24 +1,21 @@
 import React, { useState } from 'react';
 import {
     Button, Col,
-    Collapse,
     Form,
     InputGroup,
-    Row,
     Table,
 } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import {EXPRESSION_LABEL, FORMULA, TERM, UNSELECTED} from "../constants";
 import FontAwesome from 'react-fontawesome';
 import LockButton from '../buttons/LockButton';
-import HelpButton from "../buttons/HelpButton";
+import Help from "../buttons/Help";
 import AddButton from "../buttons/AddButton";
 import HenkinHintikkaGameButton from "../buttons/HenkinHintikkaGameButton";
 import HenkinHintikkaGameContainer from "../redux/containers/HenkinHintikkaGameContainer";
 
 const helpFormula = (
-  <Card id='help-formulas' border='info' className="small mb-3">
-    <Card.Body className="p-2">
+  <>
       <p>The truth of closed first-order formulas in the structure 𝓜
         and the satisfaction of open first-order formulas
         by the valuation of variables 𝑒 in 𝓜
@@ -62,29 +59,26 @@ const helpFormula = (
           </ol>
         </li>
       </ul>
-    </Card.Body>
-  </Card>
+  </>
 );
 
 const helpTerm = (
-  <Card id='help-terms' border='info' className="small mb-3">
-    <Card.Body className="p-2">
-      <p>Denotations of first-order terms in the structure 𝓜
-        for the valuation of variables 𝑒
-        can be examined in this section.</p>
-      <p>The desired/expected denotation can be selected
-        from the menu below the term.
-        Structure Explorer checks the correctness of your selection.</p>
-      <p className='mb-0'>Syntactic requirements:</p>
-      <ul className='mb-0'>
-        <li>All individual constants and function symbols used in the terms
-          must come from the language 𝓛
-          and must be used according to their type and arity.
-          All other alphanumerical symbols are treated as variables.</li>
-        <li>Terms must be properly parenthesized.</li>
-      </ul>
-    </Card.Body>
-  </Card>
+  <>
+    <p>Denotations of first-order terms in the structure 𝓜
+      for the valuation of variables 𝑒
+      can be examined in this section.</p>
+    <p>The desired/expected denotation can be selected
+      from the menu below the term.
+      Structure Explorer checks the correctness of your selection.</p>
+    <p className='mb-0'>Syntactic requirements:</p>
+    <ul className='mb-0'>
+      <li>All individual constants and function symbols used in the terms
+        must come from the language 𝓛
+        and must be used according to their type and arity.
+        All other alphanumerical symbols are treated as variables.</li>
+      <li>Terms must be properly parenthesized.</li>
+    </ul>
+  </>
 );
 
 const getFormulaAnswers = () => (
@@ -123,19 +117,22 @@ function prepareExpressions(formulas, terms) {
 }
 
 const Expressions = (props) => {
-  const [showHelp, setShowHelp] = useState({});
+  const [showHelp, setShowHelp] = useState({ [FORMULA]: false, [TERM]: false });
+  const onToggle = (exprType) => (newValue) =>
+    setShowHelp((sh) => ({...sh, [exprType]: newValue}));
   return (
     <React.Fragment>
       {prepareExpressions(props.formulas, props.terms).map(expression =>
         <Card className='mb-3' key={expression.expressionType}>
           <Card.Header as='h5' className='d-flex justify-content-between'>
             <span>{expression.panelTitle}</span>
-            <HelpButton onClick={() => setShowHelp(p => {const k = expression.expressionType.toLowerCase(); p[k] = (p[k] === undefined ? true : undefined); return Object.create(p)})}/>
+            <Help subject={expression.expressionType.toLowerCase()}
+              show={showHelp[expression.expressionType]}
+              onToggle={onToggle([expression.expressionType])}>
+                {expression.help}
+            </Help>
           </Card.Header>
           <Card.Body>
-            <Collapse in={showHelp[expression.expressionType.toLowerCase()] === true}>
-              {expression.help}
-            </Collapse>
             {expression.items.map((item, index) =>
               <Form key={"expression-form-" + index}>
                 <Form.Group>

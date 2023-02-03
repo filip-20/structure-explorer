@@ -4,12 +4,11 @@ import {Button, ButtonGroup, ButtonToolbar} from 'react-bootstrap';
 import ModalComponent from '../math_view/components_parts/ModalComponent';
 import HelpGraphButton from "./HelpGraphButton";
 
-const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphButton,clearGraphSelection,exportState,setExerciseNameState,modalShowState,diagramToggledState,teacherModeState,setDiagramToggledState, setModelShowState, importState, setTeacherModeState}) => (
+const ButtonToolbarComponent = ({clearGraphSelection,exportState,setExerciseNameState,modalShowState,diagramToggledState,teacherModeState,setDiagramToggledState, setModelShowState, importState, setTeacherModeState}) => (
     <ButtonToolbar>
         <ButtonGroup className='mr-2'>
         <Button variant='outline-primary' title='Switch to set view' className={diagramToggledState?'':' active'} onClick={() => {
             setDiagramToggledState(false);
-            setCollapseHelpGraphButton(false);
         }}>
             <strong>&#123;&nbsp;&#125;</strong>
             <span className='d-none d-sm-inline'>&nbsp;Sets</span>
@@ -42,7 +41,7 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
 
         {diagramToggledState ?
             <ButtonGroup className='mr-2'>
-                <HelpGraphButton collapseHelpGraphButton={collapseHelpGraphButton} setCollapseHelpGraphButton={setCollapseHelpGraphButton}/>
+                <HelpGraphButton/>
             </ButtonGroup>: null
         }
 

@@ -1,26 +1,24 @@
 import React, { useState } from 'react';
 import Card from "react-bootstrap/Card";
-import HelpButton from "../../buttons/HelpButton";
+import Help from "../../buttons/Help";
 import TextComponent from "../components_parts/TextComponent";
 import ComponentLockButton from "../../buttons/ComponentLockButton";
 import {Collapse} from "react-bootstrap";
 
 const languageHelp = (
-    <Card id='help-language' border='info' className="small mb-3">
-        <Card.Body className="p-2">
-            <p>A first-order language is defined in this section.</p>
-            <p>The Edit/Done button toggles between editing
-            the language and viewing it in a more compact form.</p>
-            <p className="mb-0">Syntactic requirements:</p>
-            <ul className="mb-0">
-                <li>Symbols in all sets are <strong>comma-separated</strong>.</li>
-                <li>Each predicate and function symbol
-                must be followed by a slash (<code>/</code>) and arity
-                (the number of arguments the symbol takes, a positive integer):{" "}
-                <strong><code>symbol/arity</code></strong>.</li>
-            </ul>
-        </Card.Body>
-    </Card>
+    <>
+        <p>A first-order language is defined in this section.</p>
+        <p>The Edit/Done button toggles between editing
+        the language and viewing it in a more compact form.</p>
+        <p className="mb-0">Syntactic requirements:</p>
+        <ul className="mb-0">
+            <li>Symbols in all sets are <strong>comma-separated</strong>.</li>
+            <li>Each predicate and function symbol
+            must be followed by a slash (<code>/</code>) and arity
+            (the number of arguments the symbol takes, a positive integer):{" "}
+            <strong><code>symbol/arity</code></strong>.</li>
+        </ul>
+    </>
 );
 
 function constantComponent(props) {
@@ -93,15 +91,13 @@ const Language = (props) => {
           <div className={"d-flex justify-content-left"}>
             <ComponentLockButton lockFn={() => props.lockLanguageComponent()}
                 locked={props.language.lockedComponent} subject='language'/>
-            <HelpButton subject='language'
-                onClick={() => setShowHelp(p => !p)}
-                active={showHelp} />
+            <Help subject='language'
+                children={languageHelp}
+                onToggle={setShowHelp}
+                show={showHelp} />
           </div>
       </Card.Header>
       <Card.Body>
-        <Collapse in={showHelp}>
-            { languageHelp }
-        </Collapse>
         {constantComponent(props)}
         {predicateComponent(props)}
         {functionComponent(props)}
