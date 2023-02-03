@@ -1,6 +1,7 @@
 import React from "react";
 import styled from 'styled-components';
 import {Button} from "react-bootstrap";
+import {BTN_CHANGE} from "../constants/gameMessages";
 
 const UserMessage = styled.div`
   padding: .75rem;
@@ -28,7 +29,7 @@ export class UserMessageBubble extends React.Component {
         if(this.state.entered){
             return (
                 <Button onClick={() => this.props.onClick()} size={"sm"} className={'text-primary bg-transparent border-0 mb-auto float-right mt-2'}>
-                    <strong>Zmeniť</strong>
+                    <strong>{BTN_CHANGE}</strong>
                 </Button>
             );
         }

@@ -8,7 +8,7 @@ import {RelationalTable} from './index'
 function FunctionInterpretation({functions,structure,setFunctionValueText,lockFunctionValue,toggleTable,toggleDatabase,teacherMode,domain,structureObject,setFunctionValueTable,lengthOfCol}) {
     return (
         <Col lg={lengthOfCol}>
-            <Form.Label>Interpretácia funkčných symbolov</Form.Label>
+            <Form.Label>Interpretation of function symbols</Form.Label>
                 {functions.map((name) =>
                     <Form.Group key={name}>
                         <TextInput

@@ -5,13 +5,22 @@ import TextComponent from "../components_parts/TextComponent";
 import ComponentLockButton from "../../buttons/ComponentLockButton";
 import {Collapse} from "react-bootstrap";
 
-const help = (
-  <div className="well">
-    Tu sa definuje jazyk. <strong>Symboly konštánt</strong> sa definujú oddelene
-    čiarkou. <strong>Symboly predikátov</strong> sa definujú oddelené čiarkami, vo
-    formáte <code>predikat/arita</code>. <strong>Symboly funkcií</strong> sa definujú oddelené čiarkami, vo
-    formáte <code>funkcia/arita</code>.
-  </div>
+const languageHelp = (
+    <Card id='help-language' border='info' className="small mb-3">
+        <Card.Body className="p-2">
+            <p>A first-order language is defined in this section.</p>
+            <p>The Edit/Done button toggles between editing
+            the language and viewing it in a more compact form.</p>
+            <p className="mb-0">Syntactic requirements:</p>
+            <ul className="mb-0">
+                <li>Symbols in all sets are <strong>comma-separated</strong>.</li>
+                <li>Each predicate and function symbol
+                must be followed by a slash (<code>/</code>) and arity
+                (the number of arguments the symbol takes, a positive integer):{" "}
+                <strong><code>symbol/arity</code></strong>.</li>
+            </ul>
+        </Card.Body>
+    </Card>
 );
 
 function constantComponent(props) {
@@ -21,7 +30,7 @@ function constantComponent(props) {
         );
     } else {
         return(
-            <TextComponent labelText={"Indivíduové konštanty"}
+            <TextComponent labelText={"Individual constant"}
                            errorProperty={props.language.constants.errorMessage}
                            onChangeSetFunction={props.setConstants}
                            onLockFunction={props.lockConstants}
@@ -41,7 +50,7 @@ function predicateComponent(props) {
         );
     } else {
         return(
-            <TextComponent labelText={"Predikátové symboly"}
+            <TextComponent labelText={"Predicate symbols"}
                            errorProperty={props.language.predicates.errorMessage}
                            onChangeSetFunction={props.setPredicates}
                            onLockFunction={props.lockPredicates}
@@ -61,7 +70,7 @@ function functionComponent(props) {
         );
     } else {
         return(
-            <TextComponent labelText={"Funkčné symboly"}
+            <TextComponent labelText={"Function symbols"}
                            errorProperty={props.language.functions.errorMessage}
                            onChangeSetFunction={props.setFunctions}
                            onLockFunction={props.lockFunctions}
@@ -80,15 +89,18 @@ const Language = (props) => {
   return (
     <Card className={"no-border-radius"}>
       <Card.Header as="h5" className={"d-flex justify-content-between"}>
-          <span>Jazyk 𝓛</span>
+          <span>Language 𝓛</span>
           <div className={"d-flex justify-content-left"}>
-            <ComponentLockButton lockFn={() => props.lockLanguageComponent()} locked={props.language.lockedComponent}/>
-            <HelpButton onClick={() => setShowHelp(p => !p)} />
+            <ComponentLockButton lockFn={() => props.lockLanguageComponent()}
+                locked={props.language.lockedComponent} subject='language'/>
+            <HelpButton subject='language'
+                onClick={() => setShowHelp(p => !p)}
+                active={showHelp} />
           </div>
       </Card.Header>
       <Card.Body>
         <Collapse in={showHelp}>
-          {help}
+            { languageHelp }
         </Collapse>
         {constantComponent(props)}
         {predicateComponent(props)}

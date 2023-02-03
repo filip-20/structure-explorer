@@ -66,7 +66,7 @@ class DownloadButton extends React.Component {
       return (
          <button style={style}  title={this.props.title} onClick={this._onDownload} className={cls}>
            <FontAwesome name='fas fa-save'/>
-           &nbsp;Uložiť
+           &nbsp;Export
          </button>
       );
     }

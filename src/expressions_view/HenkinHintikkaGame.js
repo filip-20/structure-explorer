@@ -11,6 +11,15 @@ import {
     PLAYER_QUANTIFIER
 } from "../constants/gameConstants";
 import {
+    BTN_CONTINUE,
+    BTN_CONT_CURRENT_ASGNMT,
+    BTN_FALSE,
+    BTN_FINISH_GAME,
+    BTN_HIDE,
+    BTN_SHOW,
+    BTN_TRUE,
+    COMMITMENT_FALSE,
+    COMMITMENT_TRUE,
     COULD_NOT_WON,
     COULD_WON,
     ENTRY_SENTENCE,
@@ -20,11 +29,14 @@ import {
     EVALUATED_PREDICATE_NOT_IN,
     FIRST_FORMULA_OPTION,
     FIRST_QUESTION, LOSS,
+    MID_IS,
     OPERATOR_ANSWER, OPERATOR_QUESTION,
-    QUANTIFIER_ANSWER_1,
-    QUANTIFIER_ANSWER_2,
+    QUANTIFIER_ANSWER,
     QUANTIFIER_QUESTION,
-    SECOND_FORMULA_OPTION, WIN_1, WIN_2
+    SECOND_FORMULA_OPTION,
+    SELECT_DOMAIN_ELEM,
+    VAR_IS_ASSIGNED,
+    WIN_1, WIN_2
 } from "../constants/gameMessages";
 import {UserMessageBubble} from "./UserMessageBubble";
 import PredicateAtom from "../model/formula/Formula.PredicateAtom";
@@ -64,20 +76,20 @@ export class HenkinHintikkaGame extends React.Component {
                 <Form.Group>
                     {this.getChoice(lastHistoryItem, variableIndex)}
                 </Form.Group>
-                {this.toggleVariables(lastHistoryItem)}
+                {this.showVariables(lastHistoryItem)}
             </Container>
         );
     }
 
-    toggleVariables(entry){
+    showVariables(entry){
         if(this.props.formula.showVariables) {
             if(entry.gameVariables.size == 0){
                 return (
-                    <p><var>e</var> = &#123;&#160;&#125;</p>
+                    <p>𝑒 = &#123;&#160;&#125;</p>
                 );
             } else {
                 return (
-                    <p><var>e</var> = &#123; {Array.from(entry.gameVariables).map(([key, value]) => key + ' ↦ ' + value).join(', ')} &#125;</p>
+                    <p>𝑒 = &#123; {Array.from(entry.gameVariables).map(([key, value]) => key + ' ↦ ' + value).join(', ')} &#125;</p>
                 );
             }
         } else {
@@ -85,21 +97,31 @@ export class HenkinHintikkaGame extends React.Component {
         }
     }
 
-    writeVariables(){
-        let writeOrHide = 'Zobraziť'
-        if(this.props.formula.showVariables){
-            writeOrHide = 'Skryť';
-        }
+    toggleVariables(){
+        const showOrHide = this.props.formula.showVariables
+            ? BTN_HIDE : BTN_SHOW;
         return(
-            <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.getVariables(this.props.index)}>{writeOrHide} ohodnotenie premenných</Button>
+            <Button size='sm' variant="outline-secondary"
+                className={"rounded mr-3"}
+                onClick={() => this.props.getVariables(this.props.index)}>
+                {showOrHide}{BTN_CONT_CURRENT_ASGNMT}
+            </Button>
         );
     }
 
     chooseCommitment(messages) {
         return (
             <div className={"d-flex justify-content-center"}>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameCommitment(this.props.index, true, messages, ['Pravdivá'])}>Pravdivá</Button>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameCommitment(this.props.index,false, messages, ['Nepravdivá'])}>Nepravdivá</Button>
+                <Button size='sm' variant="outline-primary"
+                    className={"rounded mr-3"}
+                    onClick={() => this.props.setGameCommitment(this.props.index, true, messages, [BTN_TRUE])}>
+                    {BTN_TRUE}
+                </Button>
+                <Button size='sm' variant="outline-primary"
+                    className={"rounded mr-3"}
+                    onClick={() => this.props.setGameCommitment(this.props.index, false, messages, [BTN_FALSE])}>
+                    {BTN_FALSE}
+                </Button>
             </div>
         );
     }
@@ -107,8 +129,8 @@ export class HenkinHintikkaGame extends React.Component {
     chooseFormula(entry, leftCommitment, rightCommitment, messages) {
         let leftStringCommitment = this.getCommitmentText(leftCommitment);
         let rightStringCommitment = this.getCommitmentText(rightCommitment);
-        let leftUserMessage = [entry.currentFormula.subLeft.toString() + ' je ' + leftStringCommitment];
-        let rightUserMessage = [entry.currentFormula.subRight.toString() + ' je ' + rightStringCommitment];
+        let leftUserMessage = [entry.currentFormula.subLeft.toString() + MID_IS + leftStringCommitment];
+        let rightUserMessage = [entry.currentFormula.subRight.toString() + MID_IS + rightStringCommitment];
         return (
             <div className={"d-flex justify-content-center"}>
                 <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, entry.currentFormula.subLeft, leftCommitment, messages, leftUserMessage)}>
@@ -117,21 +139,30 @@ export class HenkinHintikkaGame extends React.Component {
                 <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, entry.currentFormula.subRight, rightCommitment, messages, rightUserMessage)}>
                     {rightUserMessage}
                 </Button>
-                {this.writeVariables()}
+                {this.toggleVariables()}
             </div>
         );
     }
 
-    chooseDomainValue(entry, messages, variableIndex){
+    chooseDomainValue(_entry, messages, variableIndex){
         let varName = 'n' + variableIndex;
         return (
             <div className={"d-flex justify-content-center"}>
-                <DropdownButton size='sm' variant="outline-primary" className={"rounded mr-3"} alignRight as={ButtonGroup} title="Vyber prvok z domény">
+                <DropdownButton size='sm' variant="outline-primary"
+                    className={"rounded mr-3"} alignRight
+                    as={ButtonGroup}
+                    title={SELECT_DOMAIN_ELEM}>
                     {this.props.domain.map((value, index) =>
-                        <Dropdown.Item size='sm' key={index} eventKey={index} onClick={() => this.props.setGameDomainChoice(this.props.index, value, messages, [`Premenná ${varName} označuje prvok ${value}`])}>{value}</Dropdown.Item>
+                        <Dropdown.Item size='sm'
+                            key={index} eventKey={index}
+                            onClick={() => this.props.setGameDomainChoice(
+                                this.props.index, value, messages,
+                                [VAR_IS_ASSIGNED(varName, value)])}>
+                            {value}
+                        </Dropdown.Item>
                     )}
                 </DropdownButton>
-                {this.writeVariables()}
+                {this.toggleVariables()}
             </div>
         );
     }
@@ -139,8 +170,8 @@ export class HenkinHintikkaGame extends React.Component {
     chooseImplication(messages, currentFormula, commitment){
         let leftImplication = new Implication(currentFormula.subLeft, currentFormula.subRight);
         let rightImplication = new Implication(currentFormula.subRight, currentFormula.subLeft);
-        let leftUserMessage = [leftImplication.toString() + ' je ' + this.getCommitmentText(commitment)];
-        let rightUserMessage = [rightImplication.toString() + ' je ' + this.getCommitmentText(commitment)];
+        let leftUserMessage = [leftImplication.toString() + MID_IS + this.getCommitmentText(commitment)];
+        let rightUserMessage = [rightImplication.toString() + MID_IS + this.getCommitmentText(commitment)];
         return (
             <div className={"d-flex justify-content-center"}>
                 <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, leftImplication, commitment, messages, leftUserMessage)}>
@@ -149,7 +180,7 @@ export class HenkinHintikkaGame extends React.Component {
                 <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, rightImplication, commitment, messages, rightUserMessage)}>
                     {rightUserMessage}
                 </Button>
-                {this.writeVariables()}
+                {this.toggleVariables()}
             </div>
         );
     }
@@ -157,8 +188,13 @@ export class HenkinHintikkaGame extends React.Component {
     chooseOk(messages){
         return (
             <div className={"d-flex justify-content-center"}>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.continueGame(this.props.index, messages, ['Pokračuj'])}>Pokračuj</Button>
-                {this.writeVariables()}
+                <Button size='sm' variant="outline-primary"
+                    className={"rounded mr-3"}
+                    onClick={() => this.props.continueGame(this.props.index, 
+                        messages, [BTN_CONTINUE])}>
+                    {BTN_CONTINUE}
+                </Button>
+                {this.toggleVariables()}
             </div>
         );
     }
@@ -166,8 +202,12 @@ export class HenkinHintikkaGame extends React.Component {
     chooseEndGame(){
         return (
             <div className={"d-flex justify-content-center"}>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.endGame(this.props.index)}>Ukončiť hru</Button>
-                {this.writeVariables()}
+                <Button size='sm' variant="outline-primary"
+                    className={"rounded mr-3"}
+                    onClick={() => this.props.endGame(this.props.index)}>
+                    {BTN_FINISH_GAME}
+                </Button>
+                {this.toggleVariables()}
             </div>
         );
     }
@@ -237,8 +277,12 @@ export class HenkinHintikkaGame extends React.Component {
                     return messages;
 
                 case GAME_QUANTIFIER:
-                    messages.push(QUANTIFIER_ANSWER_1(this.getCommitmentText(entry.nextMove.commitment), entry.nextMove.formula));
-                    messages.push(QUANTIFIER_ANSWER_2(entry.nextMove.variables[0], entry.nextMove.variables[1]));
+                    messages.push(QUANTIFIER_ANSWER(
+                        this.getCommitmentText(entry.nextMove.commitment),
+                        entry.nextMove.formula,
+                        entry.nextMove.variables[0],
+                        entry.nextMove.variables[1]
+                    ));
                     return messages;
             }
         }
@@ -287,7 +331,7 @@ export class HenkinHintikkaGame extends React.Component {
     }
 
     getCommitmentText(commitment){
-        return commitment ? 'pravdivá' : 'nepravdivá';
+        return commitment ? COMMITMENT_TRUE : COMMITMENT_FALSE;
     }
 
     getRandom(size){

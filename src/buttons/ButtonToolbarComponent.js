@@ -6,28 +6,28 @@ import HelpGraphButton from "./HelpGraphButton";
 
 const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphButton,clearGraphSelection,exportState,setExerciseNameState,modalShowState,diagramToggledState,teacherModeState,setDiagramToggledState, setModelShowState, importState, setTeacherModeState}) => (
     <ButtonToolbar>
-        <ButtonGroup className='mr-lg-2'>
-        <Button variant='outline-primary' title='Prepnúť na matematický pohľad' className={diagramToggledState?'':' active'} onClick={() => {
+        <ButtonGroup className='mr-2'>
+        <Button variant='outline-primary' title='Switch to set view' className={diagramToggledState?'':' active'} onClick={() => {
             setDiagramToggledState(false);
             setCollapseHelpGraphButton(false);
         }}>
             <strong>&#123;&nbsp;&#125;</strong>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Množiny</span>
+            <span className={'hidden-on-medium-and-lower'}>&nbsp;Sets</span>
         </Button>
 
-        <Button variant='outline-primary' title='Prepnúť na grafový pohľad' className={diagramToggledState?' active':''} onClick={() => setDiagramToggledState(true)}>
+        <Button variant='outline-primary' title='Switch to graph view' className={diagramToggledState?' active':''} onClick={() => setDiagramToggledState(true)}>
             <FontAwesome name='fas fa-project-diagram'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Graf</span>
+            <span className={'hidden-on-medium-and-lower'}>&nbsp;Graph</span>
         </Button>
         </ButtonGroup>
 
-        <ButtonGroup className='mr-lg-2'>
-        <Button size="md" variant='secondary' title='Exportovať cvičenie' onClick={() => {setModelShowState(true);clearGraphSelection();}}>
+        <ButtonGroup className='mr-2'>
+        <Button size="md" variant='secondary' title='Export this exercise' onClick={() => {setModelShowState(true);clearGraphSelection();}}>
             <FontAwesome name='fas fa-file-export'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Exportovať</span>
+            <span className={'hidden-on-medium-and-lower'}>&nbsp;Export</span>
         </Button>
 
-        <Button variant='secondary' title='Importovať cvičenie'
+        <Button variant='secondary' title='Import an exercise'
                 onClick={() => document.getElementById('uploadInput').click()}>
             <FontAwesome name='fas fa-file-import'/>
             <input id='uploadInput' type='file' name='jsonFile'
@@ -36,12 +36,12 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
                    }}
                    hidden={true}
                    style={{display: 'none'}}/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Importovať</span>
+            <span className={'hidden-on-medium-and-lower'}>&nbsp;Import</span>
         </Button>
         </ButtonGroup>
 
         {diagramToggledState ?
-            <ButtonGroup className='mr-lg-2'>
+            <ButtonGroup className='mr-2'>
                 <HelpGraphButton collapseHelpGraphButton={collapseHelpGraphButton} setCollapseHelpGraphButton={setCollapseHelpGraphButton}/>
             </ButtonGroup>: null
         }
@@ -49,9 +49,9 @@ const ButtonToolbarComponent = ({setCollapseHelpGraphButton,collapseHelpGraphBut
         <ModalComponent exportState={exportState} modalShowState={modalShowState} setExerciseNameState={setExerciseNameState} setModalShowState={setModelShowState}/>
 
         {/*<ButtonGroup>
-        <Button variant={'outline-success'} size='lg' title='Učiteľský mód' className={(teacherModeState?'active':'')} onClick={() => setTeacherModeState()}>
+        <Button variant={'outline-success'} size='lg' title='Teacher mode' className={(teacherModeState?'active':'')} onClick={() => setTeacherModeState()}>
             <FontAwesome name='fas fa-user-edit'/>
-            <span className={'hidden-on-medium-and-lower'}>&nbsp;Učiteľský mód</span>
+            <span className={'hidden-on-medium-and-lower'}>&nbsp;Teacher mode</span>
         </Button>
         </ButtonGroup>*/}
     </ButtonToolbar>

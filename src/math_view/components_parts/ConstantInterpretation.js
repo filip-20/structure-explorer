@@ -6,7 +6,7 @@ export function ConstantInterpretation({structure,setConstantValue,structureObje
     return(
     <Col lg={12}>
         <Form>
-            <Form.Label>Interpretácia indivíduových konštánt</Form.Label>
+            <Form.Label>Interpretation of individual constants</Form.Label>
             {Object.keys(structure.constants).map((constant) =>
                 <Form.Group key={constant} >
                     <InputGroup size='sm'>

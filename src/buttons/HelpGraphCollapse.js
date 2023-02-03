@@ -3,7 +3,7 @@ import {Card, Collapse} from "react-bootstrap";
 
 const HelpGraphCollapse = ({collapsed}) => (
     <Collapse in={collapsed}>
-        <Card id="help-graph" className="text-justify">
+        <Card id="help-graph" border="info" className="text-justify small">
             <Card.Body>
                 <p>Vrcholy sa do grafu umiestňujú tahaním alebo klikaním na ikonu z panelu. Pri ťahaní je
                     možné

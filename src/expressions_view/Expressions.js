@@ -5,6 +5,7 @@ import {
     Form,
     InputGroup,
     Row,
+    Table,
 } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import {EXPRESSION_LABEL, FORMULA, TERM} from "../constants";
@@ -16,31 +17,70 @@ import HenkinHintikkaGameButton from "../buttons/HenkinHintikkaGameButton";
 import HenkinHintikkaGameContainer from "../redux/containers/HenkinHintikkaGameContainer";
 
 const helpFormula = (
-  <div className="well">
-    Tu je možné overiť, či ľubovoľná formula spĺňa vyššie definovanú štruktúru. Všetky termy a predikáty
-    musia byť definované v jazyku. Ak formula nie je zapísaná v správnej syntaxi, nevyhodnotí sa. Je potrebné
-    dodržiavať správne uzátvorkovanie podformúl. Napravo od
-    formuly sa vyberá možnosť splnenia alebo nesplnenia formuly v štruktúre. Sú povolené nasledujúce symboly
-    spojok, atómov a kvantifikátorov a žiadne iné:
-    <ul>
-      <li>Konjunkcia: \wedge, \land, &&, &, /\, ∧</li>
-      <li>Disjunkcia: \vee, \lor, ||, |, \/, ∨</li>
-      <li>Implikácia: \to, →, -{'>'}</li>
-      <li>Existenčný kvantifikátor: \exists, \e, \E, ∃</li>
-      <li>Všeobecný kvantifikátor: \forall, \a, \A, ∀</li>
-      <li>Negácia: \neg, \lnot, -, !, ~, ¬</li>
-      <li>Rovnosť: =</li>
-      <li>Nerovnosť: !=, &#60;&#62;, /=, &#8800;</li>
-    </ul>
-  </div>
+  <Card id='help-formulas' border='info' className="small mb-3">
+    <Card.Body className="p-2">
+      <p>The truth of closed first-order formulas in the structure 𝓜
+        and the satisfaction of open first-order formulas
+        by the valuation of variables 𝑒 in 𝓜
+        can be examined in this section.</p>
+      <p>The desired/expected truth or satisfaction can be selected
+        from the ⊨/⊭ menu below a formula.
+        Structure Explorer checks the correctness of your selection.</p>
+      <p className='mb-0'>Syntactic requirements:</p>
+      <ul className='mb-0'>
+        <li>All non-logical symbols used in formulas
+          must come from the language 𝓛
+          and must be used according to their type and arity.
+          All other alphanumerical symbols are treated as variables.</li>
+        <li>Formulas must be properly parenthesized.</li>
+        <li>The following notation of logical symbols is accepted:
+          <Table size='sm' striped className="my-2 border-bottom">
+            <tr><th>Symbol</th><th>Notation</th></tr>
+            <tr><td>Equality</td><td> =, ≐</td></tr>
+            <tr><td>Non-equality</td><td> !=, {'<>'}, /=, ≠</td></tr>
+            <tr><td>Negation</td><td> \neg, \lnot, -, !, ~, ¬</td></tr>
+            <tr><td>Conjunction</td><td> \wedge, \land, &&, &, /\, ∧</td></tr>
+            <tr><td>Disjunction</td><td> \vee, \lor, ||, |, \/, ∨</td></tr>
+            <tr><td>Implication</td><td> \to, \limpl, {'->'}, →</td></tr>
+            <tr><td>Equivalence</td><td> \lequiv, \leftrightarrow, {'<->'}, ↔︎</td></tr>
+            <tr><td>Existential quantifier</td><td> \exists, \e, \E, ∃</td></tr>
+            <tr><td>General quantifier</td><td> \forall, \a, \A, ∀</td></tr>
+          </Table>
+        </li>
+        <li>The priority of logical symbols:
+          <ol className="my-0">
+            <li>≐, ≠ (highest priority)</li>
+            <li>¬, ∀, ∃</li>
+            <li>∧ (left-associative, i.e., A ∧ B ∧ C ≡ ((A ∧ B) ∧ C))</li>
+            <li>∨ (left-associative)</li>
+            <li>→ (right-associative, i.e., A → B → C ≡ (A → (B → C)))</li>
+            <li>↔︎ (non-associative, lowest priority)</li>
+          </ol>
+        </li>
+      </ul>
+    </Card.Body>
+  </Card>
 );
 
 const helpTerm = (
-  <div className="well">
-    Tu sa pridávajú termy a je možné zistiť ich hodnotu na základe vyššie definovanej štruktúry. Všetky termy
-    musia byť definované v jazyku. Každý symbol premennej, symbol konštanty a funkčný symbol sa považuje za term.
-    Predikátový symbol nie je term.
-  </div>
+  <Card id='help-terms' border='info' className="small mb-3">
+    <Card.Body className="p-2">
+      <p>Denotations of first-order terms in the structure 𝓜
+        for the valuation of variables 𝑒
+        can be examined in this section.</p>
+      <p>The desired/expected denotation can be selected
+        from the menu below the term.
+        Structure Explorer checks the correctness of your selection.</p>
+      <p className='mb-0'>Syntactic requirements:</p>
+      <ul className='mb-0'>
+        <li>All individual constants and function symbols used in the terms
+          must come from the language 𝓛
+          and must be used according to their type and arity.
+          All other alphanumerical symbols are treated as variables.</li>
+        <li>Terms must be properly parenthesized.</li>
+      </ul>
+    </Card.Body>
+  </Card>
 );
 
 const getFormulaAnswers = () => (
@@ -53,7 +93,7 @@ const getFormulaAnswers = () => (
 
 const getTermAnswers = (domain) => (
    <React.Fragment>
-     <option value={''}>Vyber hodnotu ...</option>
+     <option value={''}>Select a domain element…</option>
      {domain.map(item =>
         <option key={item} value={item}>{item}</option>
      )}
@@ -66,14 +106,14 @@ function prepareExpressions(formulas, terms) {
     expressionType: FORMULA,
     answers: () => getFormulaAnswers(),
     help: helpFormula,
-    panelTitle: 'Pravdivosť formúl v štruktúre 𝓜'
+    panelTitle: 'Truth of formulas in 𝓜'
   };
   let t = {
     items: terms,
     expressionType: TERM,
     answers: (domain) => getTermAnswers(domain),
     help: helpTerm,
-    panelTitle: 'Hodnoty termov v 𝓜'
+    panelTitle: 'Denotation of terms in 𝓜'
   };
   return [f, t];
 }
@@ -126,7 +166,11 @@ const Expressions = (props) => {
                     <Form.Group>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
-                          <InputGroup.Text id={expression.expressionType.toLowerCase() + '-answer-' + index}>𝓜</InputGroup.Text>
+                          <InputGroup.Text as='label' for={expression.expressionType.toLowerCase() + '-answer-' + index}>
+                            { expression.expressionType === TERM
+                                ? <>{EXPRESSION_LABEL[expression.expressionType]}<sub>{index + 1}</sub><sup>𝓜</sup>[𝑒] =</>
+                                : '𝓜' }
+                          </InputGroup.Text>
                         </InputGroup.Prepend>
                         <Form.Control as="select" value={item.answerValue}
                           onChange={(e) => props.setExpressionAnswer(expression.expressionType, e.target.value, index)}
@@ -136,11 +180,13 @@ const Expressions = (props) => {
                           {expression.answers(props.domain)}
                         </Form.Control>
 
-                        {expression.expressionType === TERM ? null : (
-                          <InputGroup.Append>
-                            <InputGroup.Text id={expression.expressionType.toLowerCase() + '-answer-' + index}>𝝋<sub>{index + 1}</sub>[e]</InputGroup.Text>
-                          </InputGroup.Append>
-                        )}
+                        {expression.expressionType === TERM
+                          ? null
+                          : (
+                            <InputGroup.Append>
+                              <InputGroup.Text id={expression.expressionType.toLowerCase() + '-answer-' + index}>𝝋<sub>{index + 1}</sub>[𝑒]</InputGroup.Text>
+                            </InputGroup.Append>
+                            )}
                         {props.teacherMode ? (
                           <InputGroup.Append>
                             <LockButton
@@ -156,9 +202,9 @@ const Expressions = (props) => {
                     {item.answerValue !== '' && item.answerValue !== '-1' ?
                       (item.answerValue === item.expressionValue ?
                         <strong className="text-success no-padding-right"><FontAwesome
-                          name='check' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Správne</span></strong> :
+                          name='check' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Correct</span></strong> :
                         <strong className="text-danger"><FontAwesome
-                          name='times' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Nesprávne</span></strong>
+                          name='times' /><span className={'hidden-on-medium-and-lower'}>&nbsp;Incorrect</span></strong>
                       ) : null}
                   </Col>
 

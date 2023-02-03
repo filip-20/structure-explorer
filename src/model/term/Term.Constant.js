@@ -27,7 +27,7 @@ class Constant extends Term {
     if (structure.iConstant.get(this.name) === undefined ||
         structure.iConstant.get(this.name) === null ||
         structure.iConstant.get(this.name) === '') {
-      throw `Interpretácia konštanty ${this.name} nie je definovaná`;
+      throw `The interpretation of the constant ${this.name} is not defined`;
     }
     return structure.iConstant.get(this.name);
   }

@@ -7,7 +7,7 @@ import TextInput from "./TextInput";
 function PredicateInterpretation({structure,predicates,setPredicateValueText,lockPredicateValue,toggleTable,toggleDatabase,domain,setPredicateValueTable,structureObject,teacherMode,lengthOfCol}){
     return(
         <Col lg={lengthOfCol}>
-            <Form.Label>Interpretácia predikátových symbolov</Form.Label>
+            <Form.Label>Interpretation of predicate symbols</Form.Label>
                 {predicates.map((name) =>
                     <Form.Group key={name}>
                         <TextInput

@@ -27,4 +27,4 @@ export const defaultExpressionData = () => ({
   parsed: null
 });
 
-export const DEFAULT_FILE_NAME = 'struktura';
+export const DEFAULT_FILE_NAME = 'structure';
