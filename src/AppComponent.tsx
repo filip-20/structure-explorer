@@ -35,7 +35,7 @@ function AppComponent(props: {instance: any, onStateChange: () => void, isEdited
     store.subscribe(() => props.onStateChange())
     return (
         <div className={"fol-graphexplorer-cYTZ7LnVXZ"}>
-            <div className={!props.isEdited ? 'viewMode' : ''}>
+            <div className={!props.isEdited ? 'view-mode' : ''}>
                <AppContainer store={store}/>
             </div>
         </div>
