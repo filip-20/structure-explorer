@@ -41,7 +41,6 @@ function AppComponent({instance, onStateChange, isEdited}: AppComponentProps) {
     store.subscribe(() => onStateChange())
     return (
         <div className={"fol-graphexplorer-cYTZ7LnVXZ"}>
-            // SplitPanes rely on being contained in container-fluid
             <div className={`container-fluid${!isEdited ?
                                 ' view-mode' : ''}`}>
                <AppContainer store={store}/>
