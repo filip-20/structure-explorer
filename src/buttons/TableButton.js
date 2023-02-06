@@ -4,7 +4,6 @@ import {Button} from "react-bootstrap";
 
 const TableButton = ({onClick,enabled}) => (
   <Button onClick={() => onClick()} variant={"outline-secondary"}
-    className="btn-with-border"
     active={enabled}
     title="Table view">
     <FontAwesome name='fas fa-table'/>
