@@ -1,6 +1,6 @@
 {
   "name": "@fmfi-uk-1-ain-412/fol-graphexplorer",
-  "version": "5.6.9",
+  "version": "5.6.10",
   "main": "lib/dist/AppComponent.js",
   "types": "lib/types/types.d.ts",
   "homepage": "https://fmfi-uk-1-ain-412.github.io/structure-explorer",
