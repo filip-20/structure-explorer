@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AppContainer from "./redux/containers/AppContainer";
 import {createStore} from "redux";
 import reducer from "./redux/reducers";
@@ -19,23 +19,31 @@ function prepare(initialState: any) {
         store: createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     };
     const getState = (instance: any) => stateToJSON(instance.store.getState());
-    
+
     if (initialState !== null) {
       instance.store.dispatch(importAppState(initialState, instance.store.getState().diagramState));
     }
-    
+
     return {
         instance,
         getState,
     };
 }
 
-function AppComponent(props: {instance: any, onStateChange: () => void, isEdited: boolean}) {
-    const store = props.instance.store;
-    store.subscribe(() => props.onStateChange())
+interface AppComponentProps {
+    instance: any,
+    onStateChange: () => void,
+    isEdited: boolean
+}
+
+function AppComponent({instance, onStateChange, isEdited}: AppComponentProps) {
+    const store = instance.store;
+    store.subscribe(() => onStateChange())
     return (
         <div className={"fol-graphexplorer-cYTZ7LnVXZ"}>
-            <div className={!props.isEdited ? 'view-mode' : ''}>
+            // SplitPanes rely on being contained in container-fluid
+            <div className={`container-fluid${!isEdited ?
+                                ' view-mode' : ''}`}>
                <AppContainer store={store}/>
             </div>
         </div>
