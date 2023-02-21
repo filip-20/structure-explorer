@@ -52,7 +52,7 @@ export function RelationalTable(props) {
     );
 
     return (
-        <Table bordered responsive>
+        <Table bordered responsive size="sm" className="small">
             <thead>
             <tr>
                 <th className="interpretationHead">{props.name}</th>

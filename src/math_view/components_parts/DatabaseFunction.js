@@ -74,7 +74,7 @@ function DatabaseFunction(props) {
     );
 
     return (
-        <Table bordered responsive>
+        <Table bordered responsive size="sm" className="small">
             <thead>
             <tr>
                 {[...Array(props.arity)].map((x, count) =>

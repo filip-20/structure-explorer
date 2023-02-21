@@ -69,7 +69,7 @@ export function DatabasePredicate(props) {
 
     if(Array.isArray(props.value)) {
         return (
-            <Table bordered responsive>
+            <Table bordered responsive size="sm" className="small">
                 {headElements()}
                 {element(props.value)}
             </Table>
