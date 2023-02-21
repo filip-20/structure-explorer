@@ -210,10 +210,13 @@ const Expressions = (props) => {
                       {expression.expressionType === FORMULA ?
                         <HenkinHintikkaGameButton
                           onClick={() => props.initiateGame(index)}
-                          enabled={item.gameEnabled} /> : null}
+                          gameEnabled={item.gameEnabled}
+                          disabled={item.errorMessage.length > 0 ||
+                            item.value === ''}
+                        /> : null}
                     </Col>
                   </Form.Row>
-                  {item.gameEnabled
+                  {(item.gameEnabled && item.errorMessage.length === 0)
                     ? <HenkinHintikkaGameContainer index={index}
                           formula={item}
                           domain={props.domain} />

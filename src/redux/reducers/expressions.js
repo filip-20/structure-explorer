@@ -297,6 +297,9 @@ function checkExpressionSyntax(expressions, state, action, variables) {
   }
   parseExpression(expression, expressionText, state, action.expressionType);
   expression.value = action.value; // aby tam neboli zatvorky
+  if (action.expressionType === FORMULA) {
+    endGame(expression);
+  }
   if (expression.errorMessage.length === 0) {
     expression.validSyntax = true;
     evalExpression(state, expression, variables);
