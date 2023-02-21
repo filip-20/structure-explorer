@@ -18,24 +18,28 @@ const TextInput = ({onChange, onLock, textData, label, teacherMode, id, toggleTa
                 value={textData.value}
                 disabled={textData.locked}
             />
-     <InputGroup.Append>
-         <InputGroup.Text>&#125;</InputGroup.Text>
+        <InputGroup.Append>
+            <InputGroup.Text>&#125;</InputGroup.Text>
+        </InputGroup.Append>
          {toggleTable ? (
              (arity === 0 || arity > 2 || domain.size === 0) ? null : (
+                <InputGroup.Append>
                      <TableButton onClick={() => toggleTable()} enabled={tableEnabled}/>
+                </InputGroup.Append>
              )
          ):null}
 
          {toggleDatabase?(
              (arity < 1 || domain.size === 0)? null :(
+                <InputGroup.Append>
                      <DatabaseButton onClick={() => toggleDatabase()} enabled={databaseEnabled}/>
+                </InputGroup.Append>
              )
          ) : null}
 
          {teacherMode ? (
          <LockButton lockFn={() => onLock()} locked={textData.locked}/>
          ) : null}
-     </InputGroup.Append>
         <Form.Control.Feedback type={"invalid"}>{errorProperty}</Form.Control.Feedback>
    </InputGroup>
 

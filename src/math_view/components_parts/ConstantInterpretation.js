@@ -2,6 +2,21 @@ import {Col, Form, InputGroup} from "react-bootstrap";
 import LockButton from "../../buttons/LockButton";
 import React from "react";
 
+// Temporary fix until react-bootstrap is upgraded to >=2.0.0,
+// which has Form.Select
+function CustomSelect({isInvalid, className = '', ...props}) {
+    className = (className === ''
+        ? 'custom-select'
+        : `${className} custom-select`
+    );
+    if (isInvalid) {
+        className = className + ' is-invalid';
+    }
+    return (
+        <select className={className} {...props}/>
+    )
+}
+
 export function ConstantInterpretation({structure,setConstantValue,structureObject,teacherMode,lockConstantValue}){
     return(
     <Col lg={12}>
@@ -14,17 +29,16 @@ export function ConstantInterpretation({structure,setConstantValue,structureObje
                             <InputGroup.Text id={'constant-' + constant}><var>i</var>({constant}) = </InputGroup.Text>
                         </InputGroup.Prepend>
 
-                        <Form.Control as="select" value={structure.constants[constant].value}
+                        <CustomSelect value={structure.constants[constant].value}
                                       id={'constant-' + constant}
                                       onChange={(e) => setConstantValue(e.target.value, constant)}
                                       disabled={structure.constants[constant].locked}
-                                      isInvalid={structure.constants[constant].errorMessage.length > 0}
-                                      className="custom-select">
+                                      isInvalid={structure.constants[constant].errorMessage.length > 0}>
                             <option key={''} value={''}>Vyber hodnotu ...</option>
                             {[...structureObject.domain].map((item) =>
                                 <option key={item} value={item}>{item}</option>
                             )}
-                        </Form.Control>
+                        </CustomSelect>
                         {teacherMode ? (
                             <InputGroup.Append>
                                 <LockButton lockFn={() => lockConstantValue(constant)}
