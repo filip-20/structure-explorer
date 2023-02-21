@@ -128,14 +128,15 @@ export class HenkinHintikkaGame extends React.Component {
     chooseFormula(entry, leftCommitment, rightCommitment, messages) {
         let leftStringCommitment = this.getCommitmentText(leftCommitment);
         let rightStringCommitment = this.getCommitmentText(rightCommitment);
-        let leftUserMessage = [entry.currentFormula.subLeft.toString() + MID_IS + leftStringCommitment];
-        let rightUserMessage = [entry.currentFormula.subRight.toString() + MID_IS + rightStringCommitment];
+        const [subLeft, subRight] = entry.currentFormula.getSubFormulas();
+        let leftUserMessage = [subLeft.toString() + MID_IS + leftStringCommitment];
+        let rightUserMessage = [subRight.toString() + MID_IS + rightStringCommitment];
         return (
             <div className={"d-flex justify-content-center"}>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, entry.currentFormula.subLeft, leftCommitment, messages, leftUserMessage)}>
+                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, subLeft, leftCommitment, messages, leftUserMessage)}>
                     {leftUserMessage}
                 </Button>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, entry.currentFormula.subRight, rightCommitment, messages, rightUserMessage)}>
+                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, subRight, rightCommitment, messages, rightUserMessage)}>
                     {rightUserMessage}
                 </Button>
                 {this.toggleVariables()}
@@ -161,24 +162,6 @@ export class HenkinHintikkaGame extends React.Component {
                         </Dropdown.Item>
                     )}
                 </DropdownButton>
-                {this.toggleVariables()}
-            </div>
-        );
-    }
-
-    chooseImplication(messages, currentFormula, commitment){
-        let leftImplication = new Implication(currentFormula.subLeft, currentFormula.subRight);
-        let rightImplication = new Implication(currentFormula.subRight, currentFormula.subLeft);
-        let leftUserMessage = [leftImplication.toString() + MID_IS + this.getCommitmentText(commitment)];
-        let rightUserMessage = [rightImplication.toString() + MID_IS + this.getCommitmentText(commitment)];
-        return (
-            <div className={"d-flex justify-content-center"}>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, leftImplication, commitment, messages, leftUserMessage)}>
-                    {leftUserMessage}
-                </Button>
-                <Button size='sm' variant="outline-primary" className={"rounded mr-3"} onClick={() => this.props.setGameNextFormula(this.props.index, rightImplication, commitment, messages, rightUserMessage)}>
-                    {rightUserMessage}
-                </Button>
                 {this.toggleVariables()}
             </div>
         );
