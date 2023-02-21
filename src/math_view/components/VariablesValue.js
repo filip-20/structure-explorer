@@ -24,7 +24,7 @@ const assignmentHelp = (
 const VariablesValue = (props) => {
     const [showHelp, setShowHelp] = useState(false);
     return (
-        <Card className={"mt-3"}>
+        <Card className={"mb-3"}>
             <Card.Header as="h5" className={"d-flex justify-content-between"}>
                 <span>Variable assignment</span>
                 <Help subject='language'

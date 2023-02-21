@@ -85,7 +85,7 @@ const Language = (props) => {
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-    <Card className={"no-border-radius"}>
+    <Card className='mb-3'>
       <Card.Header as="h5" className={"d-flex justify-content-between"}>
           <span>Language 𝓛</span>
           <div className={"d-flex justify-content-left"}>

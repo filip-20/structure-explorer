@@ -49,7 +49,7 @@ function Structure({structure,setDomain,lockDomain,teacherMode,setConstantValue,
   const [showHelp, setShowHelp] = useState(false);
 
   return (
-     <Card className={"mt-3"}>
+     <Card className={"mb-3"}>
        <Card.Header as={"h5"} className={"d-flex justify-content-between"}>
            <span>Structure 𝓜 = (<var>D</var>, <var>i</var>)</span>
            <Help subject='language'
