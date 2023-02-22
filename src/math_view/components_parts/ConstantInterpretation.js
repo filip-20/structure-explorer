@@ -34,7 +34,7 @@ export function ConstantInterpretation({structure,setConstantValue,structureObje
                                       onChange={(e) => setConstantValue(e.target.value, constant)}
                                       disabled={structure.constants[constant].locked}
                                       isInvalid={structure.constants[constant].errorMessage.length > 0}>
-                            <option key={''} value={''}>Choose a domain element…</option>
+                            <option key={''} value={''}>Select a domain element…</option>
                             {[...structureObject.domain].map((item) =>
                                 <option key={item} value={item}>{item}</option>
                             )}
