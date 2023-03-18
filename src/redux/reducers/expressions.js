@@ -1,4 +1,4 @@
-import {defaultExpressionData, FORMULA, TERM} from "../../constants";
+import {defaultExpressionData, FORMULA, CONTEXT_FORMULA, TERM} from "../../constants";
 import {
   defaultHintikkaGameData, GAME_EQUIVALENCE,
   GAME_IMPLICATION,
@@ -89,7 +89,7 @@ const expressionsReducer = produce((expressions, action, state) => {
       return;
 
     case ADD_EXPRESSION:
-      addExpression(expressions, action.expressionType);
+      addExpression(expressions, action.expressionType, action.contextInfo);
       return;
 
     case REMOVE_EXPRESSION:
@@ -244,11 +244,13 @@ function endGame(expression) {
   expression.variableIndex = 1;
 }
 
-function addExpression(expressions, expressionType) {
+function addExpression(expressions, expressionType, contextInfo) {
   if (expressionType === FORMULA) {
     expressions.formulas.push({...defaultExpressionData(), ...defaultHintikkaGameData()});
   } else if (expressionType === TERM) {
     expressions.terms.push(defaultExpressionData());
+  } else if (expressionType === CONTEXT_FORMULA) {
+    expressions.formulas.push({...defaultExpressionData(), ...defaultHintikkaGameData(), contextInfo});
   }
 }
 

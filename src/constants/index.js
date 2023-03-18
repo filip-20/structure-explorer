@@ -9,6 +9,7 @@ export const VARIABLE = 'VARIABLE';
 
 
 export const FORMULA = 'FORMULA';
+export const CONTEXT_FORMULA = 'CONTEXT_FORMULA';
 export const TERM = 'TERM';
 
 export const EXPRESSION_LABEL = {

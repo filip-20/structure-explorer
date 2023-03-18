@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import {
-  Button, Col,
+  Button, Row, Col,
   Form,
   InputGroup,
   Table,
+  Dropdown,
 } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import { EXPRESSION_LABEL, FORMULA, TERM, UNSELECTED } from "../constants";
+import { EXPRESSION_LABEL, FORMULA, CONTEXT_FORMULA, TERM, UNSELECTED } from "../constants";
 import FontAwesome from 'react-fontawesome';
 import LockButton from '../buttons/LockButton';
 import Help from "../buttons/Help";
 import AddButton from "../buttons/AddButton";
 import HenkinHintikkaGameButton from "../buttons/HenkinHintikkaGameButton";
 import HenkinHintikkaGameContainer from "../redux/containers/HenkinHintikkaGameContainer";
+import { LogicContext } from '../logicContext';
 
 const helpFormula = (
   <>
@@ -120,6 +122,9 @@ const Expressions = (props) => {
   const [showHelp, setShowHelp] = useState({ [FORMULA]: false, [TERM]: false });
   const onToggle = (exprType) => (newValue) =>
     setShowHelp((sh) => ({ ...sh, [exprType]: newValue }));
+
+  const context = useContext(LogicContext);
+
   return (
     <React.Fragment>
       {prepareExpressions(props.formulas, props.terms).map(expression =>
@@ -136,7 +141,34 @@ const Expressions = (props) => {
             {expression.items.map((item, index) =>
               <ExpressionItem {...props} expression={expression} item={item} index={index} />
             )}
-            <AddButton onClickAddFunction={props.addExpression} addType={expression.expressionType} />
+            <Row>
+              <Col xs="auto">
+                <AddButton onClickAddFunction={props.addExpression} addType={expression.expressionType} />
+              </Col>
+              {
+                expression.expressionType === FORMULA && context &&
+                (
+                  <Col xs="auto">
+                    <Dropdown>
+                      <Dropdown.Toggle variant='success'><FontAwesome name='plus' /> &nbsp;Add from context</Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {context.axioms.map(f =>
+                          <Dropdown.Item
+                            onClick={() => props.addExpression(CONTEXT_FORMULA, { name: f.name, type: 'axiom' })}
+                          >
+                            Axiom: {f.name}
+                          </Dropdown.Item>)}
+                        {context.formulas.map(f =>
+                          <Dropdown.Item
+                            onClick={() => props.addExpression(CONTEXT_FORMULA, { name: f.name, type: 'named_formula' })}
+                          >Named formula: {f.name}
+                          </Dropdown.Item>)}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                )
+              }
+            </Row>
           </Card.Body>
         </Card>
       )}
@@ -147,18 +179,27 @@ const Expressions = (props) => {
 function ExpressionItem(props) {
   const { item, index, expression } = props;
 
+  const contextFormula = useContext(LogicContext)?.getFormula(item.contextInfo?.name);
+  const isContextFormula = item.contextInfo !== undefined;
+  // indicates that formula was possibly deleted from context
+  const isMissing = isContextFormula && !contextFormula
+  // update formula value when its value in context changes
+  useMemo(() => {
+    contextFormula && props.onInputChange(contextFormula.formula, index, FORMULA);
+  }, [contextFormula?.formula]);
+
   return (
     <Form key={"expression-form-" + index}>
       <Form.Group>
         <InputGroup size='sm' className='mb-1 has-validation'>
           <InputGroup.Prepend>
-            <InputGroup.Text id={expression.expressionType.toLowerCase() + '-' + index}>{EXPRESSION_LABEL[expression.expressionType]}<sub>{index + 1}</sub></InputGroup.Text>
+            <InputGroup.Text id={expression.expressionType.toLowerCase() + '-' + index}>{isContextFormula ? item.contextInfo.name : <>{EXPRESSION_LABEL[expression.expressionType]}<sub>{index + 1}</sub></>}</InputGroup.Text>
           </InputGroup.Prepend>
           <Form.Control type='text' value={item.value}
             onChange={(e) => props.onInputChange(e.target.value, index, expression.expressionType)}
             id={expression.expressionType.toLowerCase() + '-' + index}
-            disabled={item.inputLocked}
-            isInvalid={item.errorMessage.length > 0}
+            disabled={isContextFormula || item.inputLocked}
+            isInvalid={(item.errorMessage.length > 0 || isMissing)}
             onFocus={() => {
               props.diagramModel.clearSelection();
             }}
@@ -173,7 +214,7 @@ function ExpressionItem(props) {
                 locked={item.inputLocked} />
             ) : null}
           </InputGroup.Append>
-          <Form.Control.Feedback type={"invalid"}>{item.errorMessage}</Form.Control.Feedback>
+          <Form.Control.Feedback type={"invalid"}>{`${isMissing ? 'Formula is missing in context. ' : ''}${item.errorMessage}`}</Form.Control.Feedback>
         </InputGroup>
         <Form.Row className='align-items-center'>
           <Col xs="auto" className='mb-1'>
