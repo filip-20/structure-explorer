@@ -10,6 +10,7 @@ import './static/css/all.iso.css';
 import './static/css/bootstrap.iso.css';
 import './static/css/index.iso.css';
 import './static/css/google-fonts.css';
+import { CellContext, LogicContext } from './logicContext';
 
 enableMapSet();
 
@@ -33,17 +34,20 @@ function prepare(initialState: any) {
 interface AppComponentProps {
     instance: any,
     onStateChange: () => void,
-    isEdited: boolean
+    isEdited: boolean,
+    context: CellContext,
 }
 
-function AppComponent({instance, onStateChange, isEdited}: AppComponentProps) {
+function AppComponent({instance, onStateChange, isEdited, context}: AppComponentProps) {
     const store = instance.store;
     store.subscribe(() => onStateChange())
     return (
         <div className={"fol-graphexplorer-cYTZ7LnVXZ"}>
             <div className={`container-fluid${!isEdited ?
                                 ' view-mode' : ''}`}>
-               <AppContainer store={store}/>
+              <LogicContext.Provider value={context}>
+                <AppContainer store={store}/>
+              </LogicContext.Provider>
             </div>
         </div>
     );
