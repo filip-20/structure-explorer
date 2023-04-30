@@ -17,6 +17,7 @@ import {
   REMOVE_EXPRESSION,
   SET_CONSTANT_VALUE,
   SET_CONSTANTS,
+  SET_DOMAIN,
   SET_EXPRESSION_ANSWER,
   SET_FUNCTION_VALUE_TABLE,
   SET_FUNCTION_VALUE_TEXT,
@@ -70,6 +71,8 @@ export function defaultState(){
 const expressionsReducer = produce((expressions, action, state) => {
   const variablesObject = getValuationObject(state);
   switch (action.type) {
+    // Replace syncing with memoized selectors parsing the expressions
+    // and computing their values
     case SET_CONSTANTS:
     case SET_PREDICATES:
     case SET_FUNCTIONS:
@@ -79,6 +82,7 @@ const expressionsReducer = produce((expressions, action, state) => {
       syncExpressionsValue(expressions, state, variablesObject,true);
       expressions.formulas.forEach( (formula) => endGame(formula) );
       return;
+    case SET_DOMAIN:
     case SET_CONSTANT_VALUE:
     case SET_PREDICATE_VALUE_TEXT:
     case SET_PREDICATE_VALUE_TABLE:
