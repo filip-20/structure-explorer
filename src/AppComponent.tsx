@@ -17,7 +17,9 @@ enableMapSet();
 function prepare(initialState: any) {
     const instance = {
         // @ts-ignore
-        store: createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+        store: createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__({
+          name: 'structure-explorer'
+        }))
     };
     const getState = (instance: any) => stateToJSON(instance.store.getState());
 
