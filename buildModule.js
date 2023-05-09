@@ -22,7 +22,7 @@ function cmd(command) {
     // copy css modules
     await cmd("npx copyfiles -u 1 'src/**/*.css' 'lib/dist'");
     // isolate normal css files
-    await cmd("npx isolate-css-cli -p fol-graphexplorer-cYTZ7LnVXZ -u 1 -c -o 'lib/dist/static' 'public/css/'");
+    await cmd("npx isolate-css-cli -r -p fol-graphexplorer-cYTZ7LnVXZ -u 1 -c -o 'lib/dist/static' 'public/css/'");
     // copy font files used by isolated css
     await cmd("npx copyfiles -u 2 'public/webfonts/*' 'lib/dist/static/webfonts'");
     // we can't isolate imported fonts, we will use original css file that imports them
