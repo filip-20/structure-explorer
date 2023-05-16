@@ -125,6 +125,8 @@ const Expressions = (props) => {
 
   const context = useContext(LogicContext);
 
+  const noCtxFormulas = context.axioms.length === 0 && context.formulas.length === 0;
+
   return (
     <React.Fragment>
       {prepareExpressions(props.formulas, props.terms).map(expression =>
@@ -150,10 +152,11 @@ const Expressions = (props) => {
                 (
                   <Col xs="auto">
                     <Dropdown>
-                      <Dropdown.Toggle variant='success'><FontAwesome name='plus' /> &nbsp;Add from context</Dropdown.Toggle>
+                      <Dropdown.Toggle disabled={noCtxFormulas} variant='success'><FontAwesome name='plus' /> &nbsp;Add from context</Dropdown.Toggle>
                       <Dropdown.Menu>
                         {context.axioms.map(f =>
                           <Dropdown.Item
+                            title={f.formula}
                             onClick={() => props.addExpression(CONTEXT_FORMULA, { name: f.name, type: 'axiom' })}
                           >
                             Axiom: {f.name}
