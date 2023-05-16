@@ -125,7 +125,7 @@ const Expressions = (props) => {
 
   const context = useContext(LogicContext);
 
-  const noCtxFormulas = context.axioms.length === 0 && context.formulas.length === 0;
+  const noCtxFormulas = context?.axioms.length === 0 && context?.formulas.length === 0;
 
   return (
     <React.Fragment>
