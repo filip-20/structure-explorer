@@ -238,9 +238,10 @@ export const checkExpressionSyntax = (value, index, expressionType) => ({
   expressionType
 });
 
-export const addExpression = (expressionType) => ({
+export const addExpression = (expressionType, contextInfo) => ({
   type: 'ADD_EXPRESSION',
-  expressionType
+  expressionType,
+  contextInfo
 });
 
 export const resetDiagramState = () => ({

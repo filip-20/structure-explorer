@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import Card from "react-bootstrap/Card";
 import Help from "../../buttons/Help";
 import TextComponent from "../components_parts/TextComponent";
 import ComponentLockButton from "../../buttons/ComponentLockButton";
 import {Collapse} from "react-bootstrap";
+import { LogicContext } from '../../logicContext';
+import produce from 'immer';
 
 const languageHelp = (
     <>
@@ -83,14 +85,28 @@ function functionComponent(props) {
 
 const Language = (props) => {
   const [showHelp, setShowHelp] = useState(false);
+  const context = useContext(LogicContext);
+
+  // load language from context when context is present
+  useMemo(() => {
+    context && props.setConstants(context.constants.join(', '));
+  }, [context?.constants]);
+  useMemo(() => {
+    context && props.setPredicates(context.predicates.map(({name, arity}) => `${name}/${arity}`).join(', '));
+  }, [context?.predicates]);
+  useMemo(() => {
+    context && props.setFunctions(context.functions.map(({name, arity}) => `${name}/${arity}`).join(', '));
+  }, [context?.functions]);
+  // force lock language when context is present
+  context && (props = produce(props, draft => {draft.language.lockedComponent = true}));
 
   return (
     <Card className='mb-3'>
       <Card.Header as="h5" className={"d-flex justify-content-between"}>
           <span>Language 𝓛</span>
           <div className={"d-flex justify-content-left"}>
-            <ComponentLockButton lockFn={() => props.lockLanguageComponent()}
-                locked={props.language.lockedComponent} subject='language'/>
+            {!context && <ComponentLockButton lockFn={() => props.lockLanguageComponent()}
+                locked={props.language.lockedComponent} subject='language'/>}
             <Help subject='language'
                 children={languageHelp}
                 onToggle={setShowHelp}
