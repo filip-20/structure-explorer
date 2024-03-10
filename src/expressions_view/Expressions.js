@@ -188,7 +188,7 @@ function ExpressionItem(props) {
   const isMissing = isContextFormula && !contextFormula
   // update formula value when its value in context changes
   useMemo(() => {
-    contextFormula && props.onInputChange(contextFormula.formula, index, FORMULA);
+    contextFormula && props.onInputChange(contextFormula.formula, index, FORMULA, true);
   }, [contextFormula?.formula]);
 
   return (

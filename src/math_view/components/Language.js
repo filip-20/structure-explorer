@@ -89,13 +89,13 @@ const Language = (props) => {
 
   // load language from context when context is present
   useMemo(() => {
-    context && props.setConstants(context.constants.join(', '));
+    context && props.setConstants(context.constants.join(', '), true);
   }, [context?.constants]);
   useMemo(() => {
-    context && props.setPredicates(context.predicates.map(({name, arity}) => `${name}/${arity}`).join(', '));
+    context && props.setPredicates(context.predicates.map(({name, arity}) => `${name}/${arity}`).join(', '), true);
   }, [context?.predicates]);
   useMemo(() => {
-    context && props.setFunctions(context.functions.map(({name, arity}) => `${name}/${arity}`).join(', '));
+    context && props.setFunctions(context.functions.map(({name, arity}) => `${name}/${arity}`).join(', '), true);
   }, [context?.functions]);
   // force lock language when context is present
   context && (props = produce(props, draft => {draft.language.lockedComponent = true}));
