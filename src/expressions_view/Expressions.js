@@ -156,6 +156,7 @@ const Expressions = (props) => {
                       <Dropdown.Menu>
                         {context.axioms.map(f =>
                           <Dropdown.Item
+                            key={f.name}
                             title={f.formula}
                             onClick={() => props.addExpression(CONTEXT_FORMULA, { name: f.name, type: 'axiom' })}
                           >
@@ -163,6 +164,7 @@ const Expressions = (props) => {
                           </Dropdown.Item>)}
                         {context.formulas.map(f =>
                           <Dropdown.Item
+                            key={f.name}
                             onClick={() => props.addExpression(CONTEXT_FORMULA, { name: f.name, type: 'named_formula' })}
                           >Named formula: {f.name}
                           </Dropdown.Item>)}
