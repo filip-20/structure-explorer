@@ -44,7 +44,6 @@ function prepare(initialState: any) {
       }) : compose;
     
     const stateMonitor: Middleware = store => next => action => {
-      console.log('structure explorer redux action:', action)
       if (instance.handleStoreChange && !filterAction(action)) {
         instance.handleStoreChange();
       }
@@ -65,8 +64,6 @@ function prepare(initialState: any) {
     if (initialState !== null) {
       instance.store.dispatch(importAppState(initialState, instance.store.getState().diagramState));
     }
-
-    //instance.store.subscribe(() => instance.handleStoreChange && instance.handleStoreChange())
 
     return {
         instance,
