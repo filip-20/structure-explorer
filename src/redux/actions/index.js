@@ -1,16 +1,19 @@
-export const setConstants = (value) => ({
+export const setConstants = (value, ignore) => ({
   type: 'SET_CONSTANTS',
-  value
+  value,
+  ignore
 });
 
-export const setPredicates = (value) => ({
+export const setPredicates = (value, ignore) => ({
   type: 'SET_PREDICATES',
-  value
+  value,
+  ignore
 });
 
-export const setFunctions = (value) => ({
+export const setFunctions = (value, ignore) => ({
   type: 'SET_FUNCTIONS',
-  value
+  value,
+  ignore
 });
 
 export const setDomain = (value) => ({
@@ -231,11 +234,12 @@ export const setFunctionValueTable = (value, functionName) => ({
   functionName
 });
 
-export const checkExpressionSyntax = (value, index, expressionType) => ({
+export const checkExpressionSyntax = (value, index, expressionType, ignore) => ({
   type: 'CHECK_SYNTAX',
   value,
   index,
-  expressionType
+  expressionType,
+  ignore
 });
 
 export const addExpression = (expressionType, contextInfo) => ({
