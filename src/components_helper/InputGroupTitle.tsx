@@ -26,7 +26,7 @@ export default function InputGroupTitle({
   return (
     <>
       {label != "" && <Form.Label htmlFor={label}>{label}</Form.Label>}
-      <InputGroup as={Col} className="mb-3" hasValidation>
+      <InputGroup as={Col} className="mb-3" hasValidation={!!error}>
         <InputGroup.Text>{prefix}</InputGroup.Text>
         <Form.Control
           placeholder={placeholder}

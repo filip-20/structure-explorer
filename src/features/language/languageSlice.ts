@@ -52,14 +52,14 @@ export const selectParsedConstants = createSelector(
   [selectConstants],
   (constants) => {
     try {
-      const parsed = parseConstants(constants);
+      const parsed = new Set(parseConstants(constants));
 
       return { parsed: parsed };
+      //if (constants.filter((element2) => element2 === element).length > 1) {
+      //  throw Error(`Constant ${element} is already defined in constants`);
+      //}
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        return { error: error };
-      }
-      throw error;
+      return { error: error };
     }
   }
 );
@@ -109,38 +109,30 @@ export const selectSymbolsClash = createSelector(
     if (!funcs.parsed) return "";
 
     const constants = consts.parsed;
-    const predicates = Array.from(preds.parsed).map((name) => name[0]);
-    const functions = Array.from(funcs.parsed).map((name) => name[0]);
+    const predicates = new Set(preds.parsed.keys());
+    const functions = new Set(funcs.parsed.keys());
 
     constants.forEach((element) => {
-      if (predicates.includes(element)) {
-        err = `Constant ${element} is already defined in predicates`;
+      if (preds.parsed.has(element)) {
+        err = `Constant ${element} is also defined in predicates`;
       }
 
-      if (functions.includes(element)) {
-        err = `Constant ${element} is already defined in functions`;
-      }
-
-      if (constants.filter((element2) => element2 === element).length > 1) {
-        err = `Constant ${element} is already defined in constants`;
+      if (funcs.parsed.has(element)) {
+        err = `Constant ${element} is also defined in functions`;
       }
     });
 
     predicates.forEach((element) => {
-      if (functions.includes(element)) {
-        err = `Predicate ${element} is already defined in functions`;
-      }
-
-      if (predicates.filter((element2) => element2 === element).length > 1) {
-        err = `Predicate ${element} is already defined in predicates`;
+      if (functions.has(element)) {
+        err = `Predicate ${element} is also defined in functions`;
       }
     });
 
-    functions.forEach((element) => {
-      if (functions.filter((element2) => element2 === element).length > 1) {
-        err = `Function ${element} is already defined in functions`;
-      }
-    });
+    // functions.forEach((element) => {
+    //   if (functions.filter((element2) => element2 === element).length > 1) {
+    //     err = `Function ${element} is also defined in functions`;
+    //   }
+    // });
 
     return err;
   }

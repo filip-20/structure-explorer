@@ -134,7 +134,7 @@ export const selectParsedConstant = createSelector(
       domain.parsed === undefined ||
       domain.parsed.includes(constant.text) === false
     ) {
-      const err = new Error("Domain does not contain this symbol");
+      const err = new Error("This element is not in domain.");
       return { error: err };
     }
 
@@ -153,12 +153,16 @@ export const selectParsedPredicate = createSelector(
       const interpretation = predicate.interpretation.text;
       const arity = preds.parsed.get(predicate.name);
       const parsed = parseTuples(interpretation);
+      const size = arity === 1 ? "single" : `${arity}-tuple`;
 
       let err = undefined;
 
       parsed.forEach((tuple) => {
         if (tuple.length !== arity) {
-          err = new Error(`${arity}-tuple ${tuple} has incorrect size.`);
+          const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
+          err = new Error(
+            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${predicate.name} is ${arity}`
+          );
           return;
         }
 
@@ -174,7 +178,7 @@ export const selectParsedPredicate = createSelector(
             JSON.stringify(tuple) === JSON.stringify(tuple2) &&
             tuple != tuple2
           ) {
-            err = new Error(`${arity}-tuple ${tuple} is already in predicate.`);
+            err = new Error(`${size} (${tuple}) is already in predicate.`);
             return;
           }
         });
@@ -214,29 +218,28 @@ export const selectParsedFunction = createSelector(
   [selectFunctionSymbol, selectParsedDomain, selectParsedFunctions],
   (fun, domain, functions) => {
     if (!functions.parsed) return {};
-    if (!domain.parsed)
-      return { error: new Error("Function is not fully defined") };
+    if (!domain.parsed) return {};
     if (!fun.interpretation) return {};
 
     try {
       const interpretation = fun.interpretation.text;
-      const arity = functions.parsed.get(fun.name);
+      const arity = functions.parsed.get(fun.name) ?? 0;
       const parsed = parseTuples(interpretation);
+      const size = arity === 1 ? "single" : `${arity + 1}-tuple`;
 
       let err = undefined;
 
-      if (parsed.length !== Math.pow(domain.parsed.length, arity! - 1)) {
-        err = new Error("Function is not fully defined");
-      }
+      let all = getAllPossibleCombinations(domain.parsed, arity);
+      let examples = all.slice(0, 3).map((element) => `(${element.join(",")})`);
 
-      let all = getAllPossibleCombinations(domain.parsed, arity!);
+      // if (parsed.length !== Math.pow(domain.parsed.length, arity! - 1)) {
+      // }
 
       parsed.forEach((tuple) => {
         if (arity !== undefined && tuple.length != arity + 1) {
+          const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
           err = new Error(
-            `Tuple ${tuple} has incorrect size (${tuple.length} , should be ${
-              arity + 1
-            }).`
+            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${fun.name} is ${arity}. Format is: (n-elements,mapped_element)`
           );
           return;
         }
@@ -254,8 +257,11 @@ export const selectParsedFunction = createSelector(
               JSON.stringify(tuple2.slice(0, -1)) &&
             tuple != tuple2
           ) {
+            tuple = tuple.slice(0, -1);
+            const actual_size =
+              tuple.length === 1 ? "single" : `${arity}-tuple`;
             err = new Error(
-              `Tuple ${tuple.slice(0, -1)} is already in function.`
+              `${actual_size} (${tuple}) has already defined value.`
             );
           }
         });
@@ -268,11 +274,17 @@ export const selectParsedFunction = createSelector(
           all = all.filter(
             (i) => JSON.stringify(i) !== JSON.stringify(tuple.slice(0, -1))
           );
+          examples = all.slice(0, 3).map((element) => `(${element.join(",")})`);
         }
       });
 
       if (err === undefined && all.length !== 0) {
-        err = new Error("Function is not fully defined");
+        const examplePrints =
+          all.length <= 3 ? `${examples}` : `${examples}...`;
+        const actual_size = all[0].length === 1 ? "singles" : `${arity}-tuples`;
+        err = new Error(
+          `Function is not fully defined, for example these ${actual_size} do not have assigned value: ${examplePrints}`
+        );
       } else if (err !== undefined && all.length == 0) {
         err = undefined;
       }

@@ -65,19 +65,19 @@ export default function Structure() {
             }}
             error={domainError.error}
           ></InputGroupTitle>
-          {constants.parsed && constants.parsed.length > 0 && (
+          {constants.parsed && constants.parsed.size > 0 && (
             <h3 className="h6">Constants interpretation</h3>
           )}
-          {constants.parsed?.map((name) => (
+          {Array.from(constants.parsed ?? []).map((values) => (
             <>
               <InterpretationInput
-                name={name}
+                name={values[0]}
                 selector={selectIndividualConstant}
                 parser={selectParsedConstant}
                 onChange={(e) => {
                   dispatch(
                     updateInterpretationConstants({
-                      key: name,
+                      key: values[0],
                       value: e.target.value,
                     })
                   );
