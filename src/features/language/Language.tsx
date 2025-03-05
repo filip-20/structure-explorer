@@ -42,8 +42,9 @@ export default function Language() {
         <Card.Body>
           <InputGroupTitle
             label={"Individual constants"}
-            prefix={<InlineMath>{String.raw`\mathcal{L}`}</InlineMath>}
-            suffix="}"
+            id="0"
+            prefix={<InlineMath>{String.raw`\mathcal{C_L} = \{`}</InlineMath>}
+            suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Constants"
             text={constantsText}
             onChange={(e) => {
@@ -54,10 +55,11 @@ export default function Language() {
 
           <InputGroupTitle
             label={"Predicate symbols"}
+            id="0"
             prefix={
-              <InlineMath>{String.raw`\mathcal{P}_{\mathcal{L}}`}</InlineMath>
+              <InlineMath>{String.raw`\mathcal{P}_{\mathcal{L}} = \{`}</InlineMath>
             }
-            suffix="}"
+            suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Predicates"
             text={predicatesText}
             onChange={(e) => {
@@ -68,10 +70,11 @@ export default function Language() {
 
           <InputGroupTitle
             label={"Function symbols"}
+            id="0"
             prefix={
-              <InlineMath>{String.raw`\mathcal{F}_{\mathcal{L}}`}</InlineMath>
+              <InlineMath>{String.raw`\mathcal{F}_{\mathcal{L}} = \{`}</InlineMath>
             }
-            suffix="}"
+            suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Functions"
             text={languageText}
             onChange={(e) => {

@@ -31,9 +31,9 @@ export default function InterpretationInputIf({
       <InputGroupTitle
         label=""
         prefix={
-          <InlineMath>{String.raw`i(\text{\textsf{${name}}}) =`}</InlineMath>
+          <InlineMath>{String.raw`i(\text{\textsf{${name}}}) = \{`}</InlineMath>
         }
-        suffix=""
+        suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
         placeholder=""
         text={interpretation.interpretation?.text ?? ""}
         onChange={onChange}

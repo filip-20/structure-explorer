@@ -20,7 +20,9 @@ export default function Language() {
         <Card.Body>
           <InputGroupTitle
             label={"Variable assignment of individual variables"}
-            prefix={<InlineMath>{String.raw`e`}</InlineMath>}
+            id="0"
+            prefix={<InlineMath>{String.raw`e = \{`}</InlineMath>}
+            suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="assignments"
           ></InputGroupTitle>
         </Card.Body>

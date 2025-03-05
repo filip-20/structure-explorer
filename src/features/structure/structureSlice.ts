@@ -74,14 +74,34 @@ export const selectIndividualConstant = (state: RootState, name: string) =>
   state.structure.iC[name];
 
 export const selectIp = (state: RootState) => state.structure.iP;
+export const selectIpName = (state: RootState, name: string) =>
+  state.structure.iP[name];
+
+// export const selectPredicateSymbol = createSelector(
+//   [selectIpName, (name): string => name],
+//   (interpretation, name) => {
+//     return { interpretation: interpretation, name: name };
+//   }
+// );
+
 export const selectPredicateSymbol = (state: RootState, name: string) => {
   return { interpretation: state.structure.iP[name], name: name };
 };
 
 export const selectIf = (state: RootState) => state.structure.iF;
+export const selectIfName = (state: RootState, name: string) =>
+  state.structure.iF[name];
+
 export const selectFunctionSymbol = (state: RootState, name: string) => {
   return { interpretation: state.structure.iF[name], name: name };
 };
+
+// export const selectFunctionSymbol = createSelector(
+//   [selectIfName, (name): string => name],
+//   (interpretation, name) => {
+//     return { interpretation: interpretation, name: name };
+//   }
+// );
 
 export const selectParsedDomain = createSelector([selectDomain], (domain) => {
   try {
@@ -219,21 +239,28 @@ export const selectParsedFunction = createSelector(
   (fun, domain, functions) => {
     if (!functions.parsed) return {};
     if (!domain.parsed) return {};
-    if (!fun.interpretation) return {};
 
     try {
-      const interpretation = fun.interpretation.text;
       const arity = functions.parsed.get(fun.name) ?? 0;
+      let all = getAllPossibleCombinations(domain.parsed, arity);
+      let examples = all.slice(0, 3).map((element) => `(${element.join(",")})`);
+
+      if (!fun.interpretation) {
+        const examplePrints =
+          all.length <= 3 ? `${examples}` : `${examples}...`;
+        const actual_size = all[0].length === 1 ? "singles" : `${arity}-tuples`;
+        return {
+          error: new Error(
+            `Function is not fully defined, for example these ${actual_size} do not have assigned value: ${examplePrints}`
+          ),
+        };
+      }
+
+      const interpretation = fun.interpretation.text;
       const parsed = parseTuples(interpretation);
       const size = arity === 1 ? "single" : `${arity + 1}-tuple`;
 
       let err = undefined;
-
-      let all = getAllPossibleCombinations(domain.parsed, arity);
-      let examples = all.slice(0, 3).map((element) => `(${element.join(",")})`);
-
-      // if (parsed.length !== Math.pow(domain.parsed.length, arity! - 1)) {
-      // }
 
       parsed.forEach((tuple) => {
         if (arity !== undefined && tuple.length != arity + 1) {

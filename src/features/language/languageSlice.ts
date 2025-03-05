@@ -52,14 +52,20 @@ export const selectParsedConstants = createSelector(
   [selectConstants],
   (constants) => {
     try {
-      const parsed = new Set(parseConstants(constants));
+      const parsed = parseConstants(constants);
+      parsed.forEach((element) => {
+        if (parsed.filter((element2) => element === element2).length > 1) {
+          throw new Error(`Constant ${element} is already defined`);
+        }
+      });
 
-      return { parsed: parsed };
-      //if (constants.filter((element2) => element2 === element).length > 1) {
-      //  throw Error(`Constant ${element} is already defined in constants`);
-      //}
+      return { parsed: new Set(parsed) };
     } catch (error) {
-      return { error: error };
+      if (error instanceof SyntaxError || error instanceof Error) {
+        return { error: error };
+      }
+
+      throw error;
     }
   }
 );
@@ -67,12 +73,21 @@ export const selectParsedPredicates = createSelector(
   [selectPredicates],
   (predicates) => {
     try {
-      const parsed = new Map(
-        parsePredicates(predicates).map(({ name, arity }) => [name, arity])
-      );
-      return { parsed };
+      const parsed = parsePredicates(predicates);
+
+      parsed.forEach((element) => {
+        if (
+          parsed.filter((element2) => element.name === element2.name).length > 1
+        ) {
+          throw new Error(`Predicate ${element} is already defined`);
+        }
+      });
+
+      return {
+        parsed: new Map(parsed.map(({ name, arity }) => [name, arity])),
+      };
     } catch (error) {
-      if (error instanceof SyntaxError) {
+      if (error instanceof SyntaxError || error instanceof Error) {
         return { error: error };
       }
 
@@ -85,13 +100,21 @@ export const selectParsedFunctions = createSelector(
   [selectFunctions],
   (functions) => {
     try {
-      const parsed = new Map(
-        parseFunctions(functions).map(({ name, arity }) => [name, arity])
-      );
+      const parsed = parseFunctions(functions);
 
-      return { parsed: parsed };
+      parsed.forEach((element) => {
+        if (
+          parsed.filter((element2) => element.name === element2.name).length > 1
+        ) {
+          throw new Error(`Function ${element} is already defined`);
+        }
+      });
+
+      return {
+        parsed: new Map(parsed.map(({ name, arity }) => [name, arity])),
+      };
     } catch (error) {
-      if (error instanceof SyntaxError) {
+      if (error instanceof SyntaxError || error instanceof Error) {
         return { error: error };
       }
 

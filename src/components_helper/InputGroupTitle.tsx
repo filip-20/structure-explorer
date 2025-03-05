@@ -5,8 +5,9 @@ import ErrorFeedback from "./ErrorFeedback";
 
 interface Props {
   label: string;
+  id: string;
   prefix: string | React.JSX.Element;
-  suffix: string;
+  suffix: string | React.JSX.Element;
   placeholder: string;
   text: string;
   onChange(event: ChangeEvent<HTMLInputElement>): void;
@@ -15,7 +16,7 @@ interface Props {
 
 export default function InputGroupTitle({
   label,
-  //id,
+  id,
   prefix,
   suffix,
   placeholder,
@@ -25,7 +26,11 @@ export default function InputGroupTitle({
 }: Props) {
   return (
     <>
-      {label != "" && <Form.Label htmlFor={label}>{label}</Form.Label>}
+      {label != "" && (
+        <Form.Label htmlFor={`${id}-${label.toLowerCase()}`}>
+          {label}
+        </Form.Label>
+      )}
       <InputGroup as={Col} className="mb-3" hasValidation={!!error}>
         <InputGroup.Text>{prefix}</InputGroup.Text>
         <Form.Control
@@ -34,7 +39,7 @@ export default function InputGroupTitle({
           aria-describedby="basic-addon2"
           value={text}
           onChange={onChange}
-          id={label}
+          id={`${id}-${label.toLowerCase()}`}
           isInvalid={!!error}
         />
 

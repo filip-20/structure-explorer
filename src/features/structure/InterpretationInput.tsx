@@ -7,6 +7,7 @@ import { ChangeEvent } from "react";
 
 interface Props {
   name: string;
+  id: string;
   selector(state: RootState, name: string): InterpretationState;
   parser(
     state: RootState,
@@ -21,6 +22,7 @@ interface Props {
 // InterpretationInput
 export default function InterpretationInput({
   name,
+  id,
   selector,
   parser,
   onChange,
@@ -32,6 +34,7 @@ export default function InterpretationInput({
     <>
       <InputGroupTitle
         label=""
+        id={id}
         prefix={
           <InlineMath>{String.raw`i(\text{\textsf{${name}}}) =`}</InlineMath>
         }

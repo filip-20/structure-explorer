@@ -56,8 +56,9 @@ export default function Structure() {
         <Card.Body>
           <InputGroupTitle
             label={"Domain"}
-            prefix={<InlineMath>{String.raw`\mathcal{D} =`}</InlineMath>}
-            suffix="}"
+            id="0"
+            prefix={<InlineMath>{String.raw`\mathcal{D} = \{`}</InlineMath>}
+            suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Domain"
             text={domainText}
             onChange={(e) => {
@@ -68,10 +69,11 @@ export default function Structure() {
           {constants.parsed && constants.parsed.size > 0 && (
             <h3 className="h6">Constants interpretation</h3>
           )}
-          {Array.from(constants.parsed ?? []).map((values) => (
+          {Array.from(constants.parsed ?? []).map((values, index) => (
             <>
               <InterpretationInput
                 name={values[0]}
+                id={`constant-${index}`}
                 selector={selectIndividualConstant}
                 parser={selectParsedConstant}
                 onChange={(e) => {
@@ -88,7 +90,7 @@ export default function Structure() {
           {predicates.parsed && predicates.parsed.size > 0 && (
             <h3 className="h6">Predicates interpretation</h3>
           )}
-          {Array.from(predicates.parsed ?? []).map((values) => (
+          {Array.from(predicates.parsed ?? []).map((values, index) => (
             <>
               {/* <InterpretationInput
                 name={values[0]}
@@ -106,6 +108,7 @@ export default function Structure() {
 
               <InterpretationInputIp
                 name={values[0]}
+                //id={`predicate-${index}`}
                 selector={selectPredicateSymbol}
                 onChange={(e) => {
                   dispatch(
@@ -121,10 +124,11 @@ export default function Structure() {
           {functions.parsed && functions.parsed.size > 0 && (
             <h3 className="h6">Functions interpretation</h3>
           )}
-          {Array.from(functions.parsed ?? []).map((values) => (
+          {Array.from(functions.parsed ?? []).map((values, index) => (
             <>
               <InterpretationInputIf
                 name={values[0]}
+                //id={`function-${index}`}
                 selector={selectFunctionSymbol}
                 onChange={(e) => {
                   dispatch(
