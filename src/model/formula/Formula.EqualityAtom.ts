@@ -16,9 +16,7 @@ class EqualityAtom extends Formula {
    * @param {Term} subRight
    */
   constructor(public subLeft: Term, public subRight: Term) {
-    super([subLeft, subRight], ", ");
-    this.subLeft = subLeft;
-    this.subRight = subRight;
+    super([], ", ");
   }
 
   /**

@@ -54,11 +54,11 @@ class PredicateAtom extends Formula {
     return [];
   }
 
-  getSignedType(sign: boolean): SignedFormulaType {
-    throw new Error("Method not implemented.");
+  getSignedType(_: boolean): SignedFormulaType {
+    return SignedFormulaType.ALPHA;
   }
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    throw new Error("Method not implemented.");
+  getSignedSubFormulas(_: boolean): SignedFormula[] {
+    return [];
   }
 
   // createCopy(): PredicateAtom {

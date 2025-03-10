@@ -55,10 +55,10 @@ class UniversalQuant extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    throw new Error("Method not implemented.");
+    return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    throw new Error("Method not implemented.");
+    return [{ sign: sign, formula: this.subFormula }];
   }
 
   // createCopy() {

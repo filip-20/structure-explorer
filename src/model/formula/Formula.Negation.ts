@@ -46,11 +46,11 @@ class Negation extends Formula {
     return this.subFormula.getVariables();
   }
 
-  getSignedType(sign: boolean): SignedFormulaType {
-    throw new Error("Method not implemented.");
+  getSignedType(_: boolean): SignedFormulaType {
+    return SignedFormulaType.ALPHA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    throw new Error("Method not implemented.");
+    return [{ sign: !sign, formula: this.subFormula }];
   }
 
   // createCopy() {

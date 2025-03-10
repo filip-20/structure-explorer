@@ -43,10 +43,13 @@ class Disjunction extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    throw new Error("Method not implemented.");
+    return sign ? SignedFormulaType.ALPHA : SignedFormulaType.BETA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    throw new Error("Method not implemented.");
+    return [
+      { sign: sign, formula: this.subLeft },
+      { sign: sign, formula: this.subRight },
+    ];
   }
 
   // createCopy() {
