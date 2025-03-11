@@ -7,9 +7,12 @@ import {
   parseTuples,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {
+  selectLanguage,
   selectParsedFunctions,
   selectParsedPredicates,
 } from "../language/languageSlice";
+import Structure, { DomainElement } from "../../model/Structure";
+import { Symbol } from "../../model/Language";
 
 export interface InterpretationState {
   text: string;
@@ -327,6 +330,45 @@ export const selectParsedFunction = createSelector(
   }
 );
 
+export const selectStructure = createSelector(
+  [(state: RootState) => state, selectLanguage, selectParsedDomain],
+  (state, language, domain) => {
+    const usedConstants = language.constants;
+    const usedPredicates = language.predicates;
+    const usedFunctions = language.functions;
+
+    let iC = new Map<Symbol, DomainElement>();
+    let iP = new Map<Symbol, Set<DomainElement[]>>();
+    let iF = new Map<Symbol, Map<DomainElement[], DomainElement>>();
+
+    usedConstants.forEach((name) => {
+      const value = selectParsedConstant(state, name).parsed ?? "";
+      iC.set(name, value);
+    });
+
+    usedPredicates.forEach((_, name) => {
+      const value = selectParsedPredicate(state, name).parsed ?? [[]];
+      iP.set(name, new Set(value));
+    });
+
+    usedFunctions.forEach((_, name) => {
+      const valuation = selectParsedFunction(state, name).parsed ?? [[]];
+
+      let map = new Map<DomainElement[], DomainElement>();
+
+      valuation.forEach((value) => {
+        map.set(value.slice(0, -1), value.slice(-1)[0]);
+      });
+
+      iF.set(name, map);
+    });
+
+    return new Structure(language, new Set(domain.parsed ?? []), iC, iP, iF);
+  }
+);
+
+export default structureSlice.reducer;
+
 // export const selectPredicateSymbolsErrors = createSelector([selectPredicateSymbols, selectErrorDomain, selectErrorPredicates], (predicates, domain, preds) => {
 //   let err: Record<string, SyntaxError | undefined> = {}
 
@@ -390,5 +432,3 @@ export const selectParsedFunction = createSelector(
 //   return err
 
 // })
-
-export default structureSlice.reducer;
