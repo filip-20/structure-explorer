@@ -16,7 +16,7 @@ import {
   selectSymbolsClash,
 } from "./languageSlice";
 
-export default function Language() {
+export default function LanguageComponent() {
   let help: string = "help";
   const dispatch = useAppDispatch();
   const constantsText = useAppSelector(selectConstants);

@@ -10,8 +10,8 @@ export type Symbol = string;
 export class Language {
   constructor(
     public constants: Set<Symbol>,
-    public functions: Map<Symbol, number>,
-    public predicates: Map<Symbol, number>
+    public predicates: Map<Symbol, number>,
+    public functions: Map<Symbol, number>
   ) {}
 
   /**
@@ -74,8 +74,8 @@ export class Language {
    * @param {string} predicateName
    * @return {int} arity of the predicate
    */
-  getPredicate(predicateName: string) {
-    return this.predicates.get(predicateName);
+  getPredicate(predicateName: string): number {
+    return this.predicates.get(predicateName)!;
   }
 }
 

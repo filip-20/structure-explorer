@@ -3,7 +3,7 @@ import TooltipButton from "../../components_helper/TooltipButton";
 import InputGroupTitle from "../../components_helper/InputGroupTitle";
 import { InlineMath } from "react-katex";
 
-export default function Language() {
+export default function VariablesComponent() {
   let help: string = "help";
 
   return (

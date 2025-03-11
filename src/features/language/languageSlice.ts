@@ -7,6 +7,7 @@ import {
   parseFunctions,
   SyntaxError,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
+import Language from "../../model/Language";
 
 export interface LanguageState {
   constants: string;
@@ -158,5 +159,22 @@ export const selectSymbolsClash = createSelector(
     // });
 
     return err;
+  }
+);
+
+export const selectLanguage = createSelector(
+  [selectParsedConstants, selectParsedPredicates, selectParsedFunctions],
+  (constants, predicates, functions) => {
+    return new Language(
+      constants.parsed ?? new Set(),
+      predicates.parsed ?? new Map(),
+      functions.parsed ?? new Map()
+    );
+
+    // {
+    //   constants: constants.parsed ?? [],
+    //   predicates: predicates.parsed ?? {},
+    //   functions: functions.parsed ?? {},
+    // };
   }
 );

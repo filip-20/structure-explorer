@@ -1,10 +1,10 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import FormulaCard from "./features/formulas/FormulaCard";
-import Language from "./features/language/Language";
-import Structure from "./features/structure/Structure";
-import Variables from "./features/structure/Variables";
+import StructureComponent from "./features/structure/StructureComponent";
+import VariablesComponent from "./features/structure/VariablesComponent";
 import { Col, Row } from "react-bootstrap";
+import LanguageComponent from "./features/language/LanguageComponent";
 
 function App() {
   return (
@@ -12,9 +12,9 @@ function App() {
       <Form>
         <Row>
           <Col>
-            <Language />
-            <Structure />
-            <Variables />
+            <LanguageComponent />
+            <StructureComponent />
+            <VariablesComponent />
           </Col>
           <Col>
             <FormulaCard type="formula" help="helper"></FormulaCard>

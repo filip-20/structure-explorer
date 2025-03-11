@@ -12,7 +12,7 @@ interface Props {
   guess: boolean | null;
 }
 
-export default function Formula({ id, text, guess }: Props) {
+export default function FormulaComponent({ id, text, guess }: Props) {
   let real_id = id + 1;
   const dispatch = useAppDispatch();
   //const text = useAppSelector((state) => state.formulas.allFormulas[id].text);

@@ -28,7 +28,7 @@ import InterpretationInput from "./InterpretationInput";
 import InterpretationInputIp from "./InterpretationInputIp";
 import InterpretationInputIf from "./InterpretationInputIf";
 
-export default function Structure() {
+export default function StructureComponent() {
   let help: string = "help";
   const dispatch = useAppDispatch();
   const domainText = useAppSelector(selectDomain);

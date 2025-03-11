@@ -1,6 +1,6 @@
 import { Col, Row } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import Formula from "./Formula";
+import FormulaComponent from "./FormulaComponent";
 import TooltipButton from "../../components_helper/TooltipButton";
 import Button from "react-bootstrap/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -33,7 +33,7 @@ export default function FormulaCard({ type, help }: Props) {
         </Card.Header>
         <Card.Body>
           {allFormulas.map((formula: FormulaState, index: number) => (
-            <Formula
+            <FormulaComponent
               id={index}
               key={index}
               text={formula.text}
