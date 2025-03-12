@@ -28,18 +28,39 @@ class PredicateAtom extends Formula {
   eval(structure: Structure, e: Valuation): boolean {
     let translatedTerms: string[] = [];
     this.terms.forEach((term) => {
-      translatedTerms.push(term.eval(structure, e));
+      try {
+        translatedTerms.push(term.eval(structure, e));
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
     });
 
     const interpretation = structure.iP.get(this.name);
+    console.log(translatedTerms);
 
     if (interpretation === undefined) {
       throw new Error(
         `The interpretation of the predicate symbol ${this.name} is not defined`
       );
     }
+    console.log();
 
-    return interpretation.has(translatedTerms);
+    // const arr = ["a"];
+    // const set = new Set();
+    // set.add(arr);
+    // console.log(`${set.has(["a"])}`);
+
+    //sets compare elements by reference => arr !== ["a"] switch to arrays?
+    let tru = false;
+    interpretation.forEach((tuple) => {
+      if (JSON.stringify(tuple) === JSON.stringify(translatedTerms)) {
+        tru = true;
+      }
+    });
+
+    return tru;
+    //return interpretation.has(translatedTerms);
   }
 
   /**

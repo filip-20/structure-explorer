@@ -2,8 +2,13 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { remove, updateText, updateGuess } from "./formulasSlice";
-import { useAppDispatch } from "../../app/hooks";
+import {
+  remove,
+  updateText,
+  updateGuess,
+  selectFormulaError,
+} from "./formulasSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
 
 interface Props {
@@ -13,10 +18,13 @@ interface Props {
 }
 
 export default function FormulaComponent({ id, text, guess }: Props) {
-  let real_id = id + 1;
+  const real_id = id + 1;
   const dispatch = useAppDispatch();
   //const text = useAppSelector((state) => state.formulas.allFormulas[id].text);
   //const guess = useAppSelector((state) => state.formulas.allFormulas[id].guess);
+  const { string, f } = useAppSelector((state) =>
+    selectFormulaError(state, id)
+  );
   return (
     <>
       <InputGroup as={Col} className="mb-3">
@@ -39,6 +47,11 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         >
           Delete
         </Button>
+        {/*temporary}*/}
+        <br />
+        <div>{string}</div>
+        <br />
+        <div>answer -{f ? "true" : "false"}</div>
       </InputGroup>
 
       <InputGroup as={Col} className="mb-3">

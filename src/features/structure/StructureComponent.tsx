@@ -72,14 +72,14 @@ export default function StructureComponent() {
           {Array.from(constants.parsed ?? []).map((values, index) => (
             <>
               <InterpretationInput
-                name={values[0]}
+                name={values}
                 id={`constant-${index}`}
                 selector={selectIndividualConstant}
                 parser={selectParsedConstant}
                 onChange={(e) => {
                   dispatch(
                     updateInterpretationConstants({
-                      key: values[0],
+                      key: values,
                       value: e.target.value,
                     })
                   );
