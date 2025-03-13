@@ -51,7 +51,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         <br />
         <div>{string}</div>
         <br />
-        <div>answer -{f ? "true" : "false"}</div>
+        <div>eval -{f ? "true" : "false"}</div>
       </InputGroup>
 
       <InputGroup as={Col} className="mb-3">

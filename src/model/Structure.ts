@@ -17,13 +17,45 @@ export class Structure {
    * @param {Language} language
    */
 
+  //iP = new Map<Symbol, Set<DomainElement>>();
+  //iF = new Map<Symbol, Map<DomainElement, DomainElement>>();
   constructor(
     public language: Language,
     public domain: Set<DomainElement>,
     public iC: Map<Symbol, DomainElement>,
     public iP: Map<Symbol, Set<DomainElement[]>>,
     public iF: Map<Symbol, Map<DomainElement[], DomainElement>>
-  ) {}
+  ) {
+    // iP.forEach((element, symbol) => {
+    //   let set = this.iP.get(symbol) ?? new Set<DomainElement>();
+    //   set.add(JSON.stringify(element));
+    //   this.iP.set(symbol, set);
+    // });
+    // iF.forEach((elements, symbol) => {
+    //   let map = this.iF.get(symbol) ?? new Map<DomainElement, DomainElement>();
+    //   elements.forEach((domainElement, tuple) => {
+    //     map.set(JSON.stringify(tuple), domainElement);
+    //   });
+    //   this.iF.set(symbol, map);
+    //});
+  }
+
+  iPHas(symbol: Symbol, tuple: DomainElement[]): boolean {
+    const predicateSet = this.iP.get(symbol);
+    if (!predicateSet) return false;
+
+    let has = false;
+    predicateSet.forEach((element) => {
+      if (JSON.stringify(element) === JSON.stringify(tuple)) {
+        has = true;
+        return true;
+      }
+    });
+
+    return has;
+  }
+  // iFHas(tuple: DomainElement[]): boolean;
+  // iFGet(tuple: DomainElement[]): DomainElement;
 }
 
 export default Structure;

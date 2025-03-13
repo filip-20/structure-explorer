@@ -21,6 +21,7 @@ import Equivalence from "../../model/formula/Formula.Equivalence";
 import ExistentialQuant from "../../model/formula/Formula.ExistentialQuant";
 import { selectLanguage } from "../language/languageSlice";
 import { selectStructure } from "../structure/structureSlice";
+import UniversalQuant from "../../model/formula/Formula.UniversalQuant";
 
 export interface FormulaState {
   text: string;
@@ -66,6 +67,8 @@ export const formulasSlice = createSlice({
   },
 });
 
+export const selectFormulas = (state: RootState) => state.formulas.allFormulas;
+
 export const { add, remove, updateText, updateGuess } = formulasSlice.actions;
 
 export const selectFormulaError = (state: RootState, id: number) => {
@@ -74,30 +77,30 @@ export const selectFormulaError = (state: RootState, id: number) => {
   const structure = selectStructure(state);
 
   const factories = {
-    variable: (symbol: string, ee: ErrorExpected) => new Variable(symbol),
-    constant: (symbol: string, ee: ErrorExpected) => new Constant(symbol),
+    variable: (symbol: string, _ee: ErrorExpected) => new Variable(symbol),
+    constant: (symbol: string, _ee: ErrorExpected) => new Constant(symbol),
     functionApplication: (
       symbol: string,
       args: Array<Term>,
-      ee: ErrorExpected
+      _ee: ErrorExpected
     ) => new FunctionTerm(symbol, args),
-    predicateAtom: (symbol: string, args: Array<Term>, ee: ErrorExpected) =>
+    predicateAtom: (symbol: string, args: Array<Term>, _ee: ErrorExpected) =>
       new PredicateAtom(symbol, args),
-    equalityAtom: (lhs: Term, rhs: Term, ee: ErrorExpected) =>
+    equalityAtom: (lhs: Term, rhs: Term, _ee: ErrorExpected) =>
       new EqualityAtom(lhs, rhs),
-    negation: (subf: Formula, ee: ErrorExpected) => new Negation(subf),
-    conjunction: (lhs: Formula, rhs: Formula, ee: ErrorExpected) =>
+    negation: (subf: Formula, _ee: ErrorExpected) => new Negation(subf),
+    conjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
       new Conjunction(lhs, rhs),
-    disjunction: (lhs: Formula, rhs: Formula, ee: ErrorExpected) =>
+    disjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
       new Disjunction(lhs, rhs),
-    implication: (lhs: Formula, rhs: Formula, ee: ErrorExpected) =>
+    implication: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
       new Implication(lhs, rhs),
-    equivalence: (lhs: Formula, rhs: Formula, ee: ErrorExpected) =>
+    equivalence: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
       new Equivalence(lhs, rhs),
-    existentialQuant: (variable: string, subf: Formula, ee: ErrorExpected) =>
+    existentialQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
       new ExistentialQuant(variable, subf),
-    universalQuant: (variable: string, subf: Formula, ee: ErrorExpected) =>
-      new ExistentialQuant(variable, subf),
+    universalQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
+      new UniversalQuant(variable, subf),
   };
 
   console.log(language);
@@ -106,7 +109,7 @@ export const selectFormulaError = (state: RootState, id: number) => {
   let error = "";
   try {
     const formula = parseFormulaWithPrecedence(
-      state.formulas.allFormulas[id].text,
+      state.formulas.allFormulas[id].text, //dorobit selectFormula a pouzit tu?
       language.getParserLanguage(),
       factories
     );
@@ -124,4 +127,3 @@ export const selectFormulaError = (state: RootState, id: number) => {
 };
 
 export default formulasSlice.reducer;
-export const selectFormulas = (state: RootState) => state.formulas.allFormulas;

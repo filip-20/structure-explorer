@@ -29,8 +29,12 @@ class UniversalQuant extends Formula {
     let eCopy = new Map(e);
     for (let item of structure.domain) {
       eCopy.set(this.variableName, item);
-      if (!this.subFormula.eval(structure, eCopy)) {
-        return false;
+      try {
+        if (!this.subFormula.eval(structure, eCopy)) {
+          return false;
+        }
+      } catch (error) {
+        throw error;
       }
     }
     return true;

@@ -27,14 +27,12 @@ class PredicateAtom extends Formula {
    */
   eval(structure: Structure, e: Valuation): boolean {
     let translatedTerms: string[] = [];
-    this.terms.forEach((term) => {
-      try {
-        translatedTerms.push(term.eval(structure, e));
-      } catch (error) {
-        console.log(error);
-        throw error;
-      }
-    });
+    try {
+      translatedTerms = this.terms.map((term) => term.eval(structure, e));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
 
     const interpretation = structure.iP.get(this.name);
     console.log(translatedTerms);
@@ -52,14 +50,14 @@ class PredicateAtom extends Formula {
     // console.log(`${set.has(["a"])}`);
 
     //sets compare elements by reference => arr !== ["a"] switch to arrays?
-    let tru = false;
-    interpretation.forEach((tuple) => {
-      if (JSON.stringify(tuple) === JSON.stringify(translatedTerms)) {
-        tru = true;
-      }
-    });
+    // let tru = false;
+    // interpretation.forEach((tuple) => {
+    //   if (JSON.stringify(tuple) === JSON.stringify(translatedTerms)) {
+    //     tru = true;
+    //   }
+    // });
 
-    return tru;
+    return structure.iPHas(this.name, translatedTerms);
     //return interpretation.has(translatedTerms);
   }
 

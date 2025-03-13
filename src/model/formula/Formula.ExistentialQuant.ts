@@ -30,8 +30,12 @@ class ExistentialQuant extends Formula {
 
     for (let item of structure.domain) {
       eCopy.set(this.variableName, item);
-      if (this.subFormula.eval(structure, eCopy)) {
-        return true;
+      try {
+        if (this.subFormula.eval(structure, eCopy)) {
+          return true;
+        }
+      } catch (error) {
+        throw error;
       }
     }
     return false;
