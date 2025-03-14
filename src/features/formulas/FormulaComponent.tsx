@@ -6,10 +6,11 @@ import {
   remove,
   updateText,
   updateGuess,
-  selectFormulaError,
+  selectEvaluatedFormula,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
+import ErrorFeedback from "../../components_helper/ErrorFeedback";
 
 interface Props {
   id: number;
@@ -20,14 +21,12 @@ interface Props {
 export default function FormulaComponent({ id, text, guess }: Props) {
   const real_id = id + 1;
   const dispatch = useAppDispatch();
-  //const text = useAppSelector((state) => state.formulas.allFormulas[id].text);
-  //const guess = useAppSelector((state) => state.formulas.allFormulas[id].guess);
-  const { string, f } = useAppSelector((state) =>
-    selectFormulaError(state, id)
+  const { error, evaluated } = useAppSelector((state) =>
+    selectEvaluatedFormula(state, id)
   );
   return (
     <>
-      <InputGroup as={Col} className="mb-3">
+      <InputGroup as={Col} className="mb-3" hasValidation={!!error}>
         <InputGroup.Text>
           <InlineMath>{String.raw`\varphi_{${real_id}}`}</InlineMath>
         </InputGroup.Text>
@@ -39,6 +38,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
           onChange={(e) => {
             dispatch(updateText({ id: id, text: e.target.value }));
           }}
+          isInvalid={!!error}
         />
         <Button
           variant="danger"
@@ -47,11 +47,11 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         >
           Delete
         </Button>
+        <ErrorFeedback error={error} text={text}></ErrorFeedback>
+
         {/*temporary}*/}
-        <br />
-        <div>{string}</div>
-        <br />
-        <div>eval -{f ? "true" : "false"}</div>
+
+        <div>eval -{evaluated ? "true" : "false"}</div>
       </InputGroup>
 
       <InputGroup as={Col} className="mb-3">
@@ -60,15 +60,15 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         </InputGroup.Text>
         <Form.Select
           aria-label="Select"
-          value={guess == true ? "⊨" : guess == false ? "⊭" : "⊨/⊭?"}
+          value={guess == true ? "true" : guess == false ? "false" : "null"}
           onChange={(e) => {
             dispatch(
               updateGuess({
                 id: id,
                 guess:
-                  e.target.value == "⊨"
+                  e.target.value == "true"
                     ? true
-                    : e.target.value == "⊭"
+                    : e.target.value == "false"
                     ? false
                     : null,
               })
@@ -85,6 +85,11 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         <Button variant="success" id="button-addon2">
           Game
         </Button>
+        <div>
+          {guess !== null && evaluated !== undefined && guess === evaluated
+            ? "Correct"
+            : "Incorrect"}
+        </div>
       </InputGroup>
     </>
   );

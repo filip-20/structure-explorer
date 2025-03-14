@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import Constant from "../../model/term/Term.Constant";
@@ -68,62 +68,62 @@ export const formulasSlice = createSlice({
 });
 
 export const selectFormulas = (state: RootState) => state.formulas.allFormulas;
+export const selectFormula = (state: RootState, id: number) =>
+  state.formulas.allFormulas[id];
 
 export const { add, remove, updateText, updateGuess } = formulasSlice.actions;
 
-export const selectFormulaError = (state: RootState, id: number) => {
-  //TODO FIX
-  const language = selectLanguage(state);
-  const structure = selectStructure(state);
+export const selectEvaluatedFormula = createSelector(
+  [selectLanguage, selectStructure, selectFormula],
+  (language, structure, form) => {
+    const factories = {
+      variable: (symbol: string, _ee: ErrorExpected) => new Variable(symbol),
+      constant: (symbol: string, _ee: ErrorExpected) => new Constant(symbol),
+      functionApplication: (
+        symbol: string,
+        args: Array<Term>,
+        _ee: ErrorExpected
+      ) => new FunctionTerm(symbol, args),
+      predicateAtom: (symbol: string, args: Array<Term>, _ee: ErrorExpected) =>
+        new PredicateAtom(symbol, args),
+      equalityAtom: (lhs: Term, rhs: Term, _ee: ErrorExpected) =>
+        new EqualityAtom(lhs, rhs),
+      negation: (subf: Formula, _ee: ErrorExpected) => new Negation(subf),
+      conjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
+        new Conjunction(lhs, rhs),
+      disjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
+        new Disjunction(lhs, rhs),
+      implication: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
+        new Implication(lhs, rhs),
+      equivalence: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
+        new Equivalence(lhs, rhs),
+      existentialQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
+        new ExistentialQuant(variable, subf),
+      universalQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
+        new UniversalQuant(variable, subf),
+    };
 
-  const factories = {
-    variable: (symbol: string, _ee: ErrorExpected) => new Variable(symbol),
-    constant: (symbol: string, _ee: ErrorExpected) => new Constant(symbol),
-    functionApplication: (
-      symbol: string,
-      args: Array<Term>,
-      _ee: ErrorExpected
-    ) => new FunctionTerm(symbol, args),
-    predicateAtom: (symbol: string, args: Array<Term>, _ee: ErrorExpected) =>
-      new PredicateAtom(symbol, args),
-    equalityAtom: (lhs: Term, rhs: Term, _ee: ErrorExpected) =>
-      new EqualityAtom(lhs, rhs),
-    negation: (subf: Formula, _ee: ErrorExpected) => new Negation(subf),
-    conjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
-      new Conjunction(lhs, rhs),
-    disjunction: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
-      new Disjunction(lhs, rhs),
-    implication: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
-      new Implication(lhs, rhs),
-    equivalence: (lhs: Formula, rhs: Formula, _ee: ErrorExpected) =>
-      new Equivalence(lhs, rhs),
-    existentialQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
-      new ExistentialQuant(variable, subf),
-    universalQuant: (variable: string, subf: Formula, _ee: ErrorExpected) =>
-      new UniversalQuant(variable, subf),
-  };
+    console.log(language);
+    console.log(structure);
 
-  console.log(language);
-  console.log(structure);
+    //let error = "";
+    try {
+      const formula = parseFormulaWithPrecedence(
+        form.text,
+        language.getParserLanguage(),
+        factories
+      );
+      //error = formula.toString();
 
-  let error = "";
-  try {
-    const formula = parseFormulaWithPrecedence(
-      state.formulas.allFormulas[id].text, //dorobit selectFormula a pouzit tu?
-      language.getParserLanguage(),
-      factories
-    );
-    error = formula.toString();
-
-    const value = formula.eval(structure, new Map());
-    return { string: error, f: value };
-  } catch (error) {
-    if (error instanceof SyntaxError || error instanceof Error) {
-      return { string: error.message, f: false };
+      const value = formula.eval(structure, new Map());
+      return { evaluated: value };
+    } catch (error) {
+      if (error instanceof SyntaxError || error instanceof Error) {
+        return { error: error };
+      }
     }
+
+    return {};
   }
-
-  return { string: error, f: false };
-};
-
+);
 export default formulasSlice.reducer;
