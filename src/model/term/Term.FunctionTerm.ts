@@ -39,7 +39,7 @@ class FunctionTerm extends Term {
       );
     }
 
-    const interpretedValue = interpretation.get(interpretedParams);
+    const interpretedValue = structure.iFGet(this.name, interpretedParams);
 
     if (interpretedValue === undefined) {
       throw new Error(

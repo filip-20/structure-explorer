@@ -54,8 +54,36 @@ export class Structure {
 
     return has;
   }
-  // iFHas(tuple: DomainElement[]): boolean;
-  // iFGet(tuple: DomainElement[]): DomainElement;
+
+  iFHas(symbol: Symbol, tuple: DomainElement[]): boolean {
+    const functionMap = this.iF.get(symbol);
+    if (!functionMap) return false;
+
+    let has = false;
+    functionMap.forEach((_, key) => {
+      if (JSON.stringify(key) === JSON.stringify(tuple)) {
+        has = true;
+        return true;
+      }
+    });
+
+    return has;
+  }
+
+  iFGet(symbol: Symbol, tuple: DomainElement[]): DomainElement | undefined {
+    const functionMap = this.iF.get(symbol);
+    if (!functionMap) return undefined;
+
+    let element = "";
+    functionMap.forEach((value, key) => {
+      if (JSON.stringify(key) === JSON.stringify(tuple)) {
+        element = value;
+        return true;
+      }
+    });
+
+    return element;
+  }
 }
 
 export default Structure;
