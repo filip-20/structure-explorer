@@ -60,7 +60,7 @@ class ExistentialQuant extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    return sign ? SignedFormulaType.GAMMA : SignedFormulaType.DELTA;
+    return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [{ sign: sign, formula: this.subFormula }];

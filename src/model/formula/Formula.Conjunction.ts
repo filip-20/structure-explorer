@@ -43,7 +43,7 @@ class Conjunction extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    return sign ? SignedFormulaType.BETA : SignedFormulaType.ALPHA;
+    return sign ? SignedFormulaType.ALPHA : SignedFormulaType.BETA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [

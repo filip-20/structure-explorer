@@ -45,22 +45,15 @@ class Equivalence extends Formula {
     return [toRightImpl, toLeftImpl];
   }
 
-  getSignedType(_: boolean): SignedFormulaType {
-    return SignedFormulaType.BETA;
+  getSignedType(sign: boolean): SignedFormulaType {
+    return sign ? SignedFormulaType.ALPHA : SignedFormulaType.BETA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     const toRightImpl = new Implication(this.subLeft, this.subRight);
     const toLeftImpl = new Implication(this.subRight, this.subLeft);
 
-    if (sign === false) {
-      return [
-        { sign: sign, formula: toLeftImpl },
-        { sign: sign, formula: toRightImpl },
-      ];
-    }
-
     return [
-      { sign: !sign, formula: toLeftImpl },
+      { sign: sign, formula: toLeftImpl },
       { sign: sign, formula: toRightImpl },
     ];
   }

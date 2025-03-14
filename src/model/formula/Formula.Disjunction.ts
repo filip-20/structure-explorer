@@ -43,7 +43,7 @@ class Disjunction extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    return sign ? SignedFormulaType.ALPHA : SignedFormulaType.BETA;
+    return sign ? SignedFormulaType.BETA : SignedFormulaType.ALPHA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [

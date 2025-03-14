@@ -59,7 +59,7 @@ class UniversalQuant extends Formula {
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
-    return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
+    return sign ? SignedFormulaType.GAMMA : SignedFormulaType.DELTA;
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [{ sign: sign, formula: this.subFormula }];
