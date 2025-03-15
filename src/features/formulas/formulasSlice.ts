@@ -22,6 +22,7 @@ import ExistentialQuant from "../../model/formula/Formula.ExistentialQuant";
 import { selectLanguage } from "../language/languageSlice";
 import { selectStructure } from "../structure/structureSlice";
 import UniversalQuant from "../../model/formula/Formula.UniversalQuant";
+import { selectValuation } from "../variables/variablesSlice";
 
 export interface FormulaState {
   text: string;
@@ -74,8 +75,8 @@ export const selectFormula = (state: RootState, id: number) =>
 export const { add, remove, updateText, updateGuess } = formulasSlice.actions;
 
 export const selectEvaluatedFormula = createSelector(
-  [selectLanguage, selectStructure, selectFormula],
-  (language, structure, form) => {
+  [selectLanguage, selectStructure, selectFormula, selectValuation],
+  (language, structure, form, valuation) => {
     const factories = {
       variable: (symbol: string, _ee: ErrorExpected) => new Variable(symbol),
       constant: (symbol: string, _ee: ErrorExpected) => new Constant(symbol),
@@ -115,7 +116,7 @@ export const selectEvaluatedFormula = createSelector(
       );
       //error = formula.toString();
 
-      const value = formula.eval(structure, new Map());
+      const value = formula.eval(structure, valuation);
       return { evaluated: value };
     } catch (error) {
       if (error instanceof SyntaxError || error instanceof Error) {

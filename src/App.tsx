@@ -2,7 +2,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import FormulaCard from "./features/formulas/FormulaCard";
 import StructureComponent from "./features/structure/StructureComponent";
-import VariablesComponent from "./features/structure/VariablesComponent";
+import VariablesComponent from "./features/variables/VariablesComponent";
 import { Col, Row } from "react-bootstrap";
 import LanguageComponent from "./features/language/LanguageComponent";
 
