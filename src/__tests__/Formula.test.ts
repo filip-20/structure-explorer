@@ -16,7 +16,7 @@ import Language from "../model/Language";
 import Structure from "../model/Structure";
 
 //source: https://fmfi-uk-1-ain-412.github.io/lpi/teoreticke-ain/zbierka.pdf
-describe("testing test", () => {
+describe("exercise 2.2.1", () => {
   const domain = new Set(["barca", "janci", "karci"]);
   const constants = new Set(["karol"]);
   const predicates = new Map<string, number>([
@@ -47,7 +47,140 @@ describe("testing test", () => {
 
   const formula = new Implication(lhs, rhs);
 
-  test("exercise 2.2.1", () => {
+  test("rlhs", () => {
+    expect(rlhs.eval(structure, new Map())).toBe(false);
+  });
+
+  test("rrhs", () => {
+    expect(rrhs.eval(structure, new Map())).toBe(true);
+  });
+
+  test("lhs", () => {
+    expect(lhs.eval(structure, new Map())).toBe(true);
+  });
+
+  test("rhs", () => {
+    expect(rhs.eval(structure, new Map())).toBe(true);
+  });
+
+  test("full formula", () => {
     expect(formula.eval(structure, new Map())).toBe(true);
+  });
+});
+
+describe("exercise 2.2.2", () => {
+  const domain = new Set(["1", "2", "3", "4", "5", "6"]);
+  const constants = new Set(["alex", "bruno", "hugo", "tereza"]);
+  const predicates = new Map<string, number>([
+    ["zena", 1],
+    ["muz", 1],
+    ["ma_rad", 2],
+    ["brat", 2],
+    ["rodic", 2],
+    ["starsi", 2],
+  ]);
+  const functions = new Map<string, number>();
+  const language = new Language(constants, predicates, functions);
+
+  const iC = new Map<string, string>([
+    ["alex", "1"],
+    ["bruno", "2"],
+    ["hugo", "5"],
+    ["tereza", "6"],
+  ]);
+
+  const iPzena = new Set<string[]>([["1"], ["3"], ["4"], ["6"]]);
+  const iPmuz = new Set<string[]>([["2"], ["4"]]);
+  const iPma_rad = new Set<string[]>([
+    ["1", "1"],
+    ["1", "2"],
+    ["1", "5"],
+    ["1", "6"],
+    ["2", "2"],
+    ["3", "3"],
+    ["3", "4"],
+    ["4", "4"],
+    ["5", "5"],
+    ["5", "6"],
+  ]);
+  const iPbrat = new Set<string[]>([
+    ["1", "2"],
+    ["2", "1"],
+    ["3", "1"],
+    ["4", "4"],
+    ["5", "6"],
+    ["6", "1"],
+    ["6", "2"],
+    ["6", "6"],
+  ]);
+
+  const iProdic = new Set<string[]>([
+    ["1", "1"],
+    ["2", "5"],
+    ["2", "6"],
+    ["1", "5"],
+    ["3", "4"],
+    ["4", "2"],
+    ["1", "6"],
+    ["5", "6"],
+    ["6", "5"],
+  ]);
+
+  const iPstarsi = new Set<string[]>([
+    ["2", "1"],
+    ["5", "6"],
+    ["6", "5"],
+  ]);
+
+  const iP = new Map<string, Set<string[]>>([
+    ["zena", iPzena],
+    ["muz", iPmuz],
+    ["ma_rad", iPma_rad],
+    ["brat", iPbrat],
+    ["rodic", iProdic],
+    ["starsi", iPstarsi],
+  ]);
+  const iF = new Map<string, Map<string[], string>>();
+  const structure = new Structure(language, domain, iC, iP, iF);
+
+  const alex = new Constant("alex");
+  const bruno = new Constant("bruno");
+  const hugo = new Constant("hugo");
+  const tereza = new Constant("tereza");
+
+  const a1 = new Implication(
+    new PredicateAtom("starsi", [bruno, alex]),
+    new Negation(new PredicateAtom("starsi", [alex, bruno]))
+  );
+
+  const a2 = new Equivalence(
+    new Negation(new PredicateAtom("ma_rad", [alex, bruno])),
+    new Negation(new PredicateAtom("ma_rad", [bruno, alex]))
+  );
+
+  const a3 = new Implication(
+    new Conjunction(
+      new PredicateAtom("rodic", [bruno, hugo]),
+      new PredicateAtom("rodic", [bruno, tereza])
+    ),
+    new Implication(
+      new Conjunction(
+        new Negation(new PredicateAtom("zena", [hugo])),
+        new PredicateAtom("muz", [hugo])
+      ),
+      new PredicateAtom("brat", [hugo, tereza])
+    )
+  );
+
+  test("a1", () => {
+    expect(a1.eval(structure, new Map())).toBe(true);
+  });
+
+  test("a2", () => {
+    expect(a2.eval(structure, new Map())).toBe(false);
+  });
+
+  test("a3", () => {
+    expect(a3.eval(structure, new Map())).toBe(true);
   });
 });

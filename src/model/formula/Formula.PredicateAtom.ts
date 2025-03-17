@@ -30,19 +30,19 @@ class PredicateAtom extends Formula {
     try {
       translatedTerms = this.terms.map((term) => term.eval(structure, e));
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       throw error;
     }
 
     const interpretation = structure.iP.get(this.name);
-    console.log(translatedTerms);
+    //console.log(translatedTerms);
 
     if (interpretation === undefined) {
       throw new Error(
         `The interpretation of the predicate symbol ${this.name} is not defined`
       );
     }
-    console.log();
+    //console.log();
 
     // const arr = ["a"];
     // const set = new Set();
