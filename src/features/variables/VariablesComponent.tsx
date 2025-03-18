@@ -20,7 +20,7 @@ export default function VariablesComponent() {
         <Card.Header as="h4">
           <Row>
             <Col>Variable assignment</Col>
-            <Col>
+            <Col xs="auto">
               <TooltipButton text={help}></TooltipButton>
             </Col>
           </Row>

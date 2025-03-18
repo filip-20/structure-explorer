@@ -18,7 +18,7 @@ export default function FormulaCard({ type, help }: Props) {
 
   return (
     <>
-      <Card>
+      <Card className="mb-3 mt-3">
         <Card.Header as="h4">
           <Row>
             <Col>
@@ -26,7 +26,7 @@ export default function FormulaCard({ type, help }: Props) {
               <InlineMath>{String.raw`\mathcal{M}`}</InlineMath>
               {type == "term" && "Denotation of terms in M"}
             </Col>
-            <Col>
+            <Col xs="auto">
               <TooltipButton text={help}></TooltipButton>
             </Col>
           </Row>
@@ -40,8 +40,9 @@ export default function FormulaCard({ type, help }: Props) {
               guess={formula.guess}
             />
           ))}
+
+          <Button onClick={() => dispatch(add())}>Add</Button>
         </Card.Body>
-        <Button onClick={() => dispatch(add())}>Add</Button>
       </Card>
     </>
   );

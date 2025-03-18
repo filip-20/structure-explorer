@@ -41,7 +41,7 @@ export default function StructureComponent() {
   const functionsInterpretation = useAppSelector(selectIf);
   return (
     <>
-      <Card>
+      <Card className="mb-3">
         <Card.Header as="h2" className="h4">
           <Row>
             <Col>

@@ -28,13 +28,13 @@ export default function LanguageComponent() {
   const symbolsClash = useAppSelector(selectSymbolsClash);
   return (
     <>
-      <Card>
+      <Card className="mb-3 mt-3">
         <Card.Header as="h4">
           <Row>
             <Col>
               Language <InlineMath>{String.raw`\mathcal{L}`}</InlineMath>
             </Col>
-            <Col>
+            <Col xs="auto">
               <TooltipButton text={help}></TooltipButton>
             </Col>
           </Row>

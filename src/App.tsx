@@ -1,15 +1,14 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import Form from "react-bootstrap/Form";
 import FormulaCard from "./features/formulas/FormulaCard";
 import StructureComponent from "./features/structure/StructureComponent";
 import VariablesComponent from "./features/variables/VariablesComponent";
-import { Col, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import LanguageComponent from "./features/language/LanguageComponent";
 
 function App() {
   return (
     <>
-      <Form>
+      <Container fluid>
         <Row>
           <Col>
             <LanguageComponent />
@@ -21,7 +20,7 @@ function App() {
             {/* <FormulaCard type="term" help="helper"></FormulaCard> */}
           </Col>
         </Row>
-      </Form>
+      </Container>
     </>
   );
 }
