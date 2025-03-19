@@ -12,6 +12,13 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
 import ErrorFeedback from "../../components_helper/ErrorFeedback";
 import { Row } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faGamepad,
+  faTrash,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   id: number;
@@ -43,12 +50,13 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               }}
               isInvalid={!!error}
             />
+
             <Button
-              variant="danger"
+              variant="outline-danger"
               id="button-addon2"
               onClick={() => dispatch(remove(id))}
             >
-              Delete
+              <FontAwesomeIcon icon={faTrash} />
             </Button>
             <ErrorFeedback error={error} text={text}></ErrorFeedback>
             {/*temporary}*/}
@@ -99,24 +107,46 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             {guess !== null &&
               evaluated !== undefined &&
               guess === evaluated && (
-                <div className="text-success">Correct</div>
+                <Row>
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    pull="left"
+                    className="text-success"
+                  />
+                  <div className="text-success">Correct</div>
+                </Row>
               )}
 
             {guess !== null &&
               evaluated === undefined &&
               guess !== evaluated && (
-                <div className="text-danger">Incorrect</div>
+                <Row>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    pull="left"
+                    className="text-danger"
+                  />
+
+                  <div className="text-danger">Incorrect</div>
+                </Row>
               )}
 
             {guess !== null &&
               evaluated !== undefined &&
               guess !== evaluated && (
-                <div className="text-danger">Incorrect</div>
+                <Row>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    pull="left"
+                    className="text-danger"
+                  />
+                  <div className="text-danger">Incorrect</div>
+                </Row>
               )}
           </Col>
           <Col xs={4}>
-            <Button variant="success" id="button-addon2">
-              Game
+            <Button variant="secondary" id="button-addon2" disabled={!!error}>
+              <FontAwesomeIcon icon={faGamepad} />
             </Button>
           </Col>
         </Row>

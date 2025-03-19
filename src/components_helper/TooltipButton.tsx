@@ -1,3 +1,5 @@
+import { faQuestion } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useRef } from "react";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 
@@ -10,8 +12,8 @@ export default function TooltipButton({ text }: Props) {
   const target = useRef(null); //pre help
   return (
     <>
-      <Button ref={target} onClick={() => setShow(!show)}>
-        ?
+      <Button ref={target} variant="primary" onClick={() => setShow(!show)}>
+        <FontAwesomeIcon icon={faQuestion} />
       </Button>
       <Overlay target={target.current} show={show} placement="right">
         {(props) => (
