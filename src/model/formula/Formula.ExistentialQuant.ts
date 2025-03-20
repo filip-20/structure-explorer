@@ -1,6 +1,6 @@
-import { Symbol } from "../Language";
 import Structure, { Valuation } from "../Structure";
 import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import QuantifiedFormula from "./QuantifiedFormula";
 
 /**
  * Represent existential quantificator
@@ -9,14 +9,14 @@ import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
  * @class
  * @extends Formula
  */
-class ExistentialQuant extends Formula {
+class ExistentialQuant extends QuantifiedFormula {
   /**
    *
    * @param {string} variableName
    * @param {Formula} subFormula
    */
   constructor(public variableName: string, public subFormula: Formula) {
-    super([subFormula], ", ");
+    super(variableName, subFormula, "∃");
   }
 
   /**
@@ -39,24 +39,6 @@ class ExistentialQuant extends Formula {
       }
     }
     return false;
-  }
-
-  /**
-   *
-   * @returns {string}
-   */
-  toString(): string {
-    return `∃${this.variableName} ${this.subFormula.toString()}`;
-  }
-
-  getSubFormulas(): Formula[] {
-    return [this.subFormula];
-  }
-
-  getVariables(): Set<Symbol> {
-    let variables = this.subFormula.getVariables();
-    variables.add(this.variableName);
-    return variables;
   }
 
   getSignedType(sign: boolean): SignedFormulaType {

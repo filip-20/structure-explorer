@@ -1,6 +1,6 @@
 import Structure, { Valuation } from "../Structure";
-import { Symbol } from "../Language";
 import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import QuantifiedFormula from "./QuantifiedFormula";
 
 /**
  * Represent universal quantificator
@@ -9,14 +9,14 @@ import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
  * @class
  * @extends Formula
  */
-class UniversalQuant extends Formula {
+class UniversalQuant extends QuantifiedFormula {
   /**
    *
    * @param {string} variableName
    * @param {Formula} subFormula
    */
   constructor(public variableName: string, public subFormula: Formula) {
-    super([subFormula], ", ");
+    super(variableName, subFormula, "∀");
   }
 
   /**
@@ -38,24 +38,6 @@ class UniversalQuant extends Formula {
       }
     }
     return true;
-  }
-
-  /**
-   *
-   * @returns {string}
-   */
-  toString(): string {
-    return `∀${this.variableName} ${this.subFormula.toString()}`;
-  }
-
-  getSubFormulas(): Formula[] {
-    return [this.subFormula];
-  }
-
-  getVariables(): Set<Symbol> {
-    let variables = this.subFormula.getVariables();
-    variables.add(this.variableName);
-    return variables;
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
