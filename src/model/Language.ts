@@ -5,6 +5,7 @@
  * @class
  */
 import { Language as ParserLanguage } from "@fmfi-uk-1-ain-412/js-fol-parser";
+import Term from "./term/Term";
 export type Symbol = string;
 
 export class Language {
@@ -27,6 +28,8 @@ export class Language {
       ...this.functions.keys(),
       ...this.predicates.keys(),
     ]);
+    console.log(nonLogicalSymbols);
+
     return {
       isConstant: (symbol: string): boolean => this.constants.has(symbol),
       isFunction: (symbol: string): boolean => this.functions.has(symbol),
@@ -37,10 +40,11 @@ export class Language {
 
   checkFunctionArity(
     symbol: string,
-    args: string | string[],
+    args: Term[],
     ee: { expected: (arg0: string) => void }
   ) {
     const a = this.functions.get(symbol);
+
     if (args.length !== a) {
       ee.expected(`${a} argument${a == 1 ? "" : "s"} to ${symbol}`);
     }
@@ -48,10 +52,11 @@ export class Language {
 
   checkPredicateArity(
     symbol: string,
-    args: string | string[],
+    args: Term[],
     ee: { expected: (arg0: string) => void }
   ) {
     const a = this.predicates.get(symbol);
+
     if (args.length !== a) {
       ee.expected(`${a} argument${a == 1 ? "" : "s"} to ${symbol}`);
     }

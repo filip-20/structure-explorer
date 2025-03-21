@@ -83,10 +83,15 @@ export const selectEvaluatedFormula = createSelector(
       functionApplication: (
         symbol: string,
         args: Array<Term>,
-        _ee: ErrorExpected
-      ) => new FunctionTerm(symbol, args),
-      predicateAtom: (symbol: string, args: Array<Term>, _ee: ErrorExpected) =>
-        new PredicateAtom(symbol, args),
+        ee: ErrorExpected
+      ) => {
+        language.checkFunctionArity(symbol, args, ee);
+        return new FunctionTerm(symbol, args);
+      },
+      predicateAtom: (symbol: string, args: Array<Term>, ee: ErrorExpected) => {
+        language.checkPredicateArity(symbol, args, ee);
+        return new PredicateAtom(symbol, args);
+      },
       equalityAtom: (lhs: Term, rhs: Term, _ee: ErrorExpected) =>
         new EqualityAtom(lhs, rhs),
       negation: (subf: Formula, _ee: ErrorExpected) => new Negation(subf),
@@ -119,7 +124,11 @@ export const selectEvaluatedFormula = createSelector(
       const value = formula.eval(structure, valuation);
       return { evaluated: value };
     } catch (error) {
-      if (error instanceof SyntaxError || error instanceof Error) {
+      if (error instanceof Error) {
+        return { error: error };
+      }
+
+      if (error instanceof SyntaxError) {
         return { error: error };
       }
     }
