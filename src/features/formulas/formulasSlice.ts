@@ -122,7 +122,7 @@ export const selectEvaluatedFormula = createSelector(
       //error = formula.toString();
 
       const value = formula.eval(structure, valuation);
-      return { evaluated: value };
+      return { evaluated: value, formula: formula };
     } catch (error) {
       if (error instanceof Error) {
         return { error: error };

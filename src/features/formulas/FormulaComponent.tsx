@@ -25,13 +25,19 @@ interface Props {
   text: string;
   guess: boolean | null;
 }
+import GameComponent from "../game/GameComponent";
+import { useState } from "react";
 
 export default function FormulaComponent({ id, text, guess }: Props) {
   const real_id = id + 1;
   const dispatch = useAppDispatch();
-  const { error, evaluated } = useAppSelector((state) =>
+  const { error, evaluated, formula } = useAppSelector((state) =>
     selectEvaluatedFormula(state, id)
   );
+  const [begin, setBegin] = useState(false);
+
+  const game = <GameComponent formula={formula!} choices={[{}]} />;
+
   return (
     <>
       <Form>
@@ -145,11 +151,17 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               )}
           </Col>
           <Col xs={4}>
-            <Button variant="secondary" id="button-addon2" disabled={!!error}>
+            <Button
+              variant="secondary"
+              id="button-addon2"
+              disabled={!!error}
+              onClick={() => setBegin(!begin)}
+            >
               <FontAwesomeIcon icon={faGamepad} />
             </Button>
           </Col>
         </Row>
+        {begin && game}
       </Form>
     </>
   );
