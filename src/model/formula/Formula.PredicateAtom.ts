@@ -16,7 +16,11 @@ class PredicateAtom extends Formula {
    * @param {Term[]} terms
    */
   constructor(public name: string, public terms: Term[] = []) {
-    super([], ", ");
+    super([], "");
+  }
+
+  depth(): number {
+    return 1;
   }
 
   /**

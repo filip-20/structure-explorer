@@ -15,7 +15,7 @@ class Disjunction extends Formula {
    * @param {Formula} subRight
    */
   constructor(public subLeft: Formula, public subRight: Formula) {
-    super([subLeft, subRight], ", ");
+    super([subLeft, subRight], " ∨ ");
   }
 
   /**
@@ -28,14 +28,6 @@ class Disjunction extends Formula {
     const left = this.subLeft.eval(structure, e);
     const right = this.subRight.eval(structure, e);
     return left || right;
-  }
-
-  /**
-   *
-   * @returns {string}
-   */
-  toString(): string {
-    return `(${this.subLeft.toString()} ∨ ${this.subRight.toString()})`;
   }
 
   getSubFormulas() {

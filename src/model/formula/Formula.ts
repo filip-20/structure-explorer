@@ -1,6 +1,8 @@
 import Expression from "../Expression";
 import { Symbol } from "../Language";
 import { Structure, Valuation } from "../Structure";
+import Negation from "./Formula.Negation";
+import PredicateAtom from "./Formula.PredicateAtom";
 
 export enum SignedFormulaType {
   ALPHA = "alpha",
@@ -33,6 +35,10 @@ abstract class Formula extends Expression {
 
   toString(): string {
     return `(${this.getSubFormulas().join(this.connective)})`;
+  }
+
+  depth(): number {
+    return Math.max(...this.subFormulas.map((f) => f.depth())) + 1;
   }
 
   abstract eval(structure: Structure, e: Valuation): boolean;

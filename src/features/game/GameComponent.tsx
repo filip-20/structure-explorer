@@ -1,7 +1,4 @@
-import { Col, Row } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
-import TooltipButton from "../../components_helper/TooltipButton";
-import { InlineMath } from "react-katex";
 import Formula from "../../model/formula/Formula";
 import MessageBubble from "../../components_helper/MessageBubble";
 import ChoiceBubble from "../../components_helper/ChoiceBubble";
@@ -23,7 +20,7 @@ export default function GameComponent({ formula, choices }: Props) {
         >
           <MessageBubble
             message={`What is your initial assumption about the truth/satisfaction of the formula ${formula.toString()} by the valuation 𝑒 in the structure ℳ?`}
-            sent
+            recieved
           />
 
           <ChoiceBubble choice1="True" choice2="False" />

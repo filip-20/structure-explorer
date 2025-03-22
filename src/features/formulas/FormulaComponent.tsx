@@ -27,6 +27,7 @@ interface Props {
 }
 import GameComponent from "../game/GameComponent";
 import { useState } from "react";
+import PredicateAtom from "../../model/formula/Formula.PredicateAtom";
 
 export default function FormulaComponent({ id, text, guess }: Props) {
   const real_id = id + 1;
@@ -36,7 +37,9 @@ export default function FormulaComponent({ id, text, guess }: Props) {
   );
   const [begin, setBegin] = useState(false);
 
-  const game = <GameComponent formula={formula!} choices={[{}]} />;
+  const game = (
+    <GameComponent formula={formula ?? new PredicateAtom("")} choices={[{}]} />
+  );
 
   return (
     <>

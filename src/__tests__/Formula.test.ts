@@ -182,5 +182,6 @@ describe("exercise 2.2.2", () => {
 
   test("a3", () => {
     expect(a3.eval(structure, new Map())).toBe(true);
+    expect(a3.subRight.depth()).toBe(4);
   });
 });
