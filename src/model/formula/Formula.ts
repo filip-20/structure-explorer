@@ -41,6 +41,20 @@ abstract class Formula extends Expression {
     return Math.max(...this.subFormulas.map((f) => f.depth())) + 1;
   }
 
+  winningSubformula(
+    sign: boolean,
+    structure: Structure,
+    e: Valuation
+  ): Formula | undefined {
+    const formulas = this.getSignedSubFormulas(true);
+
+    for (const { sign, formula } of formulas) {
+      if (formula.eval(structure, e) === false) {
+        return formula;
+      }
+    }
+  }
+
   abstract eval(structure: Structure, e: Valuation): boolean;
 
   getVariables(): Set<Symbol> {
