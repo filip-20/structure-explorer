@@ -199,7 +199,7 @@ describe("winningSubformula", () => {
 
   const iC = new Map<string, string>([["karol", "karci"]]);
   const iPprofesor = new Set<string[]>([["karci"], ["janci"]]);
-  const iPhlupy = new Set<string[]>([["janci"], ["karci"]]);
+  const iPhlupy = new Set<string[]>([["janci"]]);
   const iPscitany = new Set<string[]>([["barca"], ["karci"]]);
   const iP = new Map<string, Set<string[]>>([
     ["profesor", iPprofesor],
@@ -215,12 +215,56 @@ describe("winningSubformula", () => {
   const rrhs = new PredicateAtom("scitany", [karol]);
   const rhs = new Conjunction(new Negation(rlhs), rrhs);
 
-  //profesor(Karol) → (¬hlúpy(Karol) ∧ sčítaný(Karol)))
+  //F profesor(Karol) → (¬hlúpy(Karol) ∧ sčítaný(Karol)))
   const formula = new Implication(lhs, rhs);
 
+  //T profesor(karol) & F (¬hlúpy(Karol) ∧ sčítaný(Karol))
   test("winningSubformula", () => {
     expect(
-      formula.winningSubformula(true, structure, new Map())?.toString()
+      formula.winningSubformula(false, structure, new Map())?.toString()
     ).toBe(rhs.toString());
+  });
+});
+
+describe("winningElement", () => {
+  const domain = new Set(["barca", "janci", "karci"]);
+  const constants = new Set(["karol"]);
+  const predicates = new Map<string, number>([
+    ["profesor", 1],
+    ["hlupy", 1],
+    ["scitany", 1],
+  ]);
+  const functions = new Map<string, number>();
+  const language = new Language(constants, predicates, functions);
+
+  const iC = new Map<string, string>([["karol", "karci"]]);
+  const iPprofesor = new Set<string[]>([["karci"], ["janci"]]);
+  const iPhlupy = new Set<string[]>([["janci"]]);
+  const iPscitany = new Set<string[]>([["barca"], ["karci"]]);
+  const iP = new Map<string, Set<string[]>>([
+    ["profesor", iPprofesor],
+    ["hlupy", iPhlupy],
+    ["scitany", iPscitany],
+  ]);
+  const iF = new Map<string, Map<string[], string>>();
+  const structure = new Structure(language, domain, iC, iP, iF);
+
+  const variable = new Variable("x");
+
+  const karol = new Constant("karol");
+  const lhs = new PredicateAtom("profesor", [variable]);
+  const rlhs = new PredicateAtom("hlupy", [variable]);
+  const rrhs = new PredicateAtom("scitany", [variable]);
+  const rhs = new Conjunction(new Negation(rlhs), rrhs);
+
+  //\a x profesor(x) → (¬hlúpy(x) ∧ sčítaný(x)))
+  const formula = new Implication(lhs, rhs);
+
+  const qFormula = new UniversalQuant("x", formula);
+
+  test("winningElement", () => {
+    expect(
+      qFormula.winningElement(true, structure, new Map())?.toString()
+    ).toBe("janci");
   });
 });

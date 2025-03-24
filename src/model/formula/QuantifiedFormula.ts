@@ -1,4 +1,4 @@
-import Structure, { Valuation } from "../Structure";
+import Structure, { DomainElement, Valuation } from "../Structure";
 import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
 import { Symbol } from "../Language";
 
@@ -21,6 +21,27 @@ abstract class QuantifiedFormula extends Formula {
     return `${this.connective}${
       this.variableName
     } ${this.subFormula.toString()}`;
+  }
+
+  winningElement(
+    sign: boolean,
+    structure: Structure,
+    e: Valuation
+  ): DomainElement {
+    const signedFormula = this.getSignedSubFormulas(sign)[0];
+
+    let cpy = new Map(e);
+
+    let ret = "";
+
+    for (const element of structure.domain) {
+      cpy.set(this.variableName, element);
+      if (signedFormula.formula.eval(structure, cpy) !== signedFormula.sign) {
+        ret = element;
+      }
+    }
+
+    return ret;
   }
 
   getVariables(): Set<Symbol> {

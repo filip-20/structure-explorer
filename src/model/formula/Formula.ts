@@ -46,13 +46,23 @@ abstract class Formula extends Expression {
     structure: Structure,
     e: Valuation
   ): Formula | undefined {
-    const formulas = this.getSignedSubFormulas(true);
+    const formulas = this.getSignedSubFormulas(sign);
+
+    let shortest = undefined;
 
     for (const { sign, formula } of formulas) {
-      if (formula.eval(structure, e) === false) {
-        return formula;
+      if (formula.eval(structure, e) !== sign) {
+        if (!shortest) {
+          shortest = formula;
+        }
+
+        if (shortest.depth() > formula.depth()) {
+          shortest = formula;
+        }
       }
     }
+
+    return shortest;
   }
 
   abstract eval(structure: Structure, e: Valuation): boolean;
