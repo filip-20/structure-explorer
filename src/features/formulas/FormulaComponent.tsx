@@ -38,7 +38,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
   const [begin, setBegin] = useState(false);
 
   const game = (
-    <GameComponent formula={formula ?? new PredicateAtom("")} choices={[{}]} />
+    <GameComponent id={id} formula={formula ?? new PredicateAtom("")} />
   );
 
   return (

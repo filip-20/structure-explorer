@@ -8,7 +8,7 @@ import {
   parseFormulaWithPrecedence,
   SyntaxError,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
-import Formula from "../../model/formula/Formula";
+import Formula, { SignedFormula } from "../../model/formula/Formula";
 import Term from "../../model/term/Term";
 import FunctionTerm from "../../model/term/Term.FunctionTerm";
 import PredicateAtom from "../../model/formula/Formula.PredicateAtom";
@@ -27,6 +27,10 @@ import { selectValuation } from "../variables/variablesSlice";
 export interface FormulaState {
   text: string;
   guess: boolean | null;
+  gameChoices: {
+    choice: number;
+    type: string;
+  }[];
 }
 
 export interface FormulasState {
@@ -38,7 +42,7 @@ const initialState: FormulasState = {
 };
 
 function newFormulaState() {
-  return { text: "", guess: null };
+  return { text: "", guess: null, gameChoices: [] };
 }
 
 export const formulasSlice = createSlice({
@@ -48,6 +52,17 @@ export const formulasSlice = createSlice({
     add: (state) => {
       state.allFormulas.push(newFormulaState());
     },
+
+    addChoice: (
+      state,
+      action: PayloadAction<{ id: number; choice: number; type: string }>
+    ) => {
+      state.allFormulas[action.payload.id].gameChoices.push({
+        choice: action.payload.choice,
+        type: action.payload.type,
+      });
+    },
+
     remove: (state, action: PayloadAction<number>) => {
       state.allFormulas.splice(action.payload, 1);
     },
@@ -68,11 +83,15 @@ export const formulasSlice = createSlice({
   },
 });
 
+export const selectFormulaChoices = (state: RootState, id: number) =>
+  selectFormula(state, id).gameChoices;
+
 export const selectFormulas = (state: RootState) => state.formulas.allFormulas;
 export const selectFormula = (state: RootState, id: number) =>
   state.formulas.allFormulas[id];
 
-export const { add, remove, updateText, updateGuess } = formulasSlice.actions;
+export const { add, addChoice, remove, updateText, updateGuess } =
+  formulasSlice.actions;
 
 export const selectEvaluatedFormula = createSelector(
   [selectLanguage, selectStructure, selectFormula, selectValuation],
@@ -136,4 +155,32 @@ export const selectEvaluatedFormula = createSelector(
     return {};
   }
 );
+
+export const selectGameButtons = createSelector(
+  [selectFormulaChoices],
+  (choices) => {
+    if (choices.length === 0) {
+      return { choices: ["true", "false"], type: "init" };
+    }
+  }
+);
+
+export const selectNextGameText = createSelector(
+  [selectFormulaChoices, selectEvaluatedFormula],
+  (choices, { formula }) => {
+    if (choices.length === 0) {
+      return `What is your initial assumption about the truth/satisfaction of the formula ${formula!.toString()} by the valuation 𝑒 in the structure ℳ?`;
+    }
+  }
+);
+
+export const selectCurrentGameFormula = createSelector(
+  [selectFormulaChoices, selectEvaluatedFormula],
+  (choices, { formula }) => {
+    if (choices.length === 0) {
+      return formula!;
+    }
+  }
+);
+
 export default formulasSlice.reducer;
