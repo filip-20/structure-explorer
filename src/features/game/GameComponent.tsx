@@ -5,24 +5,30 @@ import ChoiceBubble from "../../components_helper/ChoiceBubble";
 import SelectBubble from "../../components_helper/SelectBubble";
 import { useAppSelector } from "../../app/hooks";
 import {
+  selectCurrentGameFormula,
   selectFormulaChoices,
   selectGameButtons,
+  selectHistory,
 } from "../formulas/formulasSlice";
 import { selectParsedDomain } from "../structure/structureSlice";
 interface Props {
   id: number;
-  formula: Formula;
+  originalFormula: Formula;
 }
 
-export default function GameComponent({ formula, id }: Props) {
+export default function GameComponent({ originalFormula, id }: Props) {
   const choices = useAppSelector((state) => selectFormulaChoices(state, id));
   const domain = useAppSelector(selectParsedDomain).parsed ?? [];
   const guess = choices[0] && choices[0].choice === 0;
+  const current = useAppSelector((state) =>
+    selectCurrentGameFormula(state, id)
+  );
+  const history = useAppSelector((state) => selectHistory(state, id));
 
   const buttons = useAppSelector((state) => selectGameButtons(state, id));
   let b = undefined;
-  if (buttons?.type === "init") {
-    b = <ChoiceBubble choices={buttons.choices} id={id} type="init" />;
+  if (buttons?.type === "init" || buttons?.type === "mc") {
+    b = <ChoiceBubble choices={buttons.choices} id={id} type={buttons.type} />;
   }
 
   return (
@@ -34,12 +40,22 @@ export default function GameComponent({ formula, id }: Props) {
             maxHeight: "33vh",
           }}
         >
-          <MessageBubble
+          {/* <MessageBubble
             message={`What is your initial assumption about the truth/satisfaction of the formula ${formula.toString()} by the valuation 𝑒 in the structure ℳ?`}
             recieved
-          />
+          /> */}
 
-          {choices.map(({ choice, type }) => {
+          {history.map(({ text, sender }) => (
+            <MessageBubble
+              message={text}
+              sent={sender === "player"}
+              recieved={sender === "game"}
+            />
+          ))}
+
+          {current.formula.toString()}
+
+          {/* {choices.map(({ choice, type }) => {
             if (type === "init") {
               const ch = choice === 0 ? "True" : "False";
               return (
@@ -54,7 +70,7 @@ export default function GameComponent({ formula, id }: Props) {
             }
 
             return <MessageBubble message="error" />;
-          })}
+          })} */}
 
           {/* <MessageBubble message="hello" sent />
           <MessageBubble message="hello" sent />
