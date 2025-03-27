@@ -17,6 +17,7 @@ import {
   selectFunctionSymbol,
   updateFunctionSymbols,
   selectIf,
+  selectParsedPredicate,
 } from "./structureSlice";
 import {
   selectParsedConstants,
@@ -71,7 +72,7 @@ export default function StructureComponent() {
           )}
           {Array.from(constants.parsed ?? []).map((values, index) => (
             <>
-              <InterpretationInput
+              <InterpretationInput //vraciat rovnaky objekt - aj meno
                 name={values}
                 id={`constant-${index}`}
                 selector={selectIndividualConstant}
@@ -92,7 +93,7 @@ export default function StructureComponent() {
           )}
           {Array.from(predicates.parsed ?? []).map((values, index) => (
             <>
-              {/* <InterpretationInput
+              <InterpretationInput
                 name={values[0]}
                 selector={selectPredicateSymbol}
                 parser={selectParsedPredicate}
@@ -104,8 +105,8 @@ export default function StructureComponent() {
                     })
                   );
                 }}
-              ></InterpretationInput> */}
-
+              ></InterpretationInput>
+              {/* 
               <InterpretationInputIp
                 name={values[0]}
                 //id={`predicate-${index}`}
@@ -118,7 +119,7 @@ export default function StructureComponent() {
                     })
                   );
                 }}
-              ></InterpretationInputIp>
+              ></InterpretationInputIp> */}
             </>
           ))}
           {functions.parsed && functions.parsed.size > 0 && (

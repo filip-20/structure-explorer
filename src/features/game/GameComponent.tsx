@@ -1,35 +1,51 @@
 import Card from "react-bootstrap/Card";
-import Formula from "../../model/formula/Formula";
+import Formula, { SignedFormulaType } from "../../model/formula/Formula";
 import MessageBubble from "../../components_helper/MessageBubble";
 import ChoiceBubble from "../../components_helper/ChoiceBubble";
 import SelectBubble from "../../components_helper/SelectBubble";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
+  addChoice,
   selectCurrentGameFormula,
   selectFormulaChoices,
   selectGameButtons,
   selectHistory,
 } from "../formulas/formulasSlice";
 import { selectParsedDomain } from "../structure/structureSlice";
+import GameControl from "./GameControls";
 interface Props {
   id: number;
   originalFormula: Formula;
 }
 
 export default function GameComponent({ originalFormula, id }: Props) {
+  const dispatch = useAppDispatch();
   const choices = useAppSelector((state) => selectFormulaChoices(state, id));
   const domain = useAppSelector(selectParsedDomain).parsed ?? [];
   const guess = choices[0] && choices[0].choice === 0;
-  const current = useAppSelector((state) =>
+  const currentFormula = useAppSelector((state) =>
     selectCurrentGameFormula(state, id)
   );
   const history = useAppSelector((state) => selectHistory(state, id));
-
   const buttons = useAppSelector((state) => selectGameButtons(state, id));
+
   let b = undefined;
-  if (buttons?.type === "init" || buttons?.type === "mc") {
+  if (
+    buttons?.type === "init" ||
+    buttons?.type === "mc" ||
+    buttons?.type === "continue"
+  ) {
     b = <ChoiceBubble choices={buttons.choices} id={id} type={buttons.type} />;
   }
+
+  // if (
+  //   choices &&
+  //   choices[0] &&
+  //   currentFormula.formula.getSignedType(currentFormula.sign) ===
+  //     SignedFormulaType.ALPHA
+  // ) {
+  //   dispatch(addChoice({ id: id, choice: 0, type: "gc" }));
+  // }
 
   return (
     <>
@@ -53,7 +69,7 @@ export default function GameComponent({ originalFormula, id }: Props) {
             />
           ))}
 
-          {current.formula.toString()}
+          {currentFormula.formula.toString()}
 
           {/* {choices.map(({ choice, type }) => {
             if (type === "init") {
@@ -77,11 +93,12 @@ export default function GameComponent({ originalFormula, id }: Props) {
           <MessageBubble message="hello" sent />
           <MessageBubble message="hello" recieved /> */}
         </Card.Body>
-        <div className="d-flex justify-content-center mb-3 mt-3">
-          {/* <ChoiceBubble choices={["true", "false"]} id={id} type="init" />
-          <SelectBubble choices={domain}></SelectBubble> */}
-          {b}
-        </div>
+        <GameControl id={id} />
+        {choices.map(({ choice, type }) => (
+          <div>
+            {type} {currentFormula.formula.toString()}
+          </div>
+        ))}
       </Card>
     </>
   );

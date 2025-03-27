@@ -6,9 +6,15 @@ interface Props {
   id: number;
   choices: string[];
   type: string;
+  onClickExtra?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function ChoiceBubble({ id, choices, type }: Props) {
+export default function ChoiceBubble({
+  id,
+  choices,
+  type,
+  onClickExtra,
+}: Props) {
   const dispatch = useAppDispatch();
 
   return (
@@ -18,9 +24,12 @@ export default function ChoiceBubble({ id, choices, type }: Props) {
           return (
             <Button
               variant="outline-primary d-inline"
-              onClick={(e) =>
-                dispatch(addChoice({ id: id, choice: index, type: type }))
-              }
+              onClick={(e) => {
+                dispatch(addChoice({ id: id, choice: index, type: type }));
+                if (onClickExtra) {
+                  onClickExtra(e);
+                }
+              }}
             >
               {choice}
             </Button>

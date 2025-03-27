@@ -8,15 +8,9 @@ import { ChangeEvent } from "react";
 interface Props {
   name: string;
   id: string;
-  selector(state: RootState, name: string): InterpretationState;
-  parser(
-    state: RootState,
-    name: string
-  ): {
-    error: Error;
-    parsed?: undefined;
-  };
-  onChange(event: ChangeEvent<HTMLInputElement>): void;
+  selector: (state: RootState, name: string) => InterpretationState;
+  parser: (state: RootState, name: string) => { error?: Error };
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 // InterpretationInput

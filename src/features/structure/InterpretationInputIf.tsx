@@ -29,6 +29,7 @@ export default function InterpretationInputIf({
   return (
     <>
       <InputGroupTitle
+        id={`i-${name}`}
         label=""
         prefix={
           <InlineMath>{String.raw`i(\text{\textsf{${name}}}) = \{`}</InlineMath>

@@ -158,15 +158,6 @@ export const selectEvaluatedFormula = createSelector(
   }
 );
 
-export const selectNextGameText = createSelector(
-  [selectFormulaChoices, selectEvaluatedFormula],
-  (choices, { formula }) => {
-    if (choices.length === 0) {
-      return `What is your initial assumption about the truth/satisfaction of the formula ${formula!.toString()} by the valuation 𝑒 in the structure ℳ?`;
-    }
-  }
-);
-
 export const selectCurrentGameFormula = createSelector(
   [selectFormulaChoices, selectEvaluatedFormula],
   (choices, { formula }) => {
@@ -176,12 +167,16 @@ export const selectCurrentGameFormula = createSelector(
 
     let newFormula: SignedFormula = { sign: true, formula: formula! };
     for (const { choice, type } of choices) {
+      if (type === "continue") {
+        continue;
+      }
+
       if (type === "init") {
         newFormula = { sign: choice === 0 ? true : false, formula: formula! };
         continue;
       }
 
-      if (choice < 2) {
+      if (type === "mc" || type === "gc") {
         const s = choice === 0 ? true : false;
         newFormula = newFormula.formula.getSignedSubFormulas(s)[choice];
       }
@@ -193,9 +188,12 @@ export const selectCurrentGameFormula = createSelector(
 export const selectGameButtons = createSelector(
   [selectFormulaChoices, selectCurrentGameFormula],
   (choices, { sign, formula }) => {
-    console.log(choices);
     if (choices.length === 0) {
-      return { choices: ["true", "false"], type: "init" };
+      return { choices: ["True", "False"], type: "init" };
+    }
+
+    if (choices.at(-1)?.type === "gc") {
+      return { choices: ["continue", formula.toString()], type: "continue" };
     }
 
     if (choices[0].type === "init") {
@@ -252,6 +250,14 @@ export const selectHistory = createSelector(
         };
         bubbles.push(bubble);
 
+        if (
+          newFormula.formula.getSignedType(newFormula.sign) ===
+          SignedFormulaType.ALPHA
+        ) {
+          bubbles.push({ text: "game makes choice", sender: "game" });
+          continue;
+        }
+
         bubble = {
           text: `Which of the following is the case?:
           `,
@@ -290,9 +296,40 @@ export const selectHistory = createSelector(
         continue;
       }
 
+      if (type === "gc") {
+        const s = choice === 0 ? true : false;
+        bubble = {
+          text: `Then ${newFormula.formula
+            .getSignedSubFormulas(newFormula.sign)
+            [choice].formula.toString()}
+          is ${
+            newFormula.formula.getSignedSubFormulas(newFormula.sign)[choice]
+              .sign === true
+              ? "True"
+              : "False"
+          }`,
+          sender: "game",
+        };
+        bubbles.push(bubble);
+
+        newFormula = newFormula.formula.getSignedSubFormulas(newFormula.sign)[
+          choice
+        ];
+        // bubble = {
+        //   text: `Then ${newFormula.formula.toString()} is blablabla`,
+        //   sender: "game",
+        // };
+        // bubbles.push(bubble);
+        continue;
+      }
+
+      if (type === "continue") {
+        bubbles.push({ text: "Continue", sender: "player" });
+      }
+
       console.log(newFormula);
 
-      if (choice < 2) {
+      if (type === "mc") {
         const s = choice === 0 ? true : false;
         bubble = {
           text: `Formula ${newFormula.formula

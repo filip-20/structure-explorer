@@ -166,8 +166,13 @@ export const selectParsedConstant = createSelector(
 );
 
 export const selectParsedPredicate = createSelector(
-  [selectPredicateSymbol, selectParsedDomain, selectParsedPredicates],
-  (predicate, domain, preds) => {
+  [
+    selectPredicateSymbol,
+    selectParsedDomain,
+    selectParsedPredicates,
+    (_: RootState, name: string) => name,
+  ], //tu sa este pozriet
+  (predicate, domain, preds, name) => {
     if (!preds.parsed) return {};
     if (!domain.parsed) return {};
     if (!predicate.interpretation) return {};
