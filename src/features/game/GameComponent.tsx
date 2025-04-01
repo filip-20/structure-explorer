@@ -15,14 +15,15 @@ import { selectParsedDomain } from "../structure/structureSlice";
 import GameControl from "./GameControls";
 interface Props {
   id: number;
+  guess: boolean;
   originalFormula: Formula;
 }
 
-export default function GameComponent({ originalFormula, id }: Props) {
+export default function GameComponent({ originalFormula, id, guess }: Props) {
   const dispatch = useAppDispatch();
   const choices = useAppSelector((state) => selectFormulaChoices(state, id));
   const domain = useAppSelector(selectParsedDomain).parsed ?? [];
-  const guess = choices[0] && choices[0].choice === 0;
+
   const currentFormula = useAppSelector((state) =>
     selectCurrentGameFormula(state, id)
   );
@@ -30,13 +31,6 @@ export default function GameComponent({ originalFormula, id }: Props) {
   const buttons = useAppSelector((state) => selectGameButtons(state, id));
 
   let b = undefined;
-  if (
-    buttons?.type === "init" ||
-    buttons?.type === "mc" ||
-    buttons?.type === "continue"
-  ) {
-    b = <ChoiceBubble choices={buttons.choices} id={id} type={buttons.type} />;
-  }
 
   // if (
   //   choices &&
@@ -69,7 +63,9 @@ export default function GameComponent({ originalFormula, id }: Props) {
             />
           ))}
 
-          {currentFormula.formula.toString()}
+          {`${
+            currentFormula.sign === true ? "T" : "F"
+          } ${currentFormula.formula.toString()}`}
 
           {/* {choices.map(({ choice, type }) => {
             if (type === "init") {
@@ -96,7 +92,7 @@ export default function GameComponent({ originalFormula, id }: Props) {
         <GameControl id={id} />
         {choices.map(({ choice, type }) => (
           <div>
-            {type} {currentFormula.formula.toString()}
+            {type} {choice} {currentFormula.formula.toString()}
           </div>
         ))}
       </Card>

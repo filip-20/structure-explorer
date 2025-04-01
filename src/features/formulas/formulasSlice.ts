@@ -26,6 +26,8 @@ import { selectLanguage } from "../language/languageSlice";
 import { selectStructure } from "../structure/structureSlice";
 import UniversalQuant from "../../model/formula/Formula.UniversalQuant";
 import { selectValuation } from "../variables/variablesSlice";
+import { text } from "@fortawesome/fontawesome-svg-core";
+import { useSelector } from "react-redux";
 export interface FormulaState {
   text: string;
   guess: boolean | null;
@@ -85,15 +87,18 @@ export const formulasSlice = createSlice({
   },
 });
 
+export const { add, addChoice, remove, updateText, updateGuess } =
+  formulasSlice.actions;
+
+export const selectFormulaGuess = (state: RootState, id: number) =>
+  selectFormula(state, id).guess;
+
 export const selectFormulaChoices = (state: RootState, id: number) =>
   selectFormula(state, id).gameChoices;
 
 export const selectFormulas = (state: RootState) => state.formulas.allFormulas;
 export const selectFormula = (state: RootState, id: number) =>
   state.formulas.allFormulas[id];
-
-export const { add, addChoice, remove, updateText, updateGuess } =
-  formulasSlice.actions;
 
 export const selectEvaluatedFormula = createSelector(
   [selectLanguage, selectStructure, selectFormula, selectValuation],
@@ -130,8 +135,8 @@ export const selectEvaluatedFormula = createSelector(
         new UniversalQuant(variable, subf),
     };
 
-    console.log(language);
-    console.log(structure);
+    //console.log(language);
+    //console.log(structure);
 
     //let error = "";
     try {
@@ -159,27 +164,23 @@ export const selectEvaluatedFormula = createSelector(
 );
 
 export const selectCurrentGameFormula = createSelector(
-  [selectFormulaChoices, selectEvaluatedFormula],
-  (choices, { formula }) => {
-    if (choices.length === 0) {
-      return { sign: true, formula: formula! };
-    }
+  [selectFormulaChoices, selectEvaluatedFormula, selectFormulaGuess],
+  (choices, { formula }, userGuess): SignedFormula => {
+    let newFormula: SignedFormula = { sign: userGuess!, formula: formula! };
 
-    let newFormula: SignedFormula = { sign: true, formula: formula! };
     for (const { choice, type } of choices) {
-      if (type === "continue") {
+      if (type === "continue" || type == "unimplemented") {
         continue;
       }
 
-      if (type === "init") {
-        newFormula = { sign: choice === 0 ? true : false, formula: formula! };
-        continue;
+      if (
+        newFormula.formula.getSignedSubFormulas(newFormula.sign).length === 0
+      ) {
+        return newFormula;
       }
-
-      if (type === "mc" || type === "gc") {
-        const s = choice === 0 ? true : false;
-        newFormula = newFormula.formula.getSignedSubFormulas(s)[choice];
-      }
+      newFormula = newFormula.formula.getSignedSubFormulas(newFormula.sign)[
+        choice
+      ];
     }
     return newFormula;
   }
@@ -188,227 +189,217 @@ export const selectCurrentGameFormula = createSelector(
 export const selectGameButtons = createSelector(
   [selectFormulaChoices, selectCurrentGameFormula],
   (choices, { sign, formula }) => {
-    if (choices.length === 0) {
-      return { choices: ["True", "False"], type: "init" };
+    console.log(`${sign === true ? "T" : "F"} ${formula.toString()}`);
+
+    if (formula.getSignedSubFormulas(sign).length === 0) {
+      return;
     }
 
-    if (choices.at(-1)?.type === "gc") {
-      return { choices: ["continue", formula.toString()], type: "continue" };
+    if (choices.at(-1) === undefined) {
+      if (formula.getSignedType(sign) === SignedFormulaType.BETA) {
+        return {
+          values: formula
+            .getSignedSubFormulas(sign)
+            .map(
+              ({ formula: f, sign: s }) =>
+                `${f.toString()} is ${s === true ? "true" : "false"}`
+            ),
+          type: "beta",
+        };
+      }
+
+      if (formula.getSignedType(sign) === SignedFormulaType.ALPHA) {
+        return {
+          values: ["Continue"],
+          type: "alpha",
+        };
+      }
     }
 
-    if (choices[0].type === "init") {
+    if (formula.getSignedType(sign) === SignedFormulaType.BETA) {
       return {
-        choices: formula
+        values: formula
           .getSignedSubFormulas(sign)
-          .map((s) => s.formula.toString()),
-        type: "mc",
+          .map(
+            ({ formula: f, sign: s }) =>
+              `${f.toString()} is ${s === true ? "true" : "false"}`
+          ),
+        type: "beta",
       };
     }
+
+    if (formula.getSignedType(sign) === SignedFormulaType.ALPHA) {
+      return {
+        values: ["Continue"],
+        type: "alpha",
+      };
+    }
+
+    return { values: ["unimplemented"], type: "unimplemented" };
   }
 );
 
-export const selectHistory = createSelector(
-  [selectFormulaChoices, selectEvaluatedFormula],
-  (choices, { formula }) => {
-    if (choices.length === 0) {
-      return [
-        {
-          text: `What is your initial assumption about the truth/satisfaction of the formula ${formula!.toString()} by the valuation 𝑒 in the structure ℳ?`,
-          sender: "game",
-        },
-      ];
+export const selectNextStep = createSelector(
+  [
+    selectFormulaChoices,
+    selectCurrentGameFormula,
+    selectStructure,
+    selectValuation,
+  ],
+  (choices, { formula, sign }, structure, e) => {
+    if (
+      formula
+        .getSignedSubFormulas(sign)
+        .every(
+          ({ formula: f, sign: s }) =>
+            f.getSignedType(s) === SignedFormulaType.BETA
+        )
+    ) {
+      return { left: -1, right: -1 };
     }
 
-    let bubbles: {
-      text: string;
-      sender: "game" | "player";
-    }[] = [];
+    const left = formula.getSignedSubFormulas(sign)[0];
+    const right = formula.getSignedSubFormulas(sign)[1];
 
-    let newFormula: SignedFormula = { sign: true, formula: formula! };
-    let bubble: {
-      text: string;
-      sender: "game" | "player";
+    if (left.formula.getSignedType(left.sign) === SignedFormulaType.ALPHA)
+      return { left: 0, right: -1 };
+    if (right.formula.getSignedType(right.sign) === SignedFormulaType.ALPHA)
+      return { left: -1, right: 0 };
+
+    return { left: 0, right: 0 };
+  }
+);
+
+export type BubbleFormat = { text: string; sender: "game" | "player" };
+
+function addBetaText({ sign, formula }: SignedFormula): BubbleFormat[] {
+  return formula.getSignedSubFormulas(sign).map(({ formula: f, sign: s }) => {
+    return {
+      text: `${f.toString()} is ${s === true ? "True" : "False"}`,
+      sender: "game",
     };
+  });
+}
+
+function addAlphaText(
+  choice: number,
+  { sign, formula }: SignedFormula
+): BubbleFormat {
+  return {
+    text: `Then ${formula
+      .getSignedSubFormulas(sign)
+      [choice].formula.toString()} is ${
+      formula.getSignedSubFormulas(sign)[choice].sign === true
+        ? "true"
+        : "false"
+    }`,
+    sender: "game",
+  };
+}
+
+export const selectHistory = createSelector(
+  [
+    selectFormulaChoices,
+    selectEvaluatedFormula,
+    selectFormulaGuess,
+    selectStructure,
+    selectValuation,
+  ],
+  (choices, { formula }, initialGuess, structure, e) => {
+    let bubbles: BubbleFormat[] = [];
+
+    let newFormula: SignedFormula = { sign: initialGuess!, formula: formula! };
+    let bubble: BubbleFormat;
+    let { formula: f, sign: s } = newFormula;
+
+    bubbles.push({
+      text: `You assume that formula ${f.toString()} is  ${
+        initialGuess === true ? "True" : "False"
+      }`,
+      sender: "game",
+    });
+
+    if (f.getSignedSubFormulas(s).length === 0) {
+      if (f.eval(structure, e) === s) {
+        bubbles.push({ text: "You win", sender: "game" });
+      } else {
+        bubbles.push({ text: "You lose", sender: "game" });
+      }
+      return bubbles;
+    }
+
+    if (f.getSignedType(s) === SignedFormulaType.BETA) {
+      bubbles.push(...addBetaText(newFormula));
+    }
+
+    if (f.getSignedType(s) === SignedFormulaType.ALPHA) {
+      bubbles.push(addAlphaText(0, newFormula));
+    }
 
     for (const { choice, type } of choices) {
-      if (type === "init") {
-        newFormula = { sign: choice === 0 ? true : false, formula: formula! };
-        bubble = {
-          text: `What is your initial assumption about the truth/satisfaction of the formula ${formula!.toString()} by the valuation 𝑒 in the structure ℳ?`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-
-        bubble = { text: choice === 0 ? "True" : "False", sender: "player" };
-        bubbles.push(bubble);
-
-        bubble = {
-          text: `You assume that the formula ${formula!.toString()} is ${
-            choice === 0 ? "True" : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-
-        if (
-          newFormula.formula.getSignedType(newFormula.sign) ===
-          SignedFormulaType.ALPHA
-        ) {
-          bubbles.push({ text: "game makes choice", sender: "game" });
-          continue;
-        }
-
-        bubble = {
-          text: `Which of the following is the case?:
-          `,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-
-        bubble = {
-          text: `${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)[0]
-            .formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[0].sign ===
-            true
-              ? "True"
-              : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-        bubble = {
-          text: `${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)[1]
-            .formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[1].sign ===
-            true
-              ? "True"
-              : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-        //TODO: pridat/upravit aby fungovalo vsobecne
-
+      if (type === "continue" || type === "unimplemented") {
         continue;
       }
 
-      if (type === "gc") {
-        const s = choice === 0 ? true : false;
+      if (type === "beta") {
         bubble = {
-          text: `Then ${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)
-            [choice].formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[choice]
-              .sign === true
-              ? "True"
-              : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-
-        newFormula = newFormula.formula.getSignedSubFormulas(newFormula.sign)[
-          choice
-        ];
-        // bubble = {
-        //   text: `Then ${newFormula.formula.toString()} is blablabla`,
-        //   sender: "game",
-        // };
-        // bubbles.push(bubble);
-        continue;
-      }
-
-      if (type === "continue") {
-        bubbles.push({ text: "Continue", sender: "player" });
-      }
-
-      console.log(newFormula);
-
-      if (type === "mc") {
-        const s = choice === 0 ? true : false;
-        bubble = {
-          text: `Formula ${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)
-            [choice].formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[choice]
-              .sign === true
-              ? "True"
-              : "False"
+          text: `${f.getSignedSubFormulas(s)[choice].formula.toString()} is ${
+            f.getSignedSubFormulas(s)[choice].sign === true ? "true" : "false"
           }`,
           sender: "player",
         };
         bubbles.push(bubble);
+      }
 
+      if (type === "alpha") {
+        bubbles.push({ text: "Continue", sender: "player" });
+      }
+
+      bubble = {
+        text: `You assume that the formula ${f
+          .getSignedSubFormulas(s)
+          [choice].formula.toString()} is ${
+          f.getSignedSubFormulas(s)[choice].sign === true ? "true" : "false"
+        }`,
+        sender: "game",
+      };
+      bubbles.push(bubble);
+
+      newFormula = f.getSignedSubFormulas(s)[choice];
+      f = newFormula.formula;
+      s = newFormula.sign;
+
+      if (f.getSignedType(s) === SignedFormulaType.BETA) {
         bubble = {
-          text: `You assume, that the formula ${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)
-            [choice].formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[choice]
-              .sign === true
-              ? "True"
-              : "False"
-          }`,
+          text: "Which option is true?",
           sender: "game",
         };
         bubbles.push(bubble);
+        bubbles.push(...addBetaText(newFormula));
+      }
 
-        newFormula = newFormula.formula.getSignedSubFormulas(s)[choice];
-
-        bubble = {
-          text: `Which of the following is the case?:
-          `,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-
-        if (
-          newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)
-            .every(
-              (signed) =>
-                signed.formula.getSignedType(signed.sign) ===
-                SignedFormulaType.ALPHA
-            )
-        ) {
-          bubble = { text: "game choices unimplemented", sender: "game" };
-          bubbles.push(bubble);
-          break;
-        }
-        bubble = {
-          text: `${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)[0]
-            .formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[0].sign ===
-            true
-              ? "True"
-              : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
-        bubble = {
-          text: `${newFormula.formula
-            .getSignedSubFormulas(newFormula.sign)[1]
-            .formula.toString()}
-          is ${
-            newFormula.formula.getSignedSubFormulas(newFormula.sign)[1].sign ===
-            true
-              ? "True"
-              : "False"
-          }`,
-          sender: "game",
-        };
-        bubbles.push(bubble);
+      if (
+        f.getSignedType(s) === SignedFormulaType.ALPHA &&
+        f.getSignedSubFormulas(s).length > 0
+      ) {
+        bubbles.push(addAlphaText(choice, newFormula));
       }
     }
+
+    console.log(
+      `ciselko -> ${
+        f.getSignedSubFormulas(s).length
+      } aaa formula => ${f.toString()}`
+    );
+
+    if (f.getSignedSubFormulas(s).length === 0) {
+      if (f.eval(structure, e) === s) {
+        bubbles.push({ text: "You win", sender: "game" });
+      } else {
+        bubbles.push({ text: "You lose", sender: "game" });
+      }
+    }
+
     return bubbles;
   }
 );

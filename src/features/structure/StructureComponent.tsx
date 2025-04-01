@@ -93,7 +93,7 @@ export default function StructureComponent() {
           )}
           {Array.from(predicates.parsed ?? []).map((values, index) => (
             <>
-              <InterpretationInput
+              {/* <InterpretationInput
                 name={values[0]}
                 selector={selectPredicateSymbol}
                 parser={selectParsedPredicate}
@@ -105,8 +105,8 @@ export default function StructureComponent() {
                     })
                   );
                 }}
-              ></InterpretationInput>
-              {/* 
+              ></InterpretationInput> */}
+
               <InterpretationInputIp
                 name={values[0]}
                 //id={`predicate-${index}`}
@@ -119,7 +119,7 @@ export default function StructureComponent() {
                     })
                   );
                 }}
-              ></InterpretationInputIp> */}
+              ></InterpretationInputIp>
             </>
           ))}
           {functions.parsed && functions.parsed.size > 0 && (

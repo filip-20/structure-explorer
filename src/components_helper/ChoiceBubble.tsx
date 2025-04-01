@@ -6,14 +6,16 @@ interface Props {
   id: number;
   choices: string[];
   type: string;
-  onClickExtra?: React.MouseEventHandler<HTMLButtonElement>;
+  onClickRight?: boolean;
+  onClickLeft?: boolean;
 }
 
 export default function ChoiceBubble({
   id,
   choices,
   type,
-  onClickExtra,
+  onClickLeft,
+  onClickRight,
 }: Props) {
   const dispatch = useAppDispatch();
 
@@ -25,10 +27,15 @@ export default function ChoiceBubble({
             <Button
               variant="outline-primary d-inline"
               onClick={(e) => {
-                dispatch(addChoice({ id: id, choice: index, type: type }));
-                if (onClickExtra) {
-                  onClickExtra(e);
+                if (onClickLeft) {
+                  dispatch(addChoice({ id: id, choice: 0, type: "alpha" }));
                 }
+
+                if (onClickRight) {
+                  dispatch(addChoice({ id: id, choice: 1, type: "alpha" }));
+                }
+
+                dispatch(addChoice({ id: id, choice: index, type: type }));
               }}
             >
               {choice}

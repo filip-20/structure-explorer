@@ -7,6 +7,7 @@ import {
   updateText,
   updateGuess,
   selectEvaluatedFormula,
+  addChoice,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
@@ -36,10 +37,6 @@ export default function FormulaComponent({ id, text, guess }: Props) {
     selectEvaluatedFormula(state, id)
   );
   const [begin, setBegin] = useState(false);
-
-  const game = (
-    <GameComponent id={id} originalFormula={formula ?? new PredicateAtom("")} />
-  );
 
   return (
     <>
@@ -157,14 +154,18 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             <Button
               variant="secondary"
               id="button-addon2"
-              disabled={!!error}
-              onClick={() => setBegin(!begin)}
+              disabled={!!error || guess === null}
+              onClick={() => {
+                setBegin(!begin);
+              }}
             >
               <FontAwesomeIcon icon={faGamepad} />
             </Button>
           </Col>
         </Row>
-        {begin && game}
+        {begin && guess !== null && formula && (
+          <GameComponent id={id} guess={guess} originalFormula={formula} />
+        )}
       </Form>
     </>
   );
