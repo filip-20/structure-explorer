@@ -23,6 +23,10 @@ abstract class QuantifiedFormula extends Formula {
     } ${this.subFormula.toString()}`;
   }
 
+  getVariableName(): string {
+    return this.variableName;
+  }
+
   winningElement(
     sign: boolean,
     structure: Structure,

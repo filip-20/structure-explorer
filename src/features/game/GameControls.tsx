@@ -8,6 +8,7 @@ import {
   selectGameButtons,
   selectNextStep,
 } from "../formulas/formulasSlice";
+import SelectBubble from "../../components_helper/SelectBubble";
 interface Props {
   id: number;
 }
@@ -28,6 +29,18 @@ export default function GameControl({ id }: Props) {
       <>
         <div className="d-flex justify-content-center mb-3 mt-3">{button}</div>
       </>
+    );
+  }
+
+  if (buttons.type === "delta") {
+    button = (
+      <SelectBubble
+        id={id}
+        choices={buttons.values}
+        type={buttons.type}
+        //onClickLeft={left === 1}
+        //onClickRight={right === 1}
+      />
     );
   }
 
