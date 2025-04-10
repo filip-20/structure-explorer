@@ -124,26 +124,6 @@ export const selectParsedDomain = createSelector([selectDomain], (domain) => {
   }
 });
 
-//vyzera ze to funguje, ale je to spravne?
-export const selectIndividualConstantsErrors = createSelector(
-  [selectIc, selectParsedDomain],
-  (constants, domain) => {
-    let err: Record<string, Error | SyntaxError | undefined> = {};
-
-    //new SyntaxError("Domain cannot be empty",x,"",l)
-
-    Object.entries(constants).forEach(
-      ([i, j]) =>
-        (err[i] =
-          domain.parsed?.filter((value) => value == j.text).length == 0
-            ? (err[i] = new Error("Domain does not contain this"))
-            : undefined)
-    );
-
-    return err;
-  }
-);
-
 // selectParsedConstant: { parsed?: string, error?: Error }
 export const selectParsedConstant = createSelector(
   [selectIndividualConstant, selectParsedDomain],
@@ -373,67 +353,3 @@ export const selectStructure = createSelector(
 );
 
 export default structureSlice.reducer;
-
-// export const selectPredicateSymbolsErrors = createSelector([selectPredicateSymbols, selectErrorDomain, selectErrorPredicates], (predicates, domain, preds) => {
-//   let err: Record<string, SyntaxError | undefined> = {}
-
-//   let l = {
-//     start: {
-//       offset: 0,
-//       line: 0,
-//       column: 0
-//     },
-//     end: {
-//       offset: 0,
-//       line: 0,
-//       column: 0
-//     },
-//   }
-//   let x = Object
-//   //new SyntaxError("Domain cannot be empty",x,"",l)
-
-//   if (!preds.parsed) return {};
-
-//   preds.parsed.forEach((symbol, arity) => {
-//     try {
-//       const interpretation = predicates[symbol] ?? { text: '' };
-//       const parsed = parseTuples(interpretation.text);
-
-//       for (let index = 0; index < parsed.length; index++) {
-//         const element = parsed[index];
-
-//         if (element.length !== arity) {
-//           err[symbol] = new SyntaxError("Tuple " + element + " is of invalid size",x,"",l)
-//           break
-//         }
-
-//         for (let index = 0; index < element.length; index++) {
-//           const el = element[index];
-//           if (el.every(domain.parsed.includes(el)) {
-//             err[symbol] = new SyntaxError("Element " + el + " is not in domain",x,"",l)
-//             break
-//           }
-//         }
-
-//         for (let index2 = index; index2 < parsed.length; index2++) {
-//           const element2 = parsed[index2];
-
-//           if (JSON.stringify(element) == JSON.stringify(element2) && element != element2) {
-//             err[symbol] = new SyntaxError("Tuple " + element + " is already in predicate",x,"",l)
-//           }
-
-//         }
-
-//       }
-
-//     } catch (error) {
-//       if (error instanceof SyntaxError) {
-//         err[symbol] = error
-//       }
-//     }
-
-//   })
-
-//   return err
-
-// })

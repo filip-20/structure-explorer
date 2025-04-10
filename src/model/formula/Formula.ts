@@ -37,32 +37,59 @@ abstract class Formula extends Expression {
     return `(${this.getSubFormulas().join(this.connective)})`;
   }
 
+  gameDepth(sign: boolean): number {
+    return Math.max(
+      ...this.getSignedSubFormulas(sign).map(({ formula: f, sign: s }) =>
+        f.gameDepth(sign)
+      )
+    ) +
+      this.getSignedType(sign) ===
+      SignedFormulaType.BETA ||
+      this.getSignedType(sign) === SignedFormulaType.DELTA
+      ? 2
+      : 1;
+  }
+
+  signedFormulaToString(sign: boolean): string {
+    return `${sign === true ? "T" : "F"} ${this.toString()}`;
+  }
+
   depth(): number {
     return Math.max(...this.subFormulas.map((f) => f.depth())) + 1;
   }
 
-  winningSubformula(
+  winningSubformulas(
     sign: boolean,
     structure: Structure,
     e: Valuation
-  ): Formula | undefined {
+  ): SignedFormula[] {
     const formulas = this.getSignedSubFormulas(sign);
 
     let shortest = undefined;
+    let winning: SignedFormula[] = [];
 
     for (const { sign, formula } of formulas) {
+      let current = { sign: sign, formula: formula };
       if (formula.eval(structure, e) !== sign) {
         if (!shortest) {
-          shortest = formula;
+          shortest = current;
+          winning.push(shortest);
         }
 
-        if (shortest.depth() > formula.depth()) {
-          shortest = formula;
+        if (
+          shortest.formula.gameDepth(shortest.sign) > formula.gameDepth(sign)
+        ) {
+          shortest = current;
+          winning = [shortest];
+        } else if (
+          shortest.formula.gameDepth(shortest.sign) === formula.gameDepth(sign)
+        ) {
+          winning.push(current);
         }
       }
     }
 
-    return shortest;
+    return winning;
   }
 
   abstract eval(structure: Structure, e: Valuation): boolean;

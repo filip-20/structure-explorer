@@ -1,24 +1,15 @@
 import { Button } from "react-bootstrap";
 import { useAppDispatch } from "../app/hooks";
-import { addChoice } from "../features/formulas/formulasSlice";
+import { addAlpha, addBeta } from "../features/formulas/formulasSlice";
 
 interface Props {
   id: number;
   choices: string[];
   type: string;
-  onClickRight?: boolean;
-  onClickLeft?: boolean;
+  onclicks: (() => void)[];
 }
 
-export default function ChoiceBubble({
-  id,
-  choices,
-  type,
-  onClickLeft,
-  onClickRight,
-}: Props) {
-  const dispatch = useAppDispatch();
-
+export default function ChoiceBubble({ choices, onclicks }: Props) {
   return (
     <>
       <div>
@@ -26,16 +17,8 @@ export default function ChoiceBubble({
           return (
             <Button
               variant="outline-primary d-inline"
-              onClick={(e) => {
-                if (onClickLeft) {
-                  dispatch(addChoice({ id: id, choice: 0, type: "alpha" }));
-                }
-
-                if (onClickRight) {
-                  dispatch(addChoice({ id: id, choice: 1, type: "alpha" }));
-                }
-
-                dispatch(addChoice({ id: id, choice: index, type: type }));
+              onClick={() => {
+                onclicks[index]();
               }}
             >
               {choice}

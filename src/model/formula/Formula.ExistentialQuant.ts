@@ -44,9 +44,6 @@ class ExistentialQuant extends QuantifiedFormula {
   getSignedType(sign: boolean): SignedFormulaType {
     return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
   }
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    return [{ sign: sign, formula: this.subFormula }];
-  }
 
   // createCopy() {
   //   return new ExistentialQuant(

@@ -7,7 +7,6 @@ import {
   updateText,
   updateGuess,
   selectEvaluatedFormula,
-  addChoice,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
@@ -21,14 +20,15 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
+import GameComponent from "../game/GameComponent";
+import { useState } from "react";
+import { selectParsedDomain } from "../structure/structureSlice";
+
 interface Props {
   id: number;
   text: string;
   guess: boolean | null;
 }
-import GameComponent from "../game/GameComponent";
-import { useState } from "react";
-import PredicateAtom from "../../model/formula/Formula.PredicateAtom";
 
 export default function FormulaComponent({ id, text, guess }: Props) {
   const real_id = id + 1;
@@ -37,6 +37,8 @@ export default function FormulaComponent({ id, text, guess }: Props) {
     selectEvaluatedFormula(state, id)
   );
   const [begin, setBegin] = useState(false);
+
+  const domain = useAppSelector(selectParsedDomain);
 
   return (
     <>
@@ -163,7 +165,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             </Button>
           </Col>
         </Row>
-        {begin && guess !== null && formula && (
+        {begin && guess !== null && formula && domain.error === undefined && (
           <GameComponent id={id} guess={guess} originalFormula={formula} />
         )}
       </Form>

@@ -1,22 +1,19 @@
 import Card from "react-bootstrap/Card";
-import Formula, { SignedFormulaType } from "../../model/formula/Formula";
+import Formula from "../../model/formula/Formula";
 import MessageBubble from "../../components_helper/MessageBubble";
-import ChoiceBubble from "../../components_helper/ChoiceBubble";
-import SelectBubble from "../../components_helper/SelectBubble";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  addChoice,
+  gameGoBack,
   selectCurrentAssignment,
   selectCurrentGameFormula,
   selectFormulaChoices,
-  selectGameButtons,
   selectHistory,
 } from "../formulas/formulasSlice";
-import { selectParsedDomain } from "../structure/structureSlice";
+import {
+  selectParsedDomain,
+  selectStructure,
+} from "../structure/structureSlice";
 import GameControl from "./GameControls";
-import { selectValuation } from "../variables/variablesSlice";
-import { Button } from "react-bootstrap";
-import { useState } from "react";
 interface Props {
   id: number;
   guess: boolean;
@@ -28,6 +25,7 @@ export default function GameComponent({ originalFormula, id, guess }: Props) {
   const choices = useAppSelector((state) => selectFormulaChoices(state, id));
   const domain = useAppSelector(selectParsedDomain).parsed ?? [];
 
+  const structure = useAppSelector(selectStructure);
   const currentFormula = useAppSelector((state) =>
     selectCurrentGameFormula(state, id)
   );
@@ -35,8 +33,6 @@ export default function GameComponent({ originalFormula, id, guess }: Props) {
   const currentAssignment = useAppSelector((state) =>
     selectCurrentAssignment(state, id)
   );
-
-  let b = undefined;
 
   return (
     <>
@@ -47,22 +43,28 @@ export default function GameComponent({ originalFormula, id, guess }: Props) {
             maxHeight: "33vh",
           }}
         >
-          {history.map(({ text, sender }) => (
+          {history.map(({ text, sender, goBack }) => (
             <MessageBubble
               message={text}
               sent={sender === "player"}
               recieved={sender === "game"}
+              onClick={
+                goBack !== undefined
+                  ? () => dispatch(gameGoBack({ id: id, index: goBack }))
+                  : undefined
+              }
+              change={goBack !== undefined}
             />
           ))}
 
-          {`${
-            currentFormula.sign === true ? "T" : "F"
-          } ${currentFormula.formula.toString()}`}
+          {`${currentFormula.formula.signedFormulaToString(
+            currentFormula.sign
+          )}`}
         </Card.Body>
         <GameControl id={id} />
-        {choices.map(({ choice, type }) => (
+        {choices.map(({ formula, element, type }) => (
           <div>
-            {type} {choice} {currentFormula.formula.toString()}
+            {type} {formula} {`"${element}"`}
           </div>
         ))}
       </Card>

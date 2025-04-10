@@ -2,11 +2,13 @@ import { SignedFormulaType } from "../../model/formula/Formula";
 import ChoiceBubble from "../../components_helper/ChoiceBubble";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  addChoice,
+  addAlpha,
+  addBeta,
+  addDelta,
+  addGamma,
   selectCurrentGameFormula,
   selectFormulaChoices,
   selectGameButtons,
-  selectNextStep,
 } from "../formulas/formulasSlice";
 import SelectBubble from "../../components_helper/SelectBubble";
 interface Props {
@@ -19,8 +21,11 @@ export default function GameControl({ id }: Props) {
   const current = useAppSelector((state) =>
     selectCurrentGameFormula(state, id)
   );
-  const { left, right } = useAppSelector((state) => selectNextStep(state, id));
   const buttons = useAppSelector((state) => selectGameButtons(state, id));
+
+  const arr = current.formula
+    .getSignedSubFormulas(current.sign)
+    .map(({ sign, formula }) => formula.signedFormulaToString(sign));
 
   let button = undefined;
 
@@ -38,8 +43,22 @@ export default function GameControl({ id }: Props) {
         id={id}
         choices={buttons.values}
         type={buttons.type}
-        //onClickLeft={left === 1}
-        //onClickRight={right === 1}
+        onclicks={buttons.elements!.map(
+          (element) => () => dispatch(addDelta({ id: id, element: element }))
+        )}
+      />
+    );
+  }
+
+  if (buttons.type === "gamma") {
+    button = (
+      <ChoiceBubble
+        id={id}
+        choices={buttons.values}
+        type={buttons.type}
+        onclicks={buttons.elements!.map(
+          (element) => () => dispatch(addGamma({ id: id, element: element }))
+        )}
       />
     );
   }
@@ -50,8 +69,12 @@ export default function GameControl({ id }: Props) {
         id={id}
         choices={buttons.values}
         type={buttons.type}
-        onClickLeft={left === 1}
-        onClickRight={right === 1}
+        onclicks={buttons.subformulas!.map((_, index) => {
+          if (index === 0 || index === 1) {
+            return () => dispatch(addBeta({ id: id, formula: index }));
+          }
+          return () => {};
+        })}
       />
     );
   }
@@ -62,20 +85,14 @@ export default function GameControl({ id }: Props) {
         id={id}
         choices={buttons.values}
         type={buttons.type}
-        onClickLeft={left === 1}
-        onClickRight={right === 1}
-      />
-    );
-  }
+        onclicks={buttons.subformulas!.map((sf) => {
+          let index = arr.indexOf(sf.formula.signedFormulaToString(sf.sign));
 
-  if (buttons.type === "continue") {
-    button = (
-      <ChoiceBubble
-        id={id}
-        choices={buttons.values}
-        type={buttons.type}
-        onClickLeft={left === 1}
-        onClickRight={right === 1}
+          if (index === 0 || index === 1) {
+            return () => dispatch(addAlpha({ id: id, formula: index }));
+          }
+          return () => {};
+        })}
       />
     );
   }

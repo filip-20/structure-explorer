@@ -43,9 +43,6 @@ class UniversalQuant extends QuantifiedFormula {
   getSignedType(sign: boolean): SignedFormulaType {
     return sign ? SignedFormulaType.GAMMA : SignedFormulaType.DELTA;
   }
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    return [{ sign: sign, formula: this.subFormula }];
-  }
 
   // createCopy() {
   //   return new UniversalQuant(this.variableName, this.subFormula.createCopy());

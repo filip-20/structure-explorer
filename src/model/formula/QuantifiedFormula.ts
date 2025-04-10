@@ -15,7 +15,9 @@ abstract class QuantifiedFormula extends Formula {
 
   abstract getSignedType(sign: boolean): SignedFormulaType;
 
-  abstract getSignedSubFormulas(sign: boolean): SignedFormula[];
+  getSignedSubFormulas(sign: boolean): SignedFormula[] {
+    return [{ sign: sign, formula: this.subFormula }];
+  }
 
   toString(): string {
     return `${this.connective}${
@@ -27,25 +29,25 @@ abstract class QuantifiedFormula extends Formula {
     return this.variableName;
   }
 
-  winningElement(
+  winningElements(
     sign: boolean,
     structure: Structure,
     e: Valuation
-  ): DomainElement {
+  ): DomainElement[] {
     const signedFormula = this.getSignedSubFormulas(sign)[0];
 
     let cpy = new Map(e);
 
-    let ret = "";
+    let winning: DomainElement[] = [];
 
     for (const element of structure.domain) {
       cpy.set(this.variableName, element);
       if (signedFormula.formula.eval(structure, cpy) !== signedFormula.sign) {
-        ret = element;
+        winning.push(element);
       }
     }
 
-    return ret;
+    return winning;
   }
 
   getVariables(): Set<Symbol> {
