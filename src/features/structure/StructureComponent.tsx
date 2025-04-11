@@ -69,9 +69,9 @@ export default function StructureComponent() {
           {constants.parsed && constants.parsed.size > 0 && (
             <h3 className="h6">Constants interpretation</h3>
           )}
-          {Array.from(constants.parsed ?? []).map((values, index) => (
+          {Array.from(constants.parsed ?? []).map((name, index) => (
             <InterpretationInput
-              name={values}
+              name={name}
               id={`constant-${index}`}
               key={`constant-${index}`}
               selector={selectIcName}
@@ -79,7 +79,7 @@ export default function StructureComponent() {
               onChange={(e) => {
                 dispatch(
                   updateInterpretationConstants({
-                    key: values,
+                    key: name,
                     value: e.target.value,
                   })
                 );
@@ -89,9 +89,9 @@ export default function StructureComponent() {
           {predicates.parsed && predicates.parsed.size > 0 && (
             <h3 className="h6">Predicates interpretation</h3>
           )}
-          {Array.from(predicates.parsed ?? []).map((values, index) => (
+          {Array.from(predicates.parsed ?? []).map(([name, _], index) => (
             <InterpretationInput
-              name={values[0]}
+              name={name}
               id={`predicate-${index}`}
               key={`predicate-${index}`}
               selector={selectIpName}
@@ -99,7 +99,7 @@ export default function StructureComponent() {
               onChange={(e) => {
                 dispatch(
                   updateInterpretationPredicates({
-                    key: values[0],
+                    key: name,
                     value: e.target.value,
                   })
                 );
@@ -109,16 +109,16 @@ export default function StructureComponent() {
           {functions.parsed && functions.parsed.size > 0 && (
             <h3 className="h6">Functions interpretation</h3>
           )}
-          {Array.from(functions.parsed ?? []).map((values, index) => (
+          {Array.from(functions.parsed ?? []).map(([from, _], index) => (
             <InterpretationInput
-              name={values[0]}
+              name={from}
               id={`function-${index}`}
               key={`function-${index}`}
               selector={selectIfName}
               onChange={(e) => {
                 dispatch(
                   updateFunctionSymbols({
-                    key: values[0],
+                    key: from,
                     value: e.target.value,
                   })
                 );
