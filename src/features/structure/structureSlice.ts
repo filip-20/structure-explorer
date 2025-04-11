@@ -73,38 +73,16 @@ export const {
 export const selectDomain = (state: RootState) => state.structure.domain;
 
 export const selectIc = (state: RootState) => state.structure.iC;
-export const selectIndividualConstant = (state: RootState, name: string) =>
+export const selectIcName = (state: RootState, name: string) =>
   state.structure.iC[name];
 
 export const selectIp = (state: RootState) => state.structure.iP;
 export const selectIpName = (state: RootState, name: string) =>
   state.structure.iP[name];
 
-// export const selectPredicateSymbol = createSelector(
-//   [selectIpName, (name): string => name],
-//   (interpretation, name) => {
-//     return { interpretation: interpretation, name: name };
-//   }
-// );
-
-export const selectPredicateSymbol = (state: RootState, name: string) => {
-  return { interpretation: state.structure.iP[name], name: name };
-};
-
 export const selectIf = (state: RootState) => state.structure.iF;
 export const selectIfName = (state: RootState, name: string) =>
   state.structure.iF[name];
-
-export const selectFunctionSymbol = (state: RootState, name: string) => {
-  return { interpretation: state.structure.iF[name], name: name };
-};
-
-// export const selectFunctionSymbol = createSelector(
-//   [selectIfName, (name): string => name],
-//   (interpretation, name) => {
-//     return { interpretation: interpretation, name: name };
-//   }
-// );
 
 export const selectParsedDomain = createSelector([selectDomain], (domain) => {
   try {
@@ -124,9 +102,8 @@ export const selectParsedDomain = createSelector([selectDomain], (domain) => {
   }
 });
 
-// selectParsedConstant: { parsed?: string, error?: Error }
 export const selectParsedConstant = createSelector(
-  [selectIndividualConstant, selectParsedDomain],
+  [selectIcName, selectParsedDomain],
   (constant, domain) => {
     if (constant === undefined || constant.text === "") {
       const err = new Error("Interpretation must be defined");
@@ -147,20 +124,20 @@ export const selectParsedConstant = createSelector(
 
 export const selectParsedPredicate = createSelector(
   [
-    selectPredicateSymbol,
+    selectIpName,
     selectParsedDomain,
     selectParsedPredicates,
     (_: RootState, name: string) => name,
-  ], //tu sa este pozriet
-  (predicate, domain, preds, name) => {
+  ],
+  (interpretation, domain, preds, name) => {
     if (!preds.parsed) return {};
     if (!domain.parsed) return {};
-    if (!predicate.interpretation) return {};
+    if (!interpretation) return {};
 
     try {
-      const interpretation = predicate.interpretation.text;
-      const arity = preds.parsed.get(predicate.name);
-      const parsed = parseTuples(interpretation);
+      const interpretationText = interpretation.text;
+      const arity = preds.parsed.get(name);
+      const parsed = parseTuples(interpretationText);
       const size = arity === 1 ? "single" : `${arity}-tuple`;
 
       let err = undefined;
@@ -169,7 +146,7 @@ export const selectParsedPredicate = createSelector(
         if (tuple.length !== arity) {
           const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
           err = new Error(
-            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${predicate.name} is ${arity}`
+            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${name} is ${arity}`
           );
           return;
         }
@@ -223,17 +200,22 @@ function getAllPossibleCombinations(arr: string[], size: number): string[][] {
 }
 
 export const selectParsedFunction = createSelector(
-  [selectFunctionSymbol, selectParsedDomain, selectParsedFunctions],
-  (fun, domain, functions) => {
+  [
+    selectIfName,
+    selectParsedDomain,
+    selectParsedFunctions,
+    (_: RootState, name: string) => name,
+  ],
+  (interpretation, domain, functions, name) => {
     if (!functions.parsed) return {};
     if (!domain.parsed) return {};
 
     try {
-      const arity = functions.parsed.get(fun.name) ?? 0;
+      const arity = functions.parsed.get(name) ?? 0;
       let all = getAllPossibleCombinations(domain.parsed, arity);
       let examples = all.slice(0, 3).map((element) => `(${element.join(",")})`);
 
-      if (!fun.interpretation) {
+      if (!interpretation) {
         const examplePrints =
           all.length <= 3 ? `${examples}` : `${examples}...`;
         const actual_size = all[0].length === 1 ? "singles" : `${arity}-tuples`;
@@ -244,8 +226,8 @@ export const selectParsedFunction = createSelector(
         };
       }
 
-      const interpretation = fun.interpretation.text;
-      const parsed = parseTuples(interpretation);
+      const interpretationText = interpretation.text;
+      const parsed = parseTuples(interpretationText);
       const size = arity === 1 ? "single" : `${arity + 1}-tuple`;
 
       let err = undefined;
@@ -254,7 +236,7 @@ export const selectParsedFunction = createSelector(
         if (arity !== undefined && tuple.length != arity + 1) {
           const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
           err = new Error(
-            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${fun.name} is ${arity}. Format is: (n-elements,mapped_element)`
+            `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${name} is ${arity}. Format is: (n-elements,mapped_element)`
           );
           return;
         }

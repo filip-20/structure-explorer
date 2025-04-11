@@ -39,11 +39,9 @@ export const languageSlice = createSlice({
   },
 });
 
-// Export the generated action creators for use in components
 export const { updateConstants, updatePredicates, updateFunctions } =
   languageSlice.actions;
 
-// Export the slice reducer for use in the store configuration
 export default languageSlice.reducer;
 export const selectConstants = (state: RootState) => state.language.constants;
 export const selectPredicates = (state: RootState) => state.language.predicates;
@@ -152,12 +150,6 @@ export const selectSymbolsClash = createSelector(
       }
     });
 
-    // functions.forEach((element) => {
-    //   if (functions.filter((element2) => element2 === element).length > 1) {
-    //     err = `Function ${element} is also defined in functions`;
-    //   }
-    // });
-
     return err;
   }
 );
@@ -170,11 +162,5 @@ export const selectLanguage = createSelector(
       predicates.parsed ?? new Map(),
       functions.parsed ?? new Map()
     );
-
-    // {
-    //   constants: constants.parsed ?? [],
-    //   predicates: predicates.parsed ?? {},
-    //   functions: functions.parsed ?? {},
-    // };
   }
 );
