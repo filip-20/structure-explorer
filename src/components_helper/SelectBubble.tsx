@@ -1,6 +1,4 @@
-import { Button, Dropdown, DropdownButton, Form } from "react-bootstrap";
-import { useAppDispatch } from "../app/hooks";
-import { addDelta, addGamma } from "../features/formulas/formulasSlice";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 interface Props {
   id: number;
@@ -10,7 +8,6 @@ interface Props {
 }
 
 export default function SelectBubble({ id, choices, type, onclicks }: Props) {
-  const dispatch = useAppDispatch();
   return (
     <>
       <div>

@@ -1,6 +1,4 @@
 import { Button } from "react-bootstrap";
-import { useAppDispatch } from "../app/hooks";
-import { addAlpha, addBeta } from "../features/formulas/formulasSlice";
 
 interface Props {
   id: number;

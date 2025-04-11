@@ -67,13 +67,8 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               <FontAwesomeIcon icon={faTrash} />
             </Button>
             <ErrorFeedback error={error} text={text}></ErrorFeedback>
-            {/*temporary}*/}
           </InputGroup>
         </Row>
-
-        {/* <Row>
-          <div>eval -{evaluated ? "true" : "false"}</div>
-        </Row> */}
 
         <Row>
           <Col xs="auto">

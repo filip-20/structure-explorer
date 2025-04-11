@@ -8,9 +8,6 @@ import { selectFormulas, FormulaState, add } from "./formulasSlice";
 import { InlineMath } from "react-katex";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import GameComponent from "../game/GameComponent";
-import PredicateAtom from "../../model/formula/Formula.PredicateAtom";
-import SelectBubble from "../../components_helper/SelectBubble";
 
 interface Props {
   type: string;
@@ -49,9 +46,6 @@ export default function FormulaCard({ type, help }: Props) {
           <Button variant="success" onClick={() => dispatch(add())}>
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
-          {/* <SelectBubble choices={["1", "2", "3"]}></SelectBubble> */}
-
-          {/* <GameComponent formula={new PredicateAtom("name")} choices={[{}]} /> */}
         </Card.Body>
       </Card>
     </>

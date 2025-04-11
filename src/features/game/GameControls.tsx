@@ -1,4 +1,3 @@
-import { SignedFormulaType } from "../../model/formula/Formula";
 import ChoiceBubble from "../../components_helper/ChoiceBubble";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {

@@ -13,7 +13,6 @@ interface Props {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// InterpretationInput
 export default function InterpretationInput({
   name,
   id,
@@ -22,7 +21,6 @@ export default function InterpretationInput({
   onChange,
 }: Props) {
   const interpretation = useAppSelector((state) => selector(state, name));
-  // const { error } = ...selectParsedConstant(...)...
   const { error } = useAppSelector((state) => parser(state, name));
   return (
     <>

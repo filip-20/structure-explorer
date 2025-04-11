@@ -226,7 +226,6 @@ export const selectEvaluatedFormula = createSelector(
     //console.log(language);
     //console.log(structure);
 
-    //let error = "";
     try {
       const formula = parseFormulaWithPrecedence(
         form.text,
