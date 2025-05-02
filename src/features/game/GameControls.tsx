@@ -40,6 +40,11 @@ export default function GameControl({ id }: Props) {
     button = (
       <SelectBubble
         id={id}
+        title={
+          <>
+            Select a domain element for <var>{buttons.variableName}</var>
+          </>
+        }
         choices={buttons.values}
         type={buttons.type}
         onclicks={buttons.elements!.map(

@@ -338,11 +338,15 @@ export const selectGameButtons = createSelector(
 
     console.log(formula.getSignedType(sign));
 
-    if (formula.getSignedType(sign) === SignedFormulaType.DELTA) {
+    if (
+      formula.getSignedType(sign) === SignedFormulaType.DELTA &&
+      formula instanceof QuantifiedFormula
+    ) {
       return {
         values: domain ?? [],
         elements: domain ?? [],
         type: "delta",
+        variableName: formula.variableName,
       };
     }
 
