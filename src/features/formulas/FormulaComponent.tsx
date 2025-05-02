@@ -73,27 +73,26 @@ export default function FormulaComponent({ id, text, guess }: Props) {
           </InputGroup>
         </Row>
 
-        <Row>
+        <Row className="align-items-start mb-3">
           <Col xs="auto">
-            <InputGroup as={Col} className="mb-3" hasValidation={true}>
+            <InputGroup hasValidation>
               <InputGroup.Text>
                 <InlineMath>{String.raw`\mathcal{M}`}</InlineMath>
               </InputGroup.Text>
 
               <Form.Select
-                as={Col}
                 aria-label="Select"
                 value={
-                  guess == true ? "true" : guess == false ? "false" : "null"
+                  guess === true ? "true" : guess === false ? "false" : "null"
                 }
                 onChange={(e) => {
                   dispatch(
                     updateGuess({
-                      id: id,
+                      id,
                       guess:
-                        e.target.value == "true"
+                        e.target.value === "true"
                           ? true
-                          : e.target.value == "false"
+                          : e.target.value === "false"
                           ? false
                           : null,
                     })
@@ -106,56 +105,23 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                 <option value="true">⊨</option>
                 <option value="false">⊭</option>
               </Form.Select>
+
               <InputGroup.Text>
                 <InlineMath>{String.raw`\varphi_{${real_id}}[e]`}</InlineMath>
               </InputGroup.Text>
+
+              <Form.Control.Feedback type="valid">
+                Verified!
+              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">
+                Not verified!
+              </Form.Control.Feedback>
             </InputGroup>
           </Col>
-          <Col xs={4}>
-            {/* {guess !== null &&
-              evaluated !== undefined &&
-              guess === evaluated && (
-                <Row>
-                  <FontAwesomeIcon
-                    icon={faCheck}
-                    pull="left"
-                    className="text-success"
-                  />
-                  <div className="text-success">Correct</div>
-                </Row>
-              )}
 
-            {guess !== null &&
-              evaluated === undefined &&
-              guess !== evaluated && (
-                <Row>
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    pull="left"
-                    className="text-danger"
-                  />
-
-                  <div className="text-danger">Incorrect</div>
-                </Row>
-              )}
-
-            {guess !== null &&
-              evaluated !== undefined &&
-              guess !== evaluated && (
-                <Row>
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    pull="left"
-                    className="text-danger"
-                  />
-                  <div className="text-danger">Incorrect</div>
-                </Row>
-              )} */}
-          </Col>
-          <Col xs={4}>
+          <Col xs="auto">
             <Button
               variant={isVerified ? "success" : "secondary"}
-              id="button-addon2"
               disabled={!!error || guess === null || domain.error !== undefined}
               onClick={() => {
                 setBegin(!begin);
