@@ -126,7 +126,7 @@ export default function StructureComponent() {
               parser={selectParsedFunction}
             ></InterpretationInput>
           ))}
-          Interpretations: <br />
+          {/* Interpretations: <br />
           {Object.entries(constantsInterpretation).map(
             ([i, j]) => i + " => " + j.text + ";"
           )}
@@ -135,7 +135,7 @@ export default function StructureComponent() {
           )}
           {Object.entries(functionsInterpretation).map(
             ([i, j]) => i + " => " + j.text + ";"
-          )}
+          )} */}
         </Card.Body>
       </Card>
     </>

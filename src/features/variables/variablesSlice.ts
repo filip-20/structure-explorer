@@ -16,13 +16,16 @@ export const variablesSlice = createSlice({
   name: "variables",
   initialState,
   reducers: {
+    importVariablesState: (state, action: PayloadAction<string>) => {
+      return JSON.parse(action.payload);
+    },
     updateVariables: (state, action: PayloadAction<string>) => {
       state.text = action.payload;
     },
   },
 });
 
-export const { updateVariables } = variablesSlice.actions;
+export const { updateVariables, importVariablesState } = variablesSlice.actions;
 
 export default variablesSlice.reducer;
 
@@ -34,9 +37,7 @@ export const selectParsedVariables = createSelector(
     try {
       const vars = parseValuation(variables, language.getParserLanguage());
       let err = undefined;
-      const varsMap = vars.map((tuple) => {
-        const from = tuple[0];
-        const to = tuple[1];
+      const varsMap = vars.map(([from, to]) => {
         if (
           (domain.parsed && domain.parsed.includes(to) == false) ||
           !domain.parsed

@@ -36,6 +36,9 @@ export const structureSlice = createSlice({
   name: "structure",
   initialState,
   reducers: {
+    importStructureState: (state, action: PayloadAction<string>) => {
+      return JSON.parse(action.payload);
+    },
     updateDomain: (state, action: PayloadAction<string>) => {
       state.domain = action.payload;
     },
@@ -68,6 +71,7 @@ export const {
   updateInterpretationConstants,
   updateInterpretationPredicates,
   updateFunctionSymbols,
+  importStructureState,
 } = structureSlice.actions;
 
 export const selectDomain = (state: RootState) => state.structure.domain;

@@ -47,6 +47,10 @@ abstract class QuantifiedFormula extends Formula {
       }
     }
 
+    if (winning.length === 0) {
+      winning = Array.from(structure.domain);
+    }
+
     return winning;
   }
 

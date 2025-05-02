@@ -14,7 +14,8 @@ export default function ChoiceBubble({ choices, onclicks }: Props) {
         {choices.map((choice, index) => {
           return (
             <Button
-              variant="outline-primary d-inline"
+              key={index}
+              variant="outline-primary d-inline m-1"
               onClick={() => {
                 onclicks[index]();
               }}

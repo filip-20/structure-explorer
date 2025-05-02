@@ -3,10 +3,11 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {
-  remove,
+  removeFormula,
   updateText,
   updateGuess,
   selectEvaluatedFormula,
+  selectIsVerifiedGame,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
@@ -40,6 +41,8 @@ export default function FormulaComponent({ id, text, guess }: Props) {
 
   const domain = useAppSelector(selectParsedDomain);
 
+  const isVerified = useAppSelector((state) => selectIsVerifiedGame(state, id));
+
   return (
     <>
       <Form>
@@ -62,7 +65,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             <Button
               variant="outline-danger"
               id="button-addon2"
-              onClick={() => dispatch(remove(id))}
+              onClick={() => dispatch(removeFormula(id))}
             >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
@@ -72,7 +75,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
 
         <Row>
           <Col xs="auto">
-            <InputGroup as={Col} className="mb-3">
+            <InputGroup as={Col} className="mb-3" hasValidation={true}>
               <InputGroup.Text>
                 <InlineMath>{String.raw`\mathcal{M}`}</InlineMath>
               </InputGroup.Text>
@@ -96,6 +99,8 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                     })
                   );
                 }}
+                isValid={isVerified && guess !== null}
+                isInvalid={!isVerified && guess !== null}
               >
                 <option value="null">⊨/⊭?</option>
                 <option value="true">⊨</option>
@@ -107,7 +112,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             </InputGroup>
           </Col>
           <Col xs={4}>
-            {guess !== null &&
+            {/* {guess !== null &&
               evaluated !== undefined &&
               guess === evaluated && (
                 <Row>
@@ -145,18 +150,18 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                   />
                   <div className="text-danger">Incorrect</div>
                 </Row>
-              )}
+              )} */}
           </Col>
           <Col xs={4}>
             <Button
-              variant="secondary"
+              variant={isVerified ? "success" : "secondary"}
               id="button-addon2"
-              disabled={!!error || guess === null}
+              disabled={!!error || guess === null || domain.error !== undefined}
               onClick={() => {
                 setBegin(!begin);
               }}
             >
-              <FontAwesomeIcon icon={faGamepad} />
+              {isVerified ? "Verified" : "Verify"}
             </Button>
           </Col>
         </Row>

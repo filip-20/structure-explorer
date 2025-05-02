@@ -89,6 +89,10 @@ abstract class Formula extends Expression {
       }
     }
 
+    if (winning.length === 0) {
+      return formulas;
+    }
+
     return winning;
   }
 

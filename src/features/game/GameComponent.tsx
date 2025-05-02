@@ -4,16 +4,14 @@ import MessageBubble from "../../components_helper/MessageBubble";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   gameGoBack,
-  selectCurrentAssignment,
-  selectCurrentGameFormula,
   selectFormulaChoices,
+  selectGameResetIndex,
   selectHistory,
+  selectHistoryData,
 } from "../formulas/formulasSlice";
-import {
-  selectParsedDomain,
-  selectStructure,
-} from "../structure/structureSlice";
 import GameControl from "./GameControls";
+import { useEffect, useRef } from "react";
+
 interface Props {
   id: number;
   guess: boolean;
@@ -23,16 +21,18 @@ interface Props {
 export default function GameComponent({ originalFormula, id, guess }: Props) {
   const dispatch = useAppDispatch();
   const choices = useAppSelector((state) => selectFormulaChoices(state, id));
-  const domain = useAppSelector(selectParsedDomain).parsed ?? [];
-
-  const structure = useAppSelector(selectStructure);
-  const currentFormula = useAppSelector((state) =>
-    selectCurrentGameFormula(state, id)
-  );
+  const data = useAppSelector((state) => selectHistoryData(state, id));
   const history = useAppSelector((state) => selectHistory(state, id));
-  const currentAssignment = useAppSelector((state) =>
-    selectCurrentAssignment(state, id)
-  );
+  const last = useRef<HTMLDivElement>(null);
+  const backIndex = useAppSelector((state) => selectGameResetIndex(state, id));
+
+  useEffect(() => {
+    if (last.current) {
+      last.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    dispatch(gameGoBack({ id, index: backIndex }));
+  }, [history]);
 
   return (
     <>
@@ -41,11 +41,14 @@ export default function GameComponent({ originalFormula, id, guess }: Props) {
           className="d-flex flex-column overflow-y-auto text-break vw-25"
           style={{
             maxHeight: "33vh",
+            overflowY: "auto",
+            position: "relative",
           }}
         >
-          {history.map(({ text, sender, goBack }) => (
+          {history.map(({ text, sender, goBack }, index) => (
             <MessageBubble
-              message={text}
+              key={`${text}-${sender}-${index}`}
+              children={text}
               sent={sender === "player"}
               recieved={sender === "game"}
               onClick={
@@ -56,17 +59,34 @@ export default function GameComponent({ originalFormula, id, guess }: Props) {
               change={goBack !== undefined}
             />
           ))}
-
-          {`${currentFormula.formula.signedFormulaToString(
+          {/* {`${currentFormula.formula.signedFormulaToString(
             currentFormula.sign
-          )}`}
+          )}`} */}
+
+          {/* {`Back: ${backIndex} arr length: ${data.length}`} */}
+          <div ref={last}></div>
         </Card.Body>
         <GameControl id={id} />
-        {choices.map(({ formula, element, type }) => (
+        {/* {choices.map(({ formula, element, type }) => (
           <div>
             {type} {formula} {`"${element}"`}
           </div>
-        ))}
+        ))} */}
+
+        {/* {data.map(({ sf, valuation, winElement, winFormula, type }) => (
+          <div>
+            {`formula: ${sf.formula.signedFormulaToString(
+              sf.sign
+            )}\n type: ${type} 
+            \n winFormula: ${
+              winFormula?.formula.signedFormulaToString(winFormula.sign) ??
+              "nic"
+            }\n winElement: ${winElement}
+             \n valuation: ${Array.from(valuation).flatMap(
+               ([from, to]) => `${from} => ${to}`
+             )}`}
+          </div>
+        ))} */}
       </Card>
     </>
   );

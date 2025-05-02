@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, ReactNode } from "react";
 import { Form, InputGroup, Col } from "react-bootstrap";
 import { SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import ErrorFeedback from "./ErrorFeedback";
@@ -6,8 +6,8 @@ import ErrorFeedback from "./ErrorFeedback";
 interface Props {
   label: string;
   id: string;
-  prefix: string | React.JSX.Element;
-  suffix: string | React.JSX.Element;
+  prefix: ReactNode;
+  suffix: ReactNode;
   placeholder: string;
   text: string;
   onChange(event: ChangeEvent<HTMLInputElement>): void;

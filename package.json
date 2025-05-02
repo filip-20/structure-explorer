@@ -1,8 +1,17 @@
 {
-  "name": "structure-explorer-clone",
-  "private": true,
+  "name": "structure-explorer",
   "version": "0.0.0",
   "type": "module",
+  "module":"./dist/structure-explorer.es.js",
+  "main":"./dist/structure-explorer.umd.js",
+
+  "exports": {
+    ".": {
+      "import": "./dist/structure-explorer.js",
+      "require": "./dist/structure-explorer.cjs"
+    }
+  },
+
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -44,8 +53,13 @@
     "typescript-eslint": "^8.11.0",
     "vite": "^6.2.0"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
+  "peerDependencies": {
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "description": "Tento repozitár obsahuje zdrojové súbory aplikácie Prieskumník štruktúr, ktorá umožňuje vytvárať a upravovať štruktúry pre jazyky logiky prvého rádu a skúmať pravdivosť formúl a hodnoty termov v nich.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/filip-20/structure-explorer.git"

@@ -4,7 +4,7 @@ import FormulaComponent from "./FormulaComponent";
 import TooltipButton from "../../components_helper/TooltipButton";
 import Button from "react-bootstrap/Button";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectFormulas, FormulaState, add } from "./formulasSlice";
+import { selectFormulas, FormulaState, addFormula } from "./formulasSlice";
 import { InlineMath } from "react-katex";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -43,7 +43,7 @@ export default function FormulaCard({ type, help }: Props) {
             />
           ))}
 
-          <Button variant="success" onClick={() => dispatch(add())}>
+          <Button variant="success" onClick={() => dispatch(addFormula())}>
             <FontAwesomeIcon icon={faPlus} /> Add
           </Button>
         </Card.Body>

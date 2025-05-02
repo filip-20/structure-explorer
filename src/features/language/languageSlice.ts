@@ -25,6 +25,10 @@ export const languageSlice = createSlice({
   name: "language",
   initialState,
   reducers: {
+    importLanguageState: (state, action: PayloadAction<string>) => {
+      return JSON.parse(action.payload);
+    },
+
     updateConstants: (state, action: PayloadAction<string>) => {
       state.constants = action.payload;
     },
@@ -39,8 +43,12 @@ export const languageSlice = createSlice({
   },
 });
 
-export const { updateConstants, updatePredicates, updateFunctions } =
-  languageSlice.actions;
+export const {
+  updateConstants,
+  updatePredicates,
+  updateFunctions,
+  importLanguageState,
+} = languageSlice.actions;
 
 export default languageSlice.reducer;
 export const selectConstants = (state: RootState) => state.language.constants;
