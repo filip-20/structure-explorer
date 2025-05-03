@@ -30,6 +30,7 @@ import {
 import UniversalQuant from "../../model/formula/Formula.UniversalQuant";
 import { selectValuation } from "../variables/variablesSlice";
 import QuantifiedFormula from "../../model/formula/QuantifiedFormula";
+import { ReactNode } from "react";
 
 export interface FormulaState {
   text: string;
@@ -399,9 +400,11 @@ export const selectGameButtons = createSelector(
 );
 
 export type BubbleFormat = {
-  text: string;
+  text: ReactNode;
   sender: "game" | "player";
   goBack?: number;
+  win?: boolean;
+  lose?: boolean;
 };
 
 function addBetaText({ sign, formula }: SignedFormula): BubbleFormat[] {
@@ -506,185 +509,6 @@ export const selectHistoryData = createSelector(
     }
 
     return history;
-  }
-);
-
-export const selectHistory = createSelector(
-  [selectHistoryData, selectStructure, selectFormulaChoices],
-  (data, structure, choices) => {
-    let bubbles: BubbleFormat[] = [];
-
-    //⊨ ⊭ ℳ
-
-    let bubble: BubbleFormat;
-
-    let back = 0;
-    for (const { sf, valuation, type, winFormula, winElement } of data) {
-      bubbles.push({
-        text: `You assume that ℳ ${
-          sf?.sign === true ? "⊨" : "⊭"
-        } ${sf.formula.toString()}[𝑒]`,
-        sender: "game",
-      });
-
-      if (
-        sf.formula.getSubFormulas().length === 0 &&
-        sf.formula instanceof PredicateAtom
-      ) {
-        bubbles.push({
-          text:
-            sf.formula.eval(structure, valuation) === sf.sign
-              ? `You win, ℳ ${
-                  sf.sign === true ? "⊨" : "⊭"
-                } ${sf.formula.toString()}[𝑒], since (${sf.formula.terms.map(
-                  (t) => t.eval(structure, valuation)
-                )}) ${sf.sign === true ? "∈ " : "∉"}  i(${sf.formula.name})`
-              : `You lose, ℳ ${
-                  sf.sign === true ? "⊨" : "⊭"
-                } ${sf.formula.toString()}[𝑒], since (${sf.formula.terms.map(
-                  (t) => t.eval(structure, valuation)
-                )}) ${sf.sign === true ? "∉ " : "∈"} i(${sf.formula.name})`,
-          sender: "game",
-        });
-        bubbles.push({
-          text: `Your initial assumption that  ℳ ${
-            data[0].sf.sign === true ? "⊨" : "⊭"
-          } ${data[0].sf.formula.toString()}[𝑒] was ${
-            data[0].sf.formula.eval(structure, valuation) === data[0].sf.sign
-              ? "correct"
-              : "incorrect"
-          }`,
-          sender: "game",
-        });
-        return bubbles;
-      }
-
-      if (type === "alpha") {
-        bubbles.push({
-          text: `Then ℳ ${
-            winFormula?.sign === true ? "⊨" : "⊭"
-          } ${winFormula?.formula.toString()}[𝑒]`,
-          sender: "game",
-        });
-
-        if (back < choices.length) {
-          bubbles.push({
-            text: `Continue`,
-            sender: "player",
-          });
-        }
-      }
-
-      if (type === "beta") {
-        bubbles.push({
-          text: `Which option is true?`,
-          sender: "game",
-        });
-
-        bubbles.push({
-          text: `ℳ ${
-            sf.formula.getSignedSubFormulas(sf.sign)[0].sign === true
-              ? "⊨"
-              : "⊭"
-          } ${sf.formula
-            .getSignedSubFormulas(sf.sign)[0]
-            .formula.toString()}[𝑒]`,
-          sender: "game",
-        });
-
-        bubbles.push({
-          text: `ℳ ${
-            sf.formula.getSignedSubFormulas(sf.sign)[1].sign === true
-              ? "⊨"
-              : "⊭"
-          } ${sf.formula
-            .getSignedSubFormulas(sf.sign)[1]
-            .formula.toString()}[𝑒]`,
-          sender: "game",
-        });
-
-        if (back < choices.length) {
-          bubbles.push({
-            text: `ℳ ${
-              sf.formula.getSignedSubFormulas(sf.sign)[choices[back].formula!]
-                .sign === true
-                ? "⊨"
-                : "⊭"
-            } ${sf.formula
-              .getSignedSubFormulas(sf.sign)
-              [choices[back].formula!].formula.toString()}[𝑒]`,
-            sender: "player",
-            goBack: back,
-          });
-        }
-      }
-
-      if (type === "gamma" && sf.formula instanceof QuantifiedFormula) {
-        bubbles.push({
-          text: `Then ℳ ${
-            sf.sign === true ? "⊨" : "⊭"
-          } ${sf.formula.toString()}[𝑒] also when we assign element ${winElement} to ${
-            sf.formula.variableName
-          }`,
-          sender: "game",
-        });
-
-        bubbles.push({
-          text: `Current assignement: 𝑒 = { ${Array.from(valuation).flatMap(
-            ([from, to]) => `[${from} / ${to}]`
-          )} }`,
-          sender: "game",
-        });
-
-        if (back < choices.length) {
-          bubbles.push({
-            text: `Continue`,
-            sender: "player",
-          });
-          bubbles.push({
-            text: `Updated assignement: 𝑒 = { ${Array.from(valuation).flatMap(
-              ([from, to]) => `[${from} / ${to}]`
-            )} [${sf.formula.variableName} / ${winElement}] }`,
-            sender: "game",
-          });
-        }
-      }
-
-      if (type === "delta" && sf.formula instanceof QuantifiedFormula) {
-        bubbles.push({
-          text: `Which domain element should we assign to ${
-            sf.formula.variableName
-          } in order to satisfy ℳ  ${
-            sf.sign === true ? "⊨" : "⊭"
-          } ${sf.formula.toString()} `,
-          sender: "game",
-        });
-
-        bubbles.push({
-          text: `Current assignement: 𝑒 = { ${Array.from(valuation).flatMap(
-            ([from, to]) => `[${from} / ${to}]`
-          )} }`,
-          sender: "game",
-        });
-
-        if (back < choices.length) {
-          bubbles.push({
-            text: `Assign ${choices[back].element} to ${sf.formula.variableName}`,
-            sender: "player",
-            goBack: back,
-          });
-          bubbles.push({
-            text: `Updated assignement: 𝑒 = { ${Array.from(valuation).flatMap(
-              ([from, to]) => `[${from} / ${to}]`
-            )} [${sf.formula.variableName} / ${choices[back].element}] }`,
-            sender: "game",
-          });
-        }
-      }
-      back++;
-    }
-
-    return bubbles;
   }
 );
 

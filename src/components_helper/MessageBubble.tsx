@@ -6,7 +6,8 @@ interface Props {
   sent?: boolean;
   recieved?: boolean;
   change?: boolean;
-  focus?: boolean;
+  win?: boolean;
+  lose?: boolean;
   onClick?: () => void;
 }
 
@@ -15,10 +16,18 @@ export default function MessageBubble({
   sent,
   recieved,
   change,
-  focus,
+  win,
+  lose,
   onClick,
 }: Props) {
-  const variant = sent ? "primary" : "secondary";
+  const variant =
+    win === true
+      ? "success"
+      : lose === true
+      ? "danger"
+      : sent
+      ? "primary"
+      : "secondary";
   const float = sent ? "float-end" : "float-start";
   const rounded = sent ? "rounded-start-3" : "rounded-end-3";
 
