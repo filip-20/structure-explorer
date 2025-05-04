@@ -1,16 +1,16 @@
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef } from "react";
+import { useState, useRef, ReactNode } from "react";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 
 interface Props {
-  text: string;
+  text: ReactNode;
 }
 
 export default function TooltipButton({ text }: Props) {
-  const [show, setShow] = useState(false); //pre help
+  const [show, setShow] = useState(false);
   const [color, setColor] = useState("outline-primary");
-  const target = useRef(null); //pre help
+  const target = useRef(null);
   return (
     <>
       <Button

@@ -14,12 +14,7 @@ import { InlineMath } from "react-katex";
 import ErrorFeedback from "../../components_helper/ErrorFeedback";
 import { Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faGamepad,
-  faTrash,
-  faXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import GameComponent from "../game/GameComponent";
 import { useState } from "react";
@@ -121,13 +116,13 @@ export default function FormulaComponent({ id, text, guess }: Props) {
 
           <Col xs="auto">
             <Button
-              variant={isVerified ? "success" : "secondary"}
+              variant={isVerified ? "success" : "danger"}
               disabled={!!error || guess === null || domain.error !== undefined}
               onClick={() => {
                 setBegin(!begin);
               }}
             >
-              {isVerified ? "Verified" : "Verify"}
+              {isVerified ? "Show verification" : "Verify"}
             </Button>
           </Col>
         </Row>

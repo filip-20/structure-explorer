@@ -13,7 +13,7 @@ export default function VariablesComponent() {
   let help: string = "help";
   const dispatch = useAppDispatch();
   const text = useAppSelector(selectVariables);
-  const { error, parsed: variables } = useAppSelector(selectParsedVariables);
+  const { error } = useAppSelector(selectParsedVariables);
   return (
     <>
       <Card>
@@ -36,9 +36,6 @@ export default function VariablesComponent() {
             onChange={(e) => dispatch(updateVariables(e.target.value))}
             error={error}
           ></InputGroupTitle>
-
-          {variables !== undefined &&
-            variables.map(({ from, to }) => `${from} -> ${to}\n`)}
         </Card.Body>
       </Card>
     </>

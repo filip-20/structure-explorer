@@ -78,9 +78,21 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
+            {originalGuess === true && satisfied === false && (
+              <>
+                <strong>You could have won, though.</strong>
+              </>
+            )}
             Your initial assumption that ℳ {data[0].sf.sign ? "⊨" : "⊭"}
             {data[0].sf.formula.toString()}[𝑒] was
-            {originalGuess ? "correct" : "incorrect"}
+            {originalGuess ? " correct" : " incorrect"}{" "}
+            {originalGuess === true && satisfied === false && (
+              <>
+                Find incorrect intermediate answers and correct them! You can
+                use <strong>change button</strong> next to your answers for
+                that.
+              </>
+            )}
           </>
         ),
         sender: "game",
@@ -161,7 +173,7 @@ export default function GameHistory({ id }: Props) {
                 [{from} / {to}]
               </>
             ))}
-            {" } "};
+            {" } "}
           </>
         ),
         sender: "game",
@@ -195,8 +207,8 @@ export default function GameHistory({ id }: Props) {
         text: (
           <>
             Which domain element should we assign to{" "}
-            <var>{sf.formula.variableName}</var> in order to satisfy ℳ
-            {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}
+            <var>{sf.formula.variableName}</var> to show that ℳ
+            {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[𝑒]
           </>
         ),
         sender: "game",
@@ -211,7 +223,7 @@ export default function GameHistory({ id }: Props) {
                 [{from} / {to}]
               </>
             ))}
-            {" } "};
+            {" } "}
           </>
         ),
         sender: "game",
@@ -231,13 +243,13 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              Updated assignment: 𝑒 = {"{"}
+              Updated assignment: 𝑒 = {" { "}
               {Array.from(valuation).map(([from, to]) => (
                 <>
                   [{from} / {to}],{" "}
                 </>
               ))}
-              [{sf.formula.variableName} / {choices[back].element}] {"}"};
+              [{sf.formula.variableName} / {choices[back].element}] {" } "};
             </>
           ),
           sender: "game",
