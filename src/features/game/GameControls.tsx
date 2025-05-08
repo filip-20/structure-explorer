@@ -6,7 +6,6 @@ import {
   addDelta,
   addGamma,
   selectCurrentGameFormula,
-  selectFormulaChoices,
   selectGameButtons,
 } from "../formulas/formulasSlice";
 import SelectBubble from "../../components_helper/SelectBubble";
@@ -16,7 +15,6 @@ interface Props {
 
 export default function GameControl({ id }: Props) {
   const dispatch = useAppDispatch();
-  const choices = useAppSelector((state) => selectFormulaChoices(state, id));
   const current = useAppSelector((state) =>
     selectCurrentGameFormula(state, id)
   );

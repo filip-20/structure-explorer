@@ -6,8 +6,15 @@
  * @abstract
  */
 
-import { Symbol } from "./Language";
-import { DomainElement, Structure } from "./Structure";
+/**
+ * Represent expression in logic
+ * @author Milan Cifra
+ * @author Jozef Filip
+ * @class
+ * @abstract
+ */
+import type { Symbol } from "./Language";
+import { type DomainElement, Structure } from "./Structure";
 
 abstract class Expression {
   abstract toString(): string;

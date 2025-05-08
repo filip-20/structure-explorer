@@ -1,5 +1,5 @@
-import Structure, { Valuation } from "../Structure";
-import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import Structure, { type Valuation } from "../Structure";
+import Formula, { SignedFormulaType } from "./Formula";
 import QuantifiedFormula from "./QuantifiedFormula";
 
 /**

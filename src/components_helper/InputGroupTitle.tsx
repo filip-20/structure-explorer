@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode } from "react";
+import type { ChangeEvent, ReactNode } from "react";
 import { Form, InputGroup, Col } from "react-bootstrap";
 import { SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import ErrorFeedback from "./ErrorFeedback";

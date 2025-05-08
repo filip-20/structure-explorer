@@ -4,7 +4,7 @@
  * @author Jozef Filip
  * @class
  */
-import { Language as ParserLanguage } from "@fmfi-uk-1-ain-412/js-fol-parser";
+import { type Language as ParserLanguage } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import Term from "./term/Term";
 export type Symbol = string;
 

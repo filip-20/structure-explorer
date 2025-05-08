@@ -1,6 +1,6 @@
-import Structure, { Valuation } from "../Structure";
-import { Symbol } from "../Language";
-import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import Structure, { type Valuation } from "../Structure";
+import type { Symbol } from "../Language";
+import Formula, { type SignedFormula, SignedFormulaType } from "./Formula";
 
 /**
  * Represent negation

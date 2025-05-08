@@ -8,13 +8,10 @@ import {
   updateDomain,
   selectParsedDomain,
   updateInterpretationConstants,
-  selectIc,
-  selectIp,
   updateInterpretationPredicates,
   selectIcName,
   selectParsedConstant,
   updateFunctionSymbols,
-  selectIf,
   selectParsedPredicate,
   selectIpName,
   selectIfName,
@@ -36,9 +33,6 @@ export default function StructureComponent() {
   const constants = useAppSelector(selectParsedConstants);
   const predicates = useAppSelector(selectParsedPredicates);
   const functions = useAppSelector(selectParsedFunctions);
-  const constantsInterpretation = useAppSelector(selectIc);
-  const predicatesInterpretation = useAppSelector(selectIp);
-  const functionsInterpretation = useAppSelector(selectIf);
   return (
     <>
       <Card className="mb-3">

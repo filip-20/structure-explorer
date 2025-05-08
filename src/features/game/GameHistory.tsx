@@ -1,5 +1,5 @@
 import {
-  BubbleFormat,
+  type BubbleFormat,
   gameGoBack,
   selectFormulaChoices,
   selectHistoryData,
@@ -128,7 +128,7 @@ export default function GameHistory({ id }: Props) {
         sender: "game",
       });
 
-      subfs.forEach((s, i) =>
+      subfs.forEach((s, _i) =>
         bubbles.push({
           text: (
             <>
@@ -168,7 +168,7 @@ export default function GameHistory({ id }: Props) {
         text: (
           <>
             Current assignment: 𝑒 = {" { "}
-            {Array.from(valuation).map(([from, to], i) => (
+            {Array.from(valuation).map(([from, to], _i) => (
               <>
                 [{from} / {to}]
               </>
@@ -189,7 +189,7 @@ export default function GameHistory({ id }: Props) {
           text: (
             <>
               Updated assignment: 𝑒 = {" { "}
-              {Array.from(valuation).map(([from, to], i) => (
+              {Array.from(valuation).map(([from, to], _i) => (
                 <>
                   [{from} / {to}],{" "}
                 </>

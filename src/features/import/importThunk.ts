@@ -1,4 +1,4 @@
-import { AppDispatch, RootState } from "../../app/store";
+import type { AppDispatch, RootState } from "../../app/store";
 import { importFormulasState } from "../formulas/formulasSlice";
 import { importLanguageState } from "../language/languageSlice";
 import { importStructureState } from "../structure/structureSlice";
@@ -6,6 +6,7 @@ import { importVariablesState } from "../variables/variablesSlice";
 
 export const importAppState =
   (importedState: RootState) => (dispatch: AppDispatch) => {
+    console.log("imported state dole:");
     console.log(importedState);
 
     dispatch(importFormulasState(JSON.stringify(importedState.formulas)));

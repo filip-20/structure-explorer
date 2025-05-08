@@ -1,6 +1,6 @@
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, ReactNode } from "react";
+import { useState, useRef, type ReactNode } from "react";
 import { Button, Overlay, Tooltip } from "react-bootstrap";
 
 interface Props {

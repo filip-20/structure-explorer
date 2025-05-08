@@ -5,7 +5,7 @@
  * @class
  */
 
-import { Symbol, Language } from "./Language";
+import { type Symbol, Language } from "./Language";
 
 export type DomainElement = string;
 

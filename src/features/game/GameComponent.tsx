@@ -12,7 +12,7 @@ interface Props {
   originalFormula: Formula;
 }
 
-export default function GameComponent({ originalFormula, id, guess }: Props) {
+export default function GameComponent({ id }: Props) {
   const dispatch = useAppDispatch();
   const backIndex = useAppSelector((state) => selectGameResetIndex(state, id));
 

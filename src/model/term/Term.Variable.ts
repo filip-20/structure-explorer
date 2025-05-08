@@ -1,5 +1,5 @@
-import { Symbol } from "../Language";
-import { Structure, Valuation, DomainElement } from "../Structure";
+import type { Symbol } from "../Language";
+import { Structure, type Valuation, type DomainElement } from "../Structure";
 import Term from "./Term";
 
 /**

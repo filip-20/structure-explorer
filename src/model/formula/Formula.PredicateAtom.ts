@@ -1,6 +1,6 @@
-import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import Formula, { type SignedFormula, SignedFormulaType } from "./Formula";
 import Term from "../term/Term";
-import Structure, { Valuation } from "../Structure";
+import Structure, { type Valuation } from "../Structure";
 
 /**
  * Represent predicate symbol

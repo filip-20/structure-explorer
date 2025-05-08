@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Dropdown, DropdownButton } from "react-bootstrap";
 
 interface Props {
@@ -9,13 +9,7 @@ interface Props {
   onclicks: (() => void)[];
 }
 
-export default function SelectBubble({
-  id,
-  title,
-  choices,
-  type,
-  onclicks,
-}: Props) {
+export default function SelectBubble({ title, choices, onclicks }: Props) {
   return (
     <>
       <div>

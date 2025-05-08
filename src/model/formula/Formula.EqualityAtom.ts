@@ -1,6 +1,6 @@
-import Structure, { Valuation } from "../Structure";
+import Structure, { type Valuation } from "../Structure";
 import Term from "../term/Term";
-import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
+import Formula, { type SignedFormula, SignedFormulaType } from "./Formula";
 
 /**
  * Represent equality symbol
@@ -41,10 +41,10 @@ class EqualityAtom extends Formula {
     return [];
   }
 
-  getSignedType(sign: boolean): SignedFormulaType {
+  getSignedType(_sign: boolean): SignedFormulaType {
     throw new Error("Method not implemented.");
   }
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
+  getSignedSubFormulas(_sign: boolean): SignedFormula[] {
     throw new Error("Method not implemented.");
   }
 

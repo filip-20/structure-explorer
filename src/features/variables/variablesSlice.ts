@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import type { RootState } from "../../app/store";
 import { parseValuation, SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import { selectLanguage } from "../language/languageSlice";
 import { selectParsedDomain } from "../structure/structureSlice";
@@ -16,7 +16,7 @@ export const variablesSlice = createSlice({
   name: "variables",
   initialState,
   reducers: {
-    importVariablesState: (state, action: PayloadAction<string>) => {
+    importVariablesState: (_state, action: PayloadAction<string>) => {
       return JSON.parse(action.payload);
     },
     updateVariables: (state, action: PayloadAction<string>) => {

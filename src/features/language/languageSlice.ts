@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import type { RootState } from "../../app/store";
 import {
   parseConstants,
   parsePredicates,
@@ -25,7 +25,7 @@ export const languageSlice = createSlice({
   name: "language",
   initialState,
   reducers: {
-    importLanguageState: (state, action: PayloadAction<string>) => {
+    importLanguageState: (_state, action: PayloadAction<string>) => {
       return JSON.parse(action.payload);
     },
 

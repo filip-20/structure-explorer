@@ -1,6 +1,6 @@
-import Structure, { DomainElement, Valuation } from "../Structure";
-import Formula, { SignedFormula, SignedFormulaType } from "./Formula";
-import { Symbol } from "../Language";
+import Structure, { type DomainElement, type Valuation } from "../Structure";
+import Formula, { type SignedFormula, SignedFormulaType } from "./Formula";
+import type { Symbol } from "../Language";
 
 abstract class QuantifiedFormula extends Formula {
   constructor(

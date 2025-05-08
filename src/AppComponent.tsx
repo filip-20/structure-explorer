@@ -1,14 +1,17 @@
-import { useEffect } from "react";
 import App from "./App";
-import { store } from "./app/store";
+import { createStore } from "./app/store";
+import { Provider } from "react-redux";
 import { importAppState } from "./features/import/importThunk";
-
+import { type CellContext, LogicContext } from "./logicContext";
+import { useEffect } from "react";
 interface PrepareResult {
   instance: any;
   getState: (instance: any) => any;
 }
 
-function prepare(initialState?: any): PrepareResult {
+export function prepare(initialState?: any): PrepareResult {
+  const store = createStore();
+
   const instance = { store: store };
   const getState = (instance: any) => {
     const storeState = instance.store.getState();
@@ -25,7 +28,8 @@ function prepare(initialState?: any): PrepareResult {
   };
 
   if (initialState !== null) {
-    instance.store.dispatch(importAppState(initialState));
+    const obj = JSON.parse(initialState);
+    instance.store.dispatch(importAppState(obj));
   }
 
   return {
@@ -34,26 +38,45 @@ function prepare(initialState?: any): PrepareResult {
   };
 }
 
-interface AppProps {
+interface AppComponentProps {
   instance: any;
-  isEdited: boolean;
   onStateChange: () => void;
+  isEdited: boolean;
+  context?: CellContext;
 }
 
-function AppComponent({ instance, isEdited, onStateChange }: AppProps) {
-  const store = instance.store;
+export function AppComponent({
+  instance,
+  onStateChange,
+  isEdited,
+  context,
+}: AppComponentProps): JSX.Element {
+  const appstore = instance.store;
+  console.log(onStateChange);
+  console.log(isEdited);
+  console.log("store v appcomponente:");
+
+  console.log(appstore.getState());
 
   useEffect(() => {
-    const unsubscribe = store.subscribe(() => {
+    const unsubscribe = appstore.subscribe(() => {
       onStateChange();
     });
 
     return () => {
       unsubscribe();
     };
-  }, [store, onStateChange]);
+  }, [appstore, onStateChange]);
 
-  return <App store={store} />;
+  return (
+    <>
+      <Provider store={appstore}>
+        <LogicContext.Provider value={context}>
+          <App />
+        </LogicContext.Provider>
+      </Provider>
+    </>
+  );
 }
 
 export default { prepare, AppComponent };

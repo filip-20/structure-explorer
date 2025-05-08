@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import type { RootState } from "../../app/store";
 import {
   parseDomain,
   SyntaxError,
@@ -11,8 +11,8 @@ import {
   selectParsedFunctions,
   selectParsedPredicates,
 } from "../language/languageSlice";
-import Structure, { DomainElement } from "../../model/Structure";
-import { Symbol } from "../../model/Language";
+import Structure, { type DomainElement } from "../../model/Structure";
+import type { Symbol } from "../../model/Language";
 
 export interface InterpretationState {
   text: string;
@@ -36,7 +36,7 @@ export const structureSlice = createSlice({
   name: "structure",
   initialState,
   reducers: {
-    importStructureState: (state, action: PayloadAction<string>) => {
+    importStructureState: (_state, action: PayloadAction<string>) => {
       return JSON.parse(action.payload);
     },
     updateDomain: (state, action: PayloadAction<string>) => {

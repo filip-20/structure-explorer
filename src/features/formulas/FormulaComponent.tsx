@@ -29,7 +29,7 @@ interface Props {
 export default function FormulaComponent({ id, text, guess }: Props) {
   const real_id = id + 1;
   const dispatch = useAppDispatch();
-  const { error, evaluated, formula } = useAppSelector((state) =>
+  const { error, formula } = useAppSelector((state) =>
     selectEvaluatedFormula(state, id)
   );
   const [begin, setBegin] = useState(false);

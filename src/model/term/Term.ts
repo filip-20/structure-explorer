@@ -1,6 +1,6 @@
 import Expression from "../Expression";
-import { Symbol } from "../Language";
-import Structure, { DomainElement } from "../Structure";
+import type { Symbol } from "../Language";
+import Structure, { type DomainElement } from "../Structure";
 
 /**
  * Represent simple term.

@@ -1,8 +1,6 @@
 import Expression from "../Expression";
-import { Symbol } from "../Language";
-import { Structure, Valuation } from "../Structure";
-import Negation from "./Formula.Negation";
-import PredicateAtom from "./Formula.PredicateAtom";
+import type { Symbol } from "../Language";
+import { Structure, type Valuation } from "../Structure";
 
 export enum SignedFormulaType {
   ALPHA = "alpha",
@@ -39,7 +37,7 @@ abstract class Formula extends Expression {
 
   gameDepth(sign: boolean): number {
     return Math.max(
-      ...this.getSignedSubFormulas(sign).map(({ formula: f, sign: s }) =>
+      ...this.getSignedSubFormulas(sign).map(({ formula: f }) =>
         f.gameDepth(sign)
       )
     ) +

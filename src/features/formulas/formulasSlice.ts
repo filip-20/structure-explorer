@@ -1,15 +1,15 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
+import type { RootState } from "../../app/store";
 import Constant from "../../model/term/Term.Constant";
 import Variable from "../../model/term/Term.Variable";
 import {
-  ErrorExpected,
+  type ErrorExpected,
   parseFormulaWithPrecedence,
   SyntaxError,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import Formula, {
-  SignedFormula,
+  type SignedFormula,
   SignedFormulaType,
 } from "../../model/formula/Formula";
 import Term from "../../model/term/Term";
@@ -30,7 +30,7 @@ import {
 import UniversalQuant from "../../model/formula/Formula.UniversalQuant";
 import { selectValuation } from "../variables/variablesSlice";
 import QuantifiedFormula from "../../model/formula/QuantifiedFormula";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 export interface FormulaState {
   text: string;
@@ -58,7 +58,7 @@ export const formulasSlice = createSlice({
   name: "formulas",
   initialState,
   reducers: {
-    importFormulasState: (state, action: PayloadAction<string>) => {
+    importFormulasState: (_state, action: PayloadAction<string>) => {
       return JSON.parse(action.payload);
     },
 
@@ -161,7 +161,7 @@ export const formulasSlice = createSlice({
       state.allFormulas[id].gameChoices = [];
     },
   },
-  extraReducers: (builder) => {},
+  extraReducers: (_builder) => {},
 });
 
 export const {
@@ -255,7 +255,7 @@ export const selectCurrentGameFormula = createSelector(
   (choices, { formula }, userGuess): SignedFormula => {
     let newFormula: SignedFormula = { sign: userGuess!, formula: formula! };
 
-    for (const { formula, element, type } of choices) {
+    for (const { formula, type } of choices) {
       if (
         newFormula.formula.getSignedSubFormulas(newFormula.sign).length === 0
       ) {
@@ -407,31 +407,6 @@ export type BubbleFormat = {
   lose?: boolean;
 };
 
-function addBetaText({ sign, formula }: SignedFormula): BubbleFormat[] {
-  return formula.getSignedSubFormulas(sign).map(({ formula: f, sign: s }) => {
-    return {
-      text: `${f.toString()} is ${s === true ? "True" : "False"}`,
-      sender: "game",
-    };
-  });
-}
-
-function addAlphaText(
-  choice: number,
-  { sign, formula }: SignedFormula
-): BubbleFormat {
-  return {
-    text: `Then ${formula
-      .getSignedSubFormulas(sign)
-      [choice].formula.toString()} is ${
-      formula.getSignedSubFormulas(sign)[choice].sign === true
-        ? "true"
-        : "false"
-    }`,
-    sender: "game",
-  };
-}
-
 export const selectHistoryData = createSelector(
   [
     selectFormulaChoices,
@@ -535,16 +510,13 @@ export const selectGameResetIndex = createSelector(
 
     let index = 0;
 
-    for (const { type, sf, winFormula, valuation } of data) {
+    for (const { type, sf } of data) {
       let prev = data[index - 1];
 
       if (prev === undefined) {
         index++;
         continue;
       }
-
-      const currentEval = sf.formula.eval(structure, valuation);
-      const expectedSign = sf.sign;
 
       const prevWinning =
         prev.type === "alpha" || prev.type === "beta"

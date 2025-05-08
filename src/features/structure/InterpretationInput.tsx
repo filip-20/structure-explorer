@@ -1,9 +1,9 @@
 import InputGroupTitle from "../../components_helper/InputGroupTitle";
 import { InlineMath } from "react-katex";
 import { useAppSelector } from "../../app/hooks";
-import { InterpretationState } from "./structureSlice";
-import { RootState } from "../../app/store";
-import { ChangeEvent } from "react";
+import type { InterpretationState } from "./structureSlice";
+import type { RootState } from "../../app/store";
+import type { ChangeEvent } from "react";
 
 interface Props {
   name: string;
