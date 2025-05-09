@@ -18,7 +18,7 @@ export default function GameComponent({ id }: Props) {
 
   useEffect(() => {
     dispatch(gameGoBack({ id, index: backIndex }));
-  }, [history]);
+  });
 
   return (
     <>
