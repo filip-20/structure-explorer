@@ -35,8 +35,8 @@ export default function GameHistory({ id }: Props) {
     bubbles.push({
       text: (
         <>
-          You assume that ℳ {sf?.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}
-          [𝑒]
+          You assume that ℳ {sf?.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[
+          <var>e</var>]
         </>
       ),
       sender: "game",
@@ -53,7 +53,7 @@ export default function GameHistory({ id }: Props) {
         text: (
           <>
             <strong>{satisfied ? "You win " : "You lose"}</strong>, ℳ
-            {sf.sign ? "⊨" : "⊭"} {sf.formula.toString()}[𝑒], since (
+            {sf.sign ? "⊨" : "⊭"} {sf.formula.toString()}[<var>e</var>], since (
             {sf.formula.terms
               .map((t) => t.eval(structure, valuation))
               .join(",")}
@@ -84,7 +84,7 @@ export default function GameHistory({ id }: Props) {
               </>
             )}
             Your initial assumption that ℳ {data[0].sf.sign ? "⊨" : "⊭"}
-            {data[0].sf.formula.toString()}[𝑒] was
+            {data[0].sf.formula.toString()}[<var>e</var>] was
             {originalGuess ? " correct" : " incorrect"}{" "}
             {originalGuess === true && satisfied === false && (
               <>
@@ -106,7 +106,7 @@ export default function GameHistory({ id }: Props) {
         text: (
           <>
             Then ℳ {winFormula.sign ? "⊨" : "⊭"} {winFormula.formula.toString()}
-            [𝑒]
+            [<var>e</var>]
           </>
         ),
         sender: "game",
@@ -132,7 +132,7 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              ℳ {s.sign ? "⊨" : "⊭"} {s.formula.toString()}[𝑒]
+              ℳ {s.sign ? "⊨" : "⊭"} {s.formula.toString()}[<var>e</var>]
             </>
           ),
           sender: "game",
@@ -144,7 +144,8 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              ℳ {choice.sign ? "⊨" : "⊭"} {choice.formula.toString()}[𝑒]
+              ℳ {choice.sign ? "⊨" : "⊭"} {choice.formula.toString()}[
+              <var>e</var>]
             </>
           ),
           sender: "player",
@@ -157,8 +158,9 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
-            Then ℳ {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[𝑒] also
-            when we assign element {winElement} to {sf.formula.variableName}
+            Then ℳ {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[
+            <var>e</var>] also when we assign element {winElement} to{" "}
+            {sf.formula.variableName}
           </>
         ),
         sender: "game",
@@ -167,7 +169,7 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
-            Current assignment: 𝑒 = {" { "}
+            Current assignment: <var>e</var> = {" { "}
             {Array.from(valuation).map(([from, to], _i) => (
               <>
                 [{from} / {to}]
@@ -188,7 +190,7 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              Updated assignment: 𝑒 = {" { "}
+              Updated assignment: <var>e</var> = {" { "}
               {Array.from(valuation).map(([from, to], _i) => (
                 <>
                   [{from} / {to}],{" "}
@@ -208,7 +210,7 @@ export default function GameHistory({ id }: Props) {
           <>
             Which domain element should we assign to{" "}
             <var>{sf.formula.variableName}</var> to show that ℳ
-            {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[𝑒]
+            {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[<var>e</var>]
           </>
         ),
         sender: "game",
@@ -217,7 +219,7 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
-            Current assignment: 𝑒 = {" { "}
+            Current assignment: <var>e</var> = {" { "}
             {Array.from(valuation).map(([from, to]) => (
               <>
                 [{from} / {to}]
@@ -243,7 +245,7 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              Updated assignment: 𝑒 = {" { "}
+              Updated assignment: <var>e</var> = {" { "}
               {Array.from(valuation).map(([from, to]) => (
                 <>
                   [{from} / {to}],{" "}

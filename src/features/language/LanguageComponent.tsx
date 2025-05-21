@@ -83,7 +83,7 @@ export default function LanguageComponent() {
             error={functionsErrors.error}
           ></InputGroupTitle>
 
-          <div className="text-danger">{symbolsClash}</div>
+          {symbolsClash && <div className="text-danger">{symbolsClash}</div>}
         </Card.Body>
       </Card>
     </>

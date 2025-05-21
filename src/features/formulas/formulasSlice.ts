@@ -510,7 +510,7 @@ export const selectGameResetIndex = createSelector(
 
     let index = 0;
 
-    for (const { type, sf } of data) {
+    for (const { sf } of data) {
       let prev = data[index - 1];
 
       if (prev === undefined) {
@@ -536,14 +536,6 @@ export const selectGameResetIndex = createSelector(
         prev.sf.formula.eval(structure, prev.valuation) !== prev.sf.sign &&
         prev.type === "alpha"
       ) {
-        console.log(
-          `som sa sekol tu: ${sf.formula.signedFormulaToString(
-            sf.sign
-          )} ${type} neplati, takze chyba je o jedno nad, co je: ${prev.sf.formula.signedFormulaToString(
-            prev.sf.sign
-          )} ${prev.type}`
-        );
-
         return index - 1;
       }
       index++;

@@ -6,9 +6,6 @@ import { importVariablesState } from "../variables/variablesSlice";
 
 export const importAppState =
   (importedState: RootState) => (dispatch: AppDispatch) => {
-    console.log("imported state dole:");
-    console.log(importedState);
-
     dispatch(importFormulasState(JSON.stringify(importedState.formulas)));
     dispatch(importLanguageState(JSON.stringify(importedState.language)));
     dispatch(importStructureState(JSON.stringify(importedState.structure)));
