@@ -86,7 +86,7 @@ export const selectParsedPredicates = createSelector(
         if (
           parsed.filter((element2) => element.name === element2.name).length > 1
         ) {
-          throw new Error(`Predicate ${element} is already defined`);
+          throw new Error(`Predicate ${element.name} is already defined`);
         }
       });
 
@@ -113,7 +113,7 @@ export const selectParsedFunctions = createSelector(
         if (
           parsed.filter((element2) => element.name === element2.name).length > 1
         ) {
-          throw new Error(`Function ${element} is already defined`);
+          throw new Error(`Function ${element.name} is already defined`);
         }
       });
 
