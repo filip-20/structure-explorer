@@ -13,7 +13,7 @@ export default function SelectBubble({ title, choices, onclicks }: Props) {
   return (
     <>
       <div>
-        <DropdownButton title={title} size="sm">
+        <DropdownButton title={title}>
           {choices.map((choice, index) => (
             <Dropdown.Item key={choice} onClick={() => onclicks[index]()}>
               {choice}
