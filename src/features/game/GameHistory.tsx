@@ -32,19 +32,33 @@ export default function GameHistory({ id }: Props) {
   let back = 0;
 
   for (const { sf, valuation, type, winFormula, winElement } of data) {
+    let text = "";
+
+    if (back > 0) {
+      let prev = data[back - 1];
+      let prevFormula = prev.sf.formula;
+
+      if (prev.type === "delta" && prevFormula instanceof QuantifiedFormula) {
+        text = `(${prevFormula.variableName}/${choices[back - 1].element})`;
+      }
+
+      if (prev.type === "gamma" && prevFormula instanceof QuantifiedFormula) {
+        text = `(${prevFormula.variableName}/${prev.winElement})`;
+      }
+    }
+
     bubbles.push({
       text: (
         <>
           You assume that ℳ {sf?.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[
-          <var>e</var>]
+          <var>e</var>
+          {text}]
         </>
       ),
       sender: "game",
     });
 
-    const last =
-      sf.formula.getSubFormulas().length === 0 &&
-      sf.formula instanceof PredicateAtom;
+    const last = sf.formula.getSubFormulas().length === 0;
 
     if (last && sf.formula instanceof PredicateAtom) {
       const satisfied = sf.formula.eval(structure, valuation) === sf.sign;
@@ -166,20 +180,20 @@ export default function GameHistory({ id }: Props) {
         sender: "game",
       });
 
-      bubbles.push({
-        text: (
-          <>
-            Current assignment: <var>e</var> = {" { "}
-            {Array.from(valuation).map(([from, to], _i) => (
-              <>
-                [{from} / {to}]
-              </>
-            ))}
-            {" } "}
-          </>
-        ),
-        sender: "game",
-      });
+      // bubbles.push({
+      //   text: (
+      //     <>
+      //       Current assignment: <var>e</var> = {" { "}
+      //       {Array.from(valuation).map(([from, to], _i) => (
+      //         <>
+      //           [{from} / {to}]
+      //         </>
+      //       ))}
+      //       {" } "}
+      //     </>
+      //   ),
+      //   sender: "game",
+      // });
 
       if (back < choices.length) {
         bubbles.push({
@@ -187,20 +201,20 @@ export default function GameHistory({ id }: Props) {
           sender: "player",
         });
 
-        bubbles.push({
-          text: (
-            <>
-              Updated assignment: <var>e</var> = {" { "}
-              {Array.from(valuation).map(([from, to], _i) => (
-                <>
-                  [{from} / {to}],{" "}
-                </>
-              ))}
-              [{sf.formula.variableName} / {winElement}] {" } "};
-            </>
-          ),
-          sender: "game",
-        });
+        // bubbles.push({
+        //   text: (
+        //     <>
+        //       Updated assignment: <var>e</var> = {" { "}
+        //       {Array.from(valuation).map(([from, to], _i) => (
+        //         <>
+        //           [{from} / {to}],{" "}
+        //         </>
+        //       ))}
+        //       [{sf.formula.variableName} / {winElement}] {" } "};
+        //     </>
+        //   ),
+        //   sender: "game",
+        // });
       }
     }
 
@@ -216,20 +230,20 @@ export default function GameHistory({ id }: Props) {
         sender: "game",
       });
 
-      bubbles.push({
-        text: (
-          <>
-            Current assignment: <var>e</var> = {" { "}
-            {Array.from(valuation).map(([from, to]) => (
-              <>
-                [{from} / {to}]
-              </>
-            ))}
-            {" } "}
-          </>
-        ),
-        sender: "game",
-      });
+      // bubbles.push({
+      //   text: (
+      //     <>
+      //       Current assignment: <var>e</var> = {" { "}
+      //       {Array.from(valuation).map(([from, to]) => (
+      //         <>
+      //           [{from} / {to}]
+      //         </>
+      //       ))}
+      //       {" } "}
+      //     </>
+      //   ),
+      //   sender: "game",
+      // });
 
       if (back < choices.length) {
         bubbles.push({
@@ -242,20 +256,20 @@ export default function GameHistory({ id }: Props) {
           goBack: back,
         });
 
-        bubbles.push({
-          text: (
-            <>
-              Updated assignment: <var>e</var> = {" { "}
-              {Array.from(valuation).map(([from, to]) => (
-                <>
-                  [{from} / {to}],{" "}
-                </>
-              ))}
-              [{sf.formula.variableName} / {choices[back].element}] {" } "};
-            </>
-          ),
-          sender: "game",
-        });
+        // bubbles.push({
+        //   text: (
+        //     <>
+        //       Updated assignment: <var>e</var> = {" { "}
+        //       {Array.from(valuation).map(([from, to]) => (
+        //         <>
+        //           [{from} / {to}],{" "}
+        //         </>
+        //       ))}
+        //       [{sf.formula.variableName} / {choices[back].element}] {" } "};
+        //     </>
+        //   ),
+        //   sender: "game",
+        // });
       }
     }
 
