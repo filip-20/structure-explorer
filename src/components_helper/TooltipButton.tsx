@@ -1,35 +1,41 @@
 import { faQuestion } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, type ReactNode } from "react";
-import { Button, Overlay, Tooltip } from "react-bootstrap";
+import { useState } from "react";
+import { Button, OverlayTrigger, Popover } from "react-bootstrap";
+import type { ReactNode } from "react";
 
-interface Props {
+interface TooltipButtonProps {
   text: ReactNode;
 }
 
-export default function TooltipButton({ text }: Props) {
+export default function TooltipButton({ text }: TooltipButtonProps) {
   const [show, setShow] = useState(false);
-  const [color, setColor] = useState("outline-info");
-  const target = useRef(null);
+
+  const popover = (
+    <Popover
+      className="mw-100 overflow-auto shadow-sm"
+      style={{ width: "30rem", maxHeight: "90vh" }}
+    >
+      <Popover.Body>{text}</Popover.Body>
+    </Popover>
+  );
+
   return (
-    <>
+    <OverlayTrigger
+      trigger="click"
+      placement="auto"
+      overlay={popover}
+      show={show}
+      onToggle={() => setShow(!show)}
+    >
       <Button
-        ref={target}
-        variant={color}
-        onClick={() => {
-          setShow(!show);
-          setColor(color === "info" ? "outline-info" : "info");
-        }}
+        variant="outline-info"
+        style={{ padding: "0.2rem 0.4rem" }}
+        title="Help"
+        onClick={() => setShow(!show)}
       >
         <FontAwesomeIcon icon={faQuestion} />
       </Button>
-      <Overlay target={target.current} show={show} placement="auto" flip>
-        {(props) => (
-          <Tooltip id="overlay-example" {...props}>
-            {text}
-          </Tooltip>
-        )}
-      </Overlay>
-    </>
+    </OverlayTrigger>
   );
 }
