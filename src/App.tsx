@@ -23,7 +23,7 @@ function App() {
             <VariablesComponent />
           </Col>
           <Col>
-            <FormulaCard type="formula" help="helper"></FormulaCard>
+            <FormulaCard />
           </Col>
         </Row>
       </Container>

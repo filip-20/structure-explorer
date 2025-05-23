@@ -16,8 +16,32 @@ import {
   selectSymbolsClash,
 } from "./languageSlice";
 
+const help = (
+  <>
+    <p>A first-order language is defined in this section.</p>
+    <p>
+      The Edit/Done button toggles between editing the language and viewing it
+      in a more compact form.
+    </p>
+    <p className="mb-0">Syntactic requirements:</p>
+    <ul className="mb-0">
+      <li>
+        Symbols in all sets are <strong>comma-separated</strong>.
+      </li>
+      <li>
+        Each predicate and function symbol must be followed by a slash (
+        <code>/</code>) and arity (the number of arguments the symbol takes, a
+        positive integer):{" "}
+        <strong>
+          <code>symbol/arity</code>
+        </strong>
+        .
+      </li>
+    </ul>
+  </>
+);
+
 export default function LanguageComponent() {
-  let help: string = "help";
   const dispatch = useAppDispatch();
   const constantsText = useAppSelector(selectConstants);
   const predicatesText = useAppSelector(selectPredicates);
