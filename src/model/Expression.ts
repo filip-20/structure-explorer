@@ -5,14 +5,6 @@
  * @class
  * @abstract
  */
-
-/**
- * Represent expression in logic
- * @author Milan Cifra
- * @author Jozef Filip
- * @class
- * @abstract
- */
 import type { Symbol } from "./Language";
 import { type DomainElement, Structure } from "./Structure";
 

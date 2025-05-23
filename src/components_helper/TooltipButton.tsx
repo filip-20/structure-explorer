@@ -9,7 +9,7 @@ interface Props {
 
 export default function TooltipButton({ text }: Props) {
   const [show, setShow] = useState(false);
-  const [color, setColor] = useState("outline-primary");
+  const [color, setColor] = useState("outline-info");
   const target = useRef(null);
   return (
     <>
@@ -18,7 +18,7 @@ export default function TooltipButton({ text }: Props) {
         variant={color}
         onClick={() => {
           setShow(!show);
-          setColor(color === "primary" ? "outline-primary" : "primary");
+          setColor(color === "info" ? "outline-info" : "info");
         }}
       >
         <FontAwesomeIcon icon={faQuestion} />

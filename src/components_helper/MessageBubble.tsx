@@ -26,7 +26,7 @@ export default function MessageBubble({
       ? "danger"
       : sent
       ? "primary"
-      : "secondary";
+      : "light";
   const float = sent ? "float-end" : "float-start";
   const rounded = sent ? "rounded-start-3" : "rounded-end-3";
 
@@ -34,7 +34,7 @@ export default function MessageBubble({
     <>
       <div>
         <div
-          className={`${float} mb-1 mt-1 p-1 text-wrap rounded-bottom-3 ${rounded} text-bg-${variant}`}
+          className={`${float} mb-1 mt-1 p-2 text-wrap rounded-bottom-3 ${rounded} text-bg-${variant}`}
         >
           {message}
         </div>
