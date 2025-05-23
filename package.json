@@ -1,6 +1,6 @@
 {
-  "name": "structure-explorer",
-  "version": "0.0.5",
+  "name": "@fmfi-uk-1-ain-412/structure-explorer",
+  "version": "0.0.6",
   "files": [
     "dist/**"
   ],
