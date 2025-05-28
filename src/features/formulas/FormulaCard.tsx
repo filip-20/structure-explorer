@@ -103,7 +103,7 @@ export default function FormulaCard() {
         <Card.Header as="h4">
           <Row>
             <Col>
-              Truth of formulas in
+              Truth of formulas in{" "}
               <InlineMath>{String.raw`\mathcal{M}`}</InlineMath>
             </Col>
             <Col xs="auto">

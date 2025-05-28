@@ -122,7 +122,11 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                 setBegin(!begin);
               }}
             >
-              {isVerified ? "Show verification" : "Verify"}
+              {!isVerified
+                ? "Verify"
+                : begin
+                ? "Hide verification"
+                : "Show verification"}
             </Button>
           </Col>
         </Row>
