@@ -357,7 +357,7 @@ export const selectGameButtons = createSelector(
           .getSignedSubFormulas(sign)
           .map(
             ({ formula: f, sign: s }) =>
-              `M ${s === true ? "⊨" : "⊭"} ${f.toString()}[𝑒]`
+              `M ${s === true ? "⊨" : "⊭"} ${f.toString()}`
           ),
         subformulas: formula.getSignedSubFormulas(sign),
         type: "beta",

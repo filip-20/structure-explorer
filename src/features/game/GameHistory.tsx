@@ -16,7 +16,7 @@ interface Props {
   id: number;
 }
 
-function getDiffAndNew(
+export function getDiffAndNew(
   a: Map<string, string>,
   b: Map<string, string>
 ): Map<string, string> {

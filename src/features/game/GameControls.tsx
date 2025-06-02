@@ -7,8 +7,11 @@ import {
   addGamma,
   selectCurrentGameFormula,
   selectGameButtons,
+  selectHistoryData,
 } from "../formulas/formulasSlice";
 import SelectBubble from "../../components_helper/SelectBubble";
+import { selectValuation } from "../variables/variablesSlice";
+import { getDiffAndNew } from "./GameHistory";
 interface Props {
   id: number;
 }
@@ -19,6 +22,8 @@ export default function GameControl({ id }: Props) {
     selectCurrentGameFormula(state, id)
   );
   const buttons = useAppSelector((state) => selectGameButtons(state, id));
+  const initialValuation = useAppSelector(selectValuation);
+  const data = useAppSelector((state) => selectHistoryData(state, id));
 
   const arr = current.formula
     .getSignedSubFormulas(current.sign)
@@ -66,10 +71,19 @@ export default function GameControl({ id }: Props) {
   }
 
   if (buttons.type === "beta") {
+    const valuationDiff = getDiffAndNew(
+      initialValuation,
+      data.at(-1)?.valuation!
+    );
+
+    const valuationText = Array.from(valuationDiff)
+      .map(([from, to]) => `(${from} / ${to})`)
+      .join(" ");
+
     button = (
       <ChoiceBubble
         id={id}
-        choices={buttons.values}
+        choices={buttons.values.map((text) => `${text}[ 𝑒${valuationText} ]`)}
         type={buttons.type}
         onclicks={buttons.subformulas!.map((_, index) => {
           if (index === 0 || index === 1) {
