@@ -43,20 +43,6 @@ class Conjunction extends Formula {
       { sign: sign, formula: this.subRight },
     ];
   }
-
-  // createCopy() {
-  //   return new Conjunction(
-  //     this.subLeft.createCopy(),
-  //     this.subRight.createCopy()
-  //   );
-  // }
-
-  // substitute(from, to, bound) {
-  //   return new Conjunction(
-  //     this.subLeft.substitute(from, to, bound),
-  //     this.subRight.substitute(from, to, bound)
-  //   );
-  // }
 }
 
 export default Conjunction;

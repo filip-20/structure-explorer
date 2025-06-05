@@ -47,20 +47,6 @@ class EqualityAtom extends Formula {
   getSignedSubFormulas(_sign: boolean): SignedFormula[] {
     throw new Error("Method not implemented.");
   }
-
-  // createCopy() {
-  //   return new EqualityAtom(
-  //     this.subLeft.createCopy(),
-  //     this.subRight.createCopy()
-  //   );
-  // }
-
-  // substitute(from, to, bound) {
-  //   return new EqualityAtom(
-  //     this.subLeft.substitute(from, to, bound),
-  //     this.subRight.substitute(from, to, bound)
-  //   );
-  // }
 }
 
 export default EqualityAtom;

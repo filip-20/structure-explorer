@@ -42,10 +42,7 @@ const help = (
         Strings of any Unicode characters except spaces, comma, and parentheses
         can be used as domain elements.
       </li>
-      <li>
-        An individual constant is interpreted a domain element picked from a
-        menu.
-      </li>
+      <li>An individual constant is interpreted as a domain element.</li>
       <li>
         A unary predicate symbol is interpreted as a set of domain elements.
       </li>

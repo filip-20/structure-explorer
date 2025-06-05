@@ -66,10 +66,6 @@ export const formulasSlice = createSlice({
       state.allFormulas.push(newFormulaState());
     },
 
-    clearChoices: (state, action: PayloadAction<number>) => {
-      state.allFormulas[action.payload].gameChoices = [];
-    },
-
     gameGoBack: (
       state,
       action: PayloadAction<{ id: number; index: number }>
@@ -167,7 +163,6 @@ export const formulasSlice = createSlice({
 export const {
   addFormula,
   removeFormula,
-  clearChoices,
   gameGoBack,
   addAlpha,
   addBeta,

@@ -52,14 +52,6 @@ class Negation extends Formula {
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [{ sign: !sign, formula: this.subFormula }];
   }
-
-  // createCopy() {
-  //   return new Negation(this.subFormula.createCopy());
-  // }
-
-  // substitute(from, to, bound) {
-  //   return new Negation(this.subFormula.substitute(from, to, bound));
-  // }
 }
 
 export default Negation;

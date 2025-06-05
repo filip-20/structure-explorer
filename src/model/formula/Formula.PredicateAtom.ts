@@ -19,10 +19,6 @@ class PredicateAtom extends Formula {
     super([], "");
   }
 
-  depth(): number {
-    return 1;
-  }
-
   /**
    *
    * @param {Structure} structure

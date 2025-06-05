@@ -57,20 +57,6 @@ class Equivalence extends Formula {
       { sign: sign, formula: toRightImpl },
     ];
   }
-
-  //   createCopy() {
-  //     return new Equivalence(
-  //       this.subLeft.createCopy(),
-  //       this.subRight.createCopy()
-  //     );
-  //   }
-
-  //   substitute(from, to, bound) {
-  //     return new Equivalence(
-  //       this.subLeft.substitute(from, to, bound),
-  //       this.subRight.substitute(from, to, bound)
-  //     );
-  //   }
 }
 
 export default Equivalence;

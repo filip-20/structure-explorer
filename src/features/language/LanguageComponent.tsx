@@ -19,10 +19,6 @@ import {
 const help = (
   <>
     <p>A first-order language is defined in this section.</p>
-    <p>
-      The Edit/Done button toggles between editing the language and viewing it
-      in a more compact form.
-    </p>
     <p className="mb-0">Syntactic requirements:</p>
     <ul className="mb-0">
       <li>

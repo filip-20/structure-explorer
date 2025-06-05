@@ -52,10 +52,6 @@ abstract class Formula extends Expression {
     return `${sign === true ? "T" : "F"} ${this.toString()}`;
   }
 
-  depth(): number {
-    return Math.max(...this.subFormulas.map((f) => f.depth())) + 1;
-  }
-
   winningSubformulas(
     sign: boolean,
     structure: Structure,

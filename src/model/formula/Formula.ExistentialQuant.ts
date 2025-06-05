@@ -44,27 +44,6 @@ class ExistentialQuant extends QuantifiedFormula {
   getSignedType(sign: boolean): SignedFormulaType {
     return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
   }
-
-  // createCopy() {
-  //   return new ExistentialQuant(
-  //     this.variableName,
-  //     this.subFormula.createCopy()
-  //   );
-  // }
-
-  // substitute(from, to, bound) {
-  //   if (this.variableName !== from) {
-  //     return new ExistentialQuant(
-  //       this.variableName,
-  //       this.subFormula.substitute(
-  //         from,
-  //         to,
-  //         new Set([this.variableName, ...(bound ?? [])])
-  //       )
-  //     );
-  //   }
-  //   return this.createCopy();
-  // }
 }
 
 export default ExistentialQuant;

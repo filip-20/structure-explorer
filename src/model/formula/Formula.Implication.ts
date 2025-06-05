@@ -54,19 +54,6 @@ class Implication extends Formula {
       { sign: sign, formula: this.subRight },
     ];
   }
-
-  // createCopy() {
-  //   let subLeft = this.subLeft.createCopy();
-  //   let subRight = this.subRight.createCopy();
-  //   return new Implication(subLeft, subRight);
-  // }
-
-  // substitute(from, to, bound) {
-  //   return new Implication(
-  //     this.subLeft.substitute(from, to, bound),
-  //     this.subRight.substitute(from, to, bound)
-  //   );
-  // }
 }
 
 export default Implication;
