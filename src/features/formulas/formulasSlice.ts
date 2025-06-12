@@ -505,7 +505,7 @@ export const selectGameResetIndex = createSelector(
 
     let index = 0;
 
-    for (const { sf } of data) {
+    for (const { sf, valuation } of data) {
       let prev = data[index - 1];
 
       if (prev === undefined) {
@@ -513,7 +513,7 @@ export const selectGameResetIndex = createSelector(
         continue;
       }
 
-      const prevWinning =
+      const prevWinningFormula =
         prev.type === "alpha" || prev.type === "beta"
           ? prev.sf.formula.winningSubformulas(
               prev.sf.sign,
@@ -522,19 +522,47 @@ export const selectGameResetIndex = createSelector(
             )[0]
           : undefined;
 
-      const prevWinningStr = prevWinning
-        ? prevWinning.formula.signedFormulaToString(prevWinning.sign)
+      const prevWinningElementValue =
+        (prev.type === "gamma" || prev.type === "delta") &&
+        prev.sf.formula instanceof QuantifiedFormula
+          ? prev.sf.formula.winningElements(
+              prev.sf.sign,
+              structure,
+              prev.valuation
+            )[0]
+          : undefined;
+
+      const prevVariableName =
+        prev.sf.formula instanceof QuantifiedFormula
+          ? prev.sf.formula.variableName
+          : undefined;
+
+      const prevWinningFormulaStr = prevWinningFormula
+        ? prevWinningFormula.formula.signedFormulaToString(
+            prevWinningFormula.sign
+          )
         : undefined;
-      const currentStr = sf.formula.signedFormulaToString(sf.sign);
+      const currentFormulaStr = sf.formula.signedFormulaToString(sf.sign);
       if (
-        prevWinningStr !== currentStr &&
+        prevWinningFormulaStr !== currentFormulaStr &&
         prev.sf.formula.eval(structure, prev.valuation) !== prev.sf.sign &&
         prev.type === "alpha"
       ) {
         return index - 1;
       }
+
+      if (
+        prevWinningElementValue !== undefined &&
+        prevVariableName !== undefined &&
+        valuation.get(prevVariableName) !== prevWinningElementValue &&
+        prev.type === "gamma"
+      ) {
+        return index - 1;
+      }
       index++;
     }
+
+    console.log(data);
 
     return index;
   }
