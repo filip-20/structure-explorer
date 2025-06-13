@@ -490,11 +490,15 @@ export const selectIsVerifiedGame = createSelector(
     const last = data.at(-1);
 
     if (last === undefined) return false;
-
-    return (
-      last.sf.formula instanceof PredicateAtom &&
-      last.sf.formula.eval(structure, last.valuation) === last.sf.sign
-    );
+    try {
+      return (
+        (last.sf.formula instanceof PredicateAtom ||
+          last.sf.formula instanceof EqualityAtom) &&
+        last.sf.formula.eval(structure, last.valuation) === last.sf.sign
+      );
+    } catch (error) {
+      return false;
+    }
   }
 );
 

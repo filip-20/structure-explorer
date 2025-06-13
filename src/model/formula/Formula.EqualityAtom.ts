@@ -42,10 +42,11 @@ class EqualityAtom extends Formula {
   }
 
   getSignedType(_sign: boolean): SignedFormulaType {
-    throw new Error("Method not implemented.");
+    return SignedFormulaType.ALPHA;
   }
+
   getSignedSubFormulas(_sign: boolean): SignedFormula[] {
-    throw new Error("Method not implemented.");
+    return [];
   }
 }
 

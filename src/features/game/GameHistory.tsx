@@ -11,6 +11,7 @@ import QuantifiedFormula from "../../model/formula/QuantifiedFormula";
 import MessageBubble from "../../components_helper/MessageBubble";
 import { useEffect, useRef } from "react";
 import { selectValuation } from "../variables/variablesSlice";
+import EqualityAtom from "../../model/formula/Formula.EqualityAtom";
 
 interface Props {
   id: number;
@@ -64,15 +65,16 @@ export default function GameHistory({ id }: Props) {
 
     const last = sf.formula.getSubFormulas().length === 0;
 
-    if (last && sf.formula instanceof PredicateAtom) {
+    if (
+      (last && sf.formula instanceof PredicateAtom) ||
+      sf.formula instanceof EqualityAtom
+    ) {
       const satisfied = sf.formula.eval(structure, valuation) === sf.sign;
 
-      bubbles.push({
-        text: (
+      const explanaiton =
+        sf.formula instanceof PredicateAtom ? (
           <>
-            <strong>{satisfied ? "You win " : "You lose"}</strong>, ℳ
-            {sf.sign ? "⊨" : "⊭"} {sf.formula.toString()}[<var> e</var>{" "}
-            {valuationText}], since (
+            , since (
             {sf.formula.terms
               .map((t) => t.eval(structure, valuation))
               .join(",")}
@@ -85,6 +87,32 @@ export default function GameHistory({ id }: Props) {
               ? " ∉ "
               : " ∈ "}
             i({sf.formula.name})
+          </>
+        ) : (
+          <>
+            , since {sf.formula.subLeft.eval(structure, valuation)}
+            {sf.sign === true
+              ? satisfied
+                ? " = "
+                : " ≠ "
+              : satisfied
+              ? " ≠ "
+              : " = "}
+            {sf.formula.subRight.eval(structure, valuation)}
+          </>
+        );
+      bubbles.push({
+        text: (
+          <>
+            <strong>{satisfied ? "You win " : "You lose"}</strong>, ℳ
+            {sf.sign === true
+              ? satisfied
+                ? " ⊨ "
+                : " ⊭ "
+              : satisfied
+              ? " ⊭ "
+              : " ⊨ "}
+            {sf.formula.toString()}[<var> e</var> {valuationText}]{explanaiton}
           </>
         ),
         sender: "game",
@@ -104,7 +132,7 @@ export default function GameHistory({ id }: Props) {
             )}
             Your initial assumption that ℳ {data[0].sf.sign ? "⊨" : "⊭"}
             {data[0].sf.formula.toString()}[<var> e</var> ] was
-            {originalGuess ? " correct" : " incorrect"}{" "}
+            {originalGuess ? " correct." : " incorrect."}{" "}
             {originalGuess === true && satisfied === false && (
               <>
                 Find incorrect intermediate answers and correct them! You can
