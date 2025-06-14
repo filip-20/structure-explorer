@@ -222,10 +222,10 @@ export const selectParsedFunction = createSelector(
       if (!interpretation) {
         const examplePrints =
           all.length <= 3 ? `${examples}` : `${examples}...`;
-        const actual_size = all[0].length === 1 ? "singles" : `${arity}-tuples`;
+        const actualSize = all[0].length === 1 ? "singles" : `${arity}-tuples`;
         return {
           error: new Error(
-            `Function is not fully defined, for example these ${actual_size} do not have assigned value: ${examplePrints}`
+            `Function is not fully defined, for example these ${actualSize} do not have assigned value: ${examplePrints}`
           ),
         };
       }
@@ -234,7 +234,7 @@ export const selectParsedFunction = createSelector(
       const parsed = parseTuples(interpretationText);
       const size = arity === 1 ? "single" : `${arity + 1}-tuple`;
 
-      let err = undefined;
+      let err: Error | undefined = undefined;
 
       parsed.forEach((tuple) => {
         if (arity !== undefined && tuple.length != arity + 1) {
@@ -251,6 +251,10 @@ export const selectParsedFunction = createSelector(
             return;
           }
         });
+
+        if (err) {
+          return { error: err };
+        }
 
         parsed.forEach((tuple2) => {
           if (
