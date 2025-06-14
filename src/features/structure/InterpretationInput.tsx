@@ -22,13 +22,14 @@ export default function InterpretationInput({
 }: Props) {
   const interpretation = useAppSelector((state) => selector(state, name));
   const { error } = useAppSelector((state) => parser(state, name));
+  const escapedName = name.replace(/_/g, "\\_");
   return (
     <>
       <InputGroupTitle
         label=""
         id={id}
         prefix={
-          <InlineMath>{String.raw`i(\text{\textsf{${name}}}) =`}</InlineMath>
+          <InlineMath>{String.raw`i(\text{\textsf{${escapedName}}}) =`}</InlineMath>
         }
         suffix=""
         placeholder=""
