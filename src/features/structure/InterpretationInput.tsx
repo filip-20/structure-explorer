@@ -4,6 +4,10 @@ import { useAppSelector } from "../../app/hooks";
 import type { InterpretationState } from "./structureSlice";
 import type { RootState } from "../../app/store";
 import type { ChangeEvent } from "react";
+import {
+  selectConstants,
+  selectParsedConstants,
+} from "../language/languageSlice";
 
 interface Props {
   name: string;
@@ -23,15 +27,26 @@ export default function InterpretationInput({
   const interpretation = useAppSelector((state) => selector(state, name));
   const { error } = useAppSelector((state) => parser(state, name));
   const escapedName = name.replace(/_/g, "\\_");
+  const constants = useAppSelector(selectParsedConstants);
   return (
     <>
       <InputGroupTitle
         label=""
         id={id}
         prefix={
-          <InlineMath>{String.raw`i(\text{\textsf{${escapedName}}}) =`}</InlineMath>
+          constants.parsed?.has(name) === false ? (
+            <InlineMath>{String.raw`i(\text{\textsf{${escapedName}}}) = \{`}</InlineMath>
+          ) : (
+            <InlineMath>{String.raw`i(\text{\textsf{${escapedName}}}) =`}</InlineMath>
+          )
         }
-        suffix=""
+        suffix={
+          constants.parsed?.has(name) === false ? (
+            <InlineMath>{String.raw`\}`}</InlineMath>
+          ) : (
+            ""
+          )
+        }
         placeholder=""
         text={interpretation?.text ?? ""}
         onChange={onChange}

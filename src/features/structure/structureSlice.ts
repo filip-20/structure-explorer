@@ -290,8 +290,6 @@ export const selectParsedFunction = createSelector(
         err = new Error(
           `Function is not fully defined, for example these ${actual_size} do not have assigned value: ${examplePrints}`
         );
-      } else if (err !== undefined && all.length == 0) {
-        err = undefined;
       }
 
       return { error: err, parsed: parsed };
