@@ -78,26 +78,13 @@ export default function GameHistory({ id }: Props) {
             {sf.formula.terms
               .map((t) => t.eval(structure, valuation))
               .join(",")}
-            )
-            {sf.sign === true
-              ? satisfied
-                ? " ∈ "
-                : " ∉ "
-              : satisfied
-              ? " ∉ "
-              : " ∈ "}
+            ){sf.sign === satisfied ? " ∈ " : " ∉ "}
             i({sf.formula.name})
           </>
         ) : (
           <>
             , since {sf.formula.subLeft.eval(structure, valuation)}
-            {sf.sign === true
-              ? satisfied
-                ? " = "
-                : " ≠ "
-              : satisfied
-              ? " ≠ "
-              : " = "}
+            {sf.sign === satisfied ? " = " : " ≠ "}
             {sf.formula.subRight.eval(structure, valuation)}
           </>
         );
@@ -105,13 +92,7 @@ export default function GameHistory({ id }: Props) {
         text: (
           <>
             <strong>{satisfied ? "You win " : "You lose"}</strong>, ℳ
-            {sf.sign === true
-              ? satisfied
-                ? " ⊨ "
-                : " ⊭ "
-              : satisfied
-              ? " ⊭ "
-              : " ⊨ "}
+            {sf.sign === satisfied ? " ⊨ " : " ⊭ "}
             {sf.formula.toString()}[<var> e</var> {valuationText}]{explanaiton}
           </>
         ),

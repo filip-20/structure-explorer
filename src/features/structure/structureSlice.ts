@@ -142,13 +142,13 @@ export const selectParsedPredicate = createSelector(
       const interpretationText = interpretation.text;
       const arity = preds.parsed.get(name);
       const parsed = parseTuples(interpretationText);
-      const size = arity === 1 ? "single" : `${arity}-tuple`;
+      const size = arity === 1 ? "element" : `${arity}-tuple`;
 
       let err = undefined;
 
       parsed.forEach((tuple) => {
         if (tuple.length !== arity) {
-          const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
+          const actual_size = tuple.length === 1 ? "element" : `${arity}-tuple`;
           err = new Error(
             `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${name} is ${arity}`
           );
@@ -222,7 +222,7 @@ export const selectParsedFunction = createSelector(
       if (!interpretation) {
         const examplePrints =
           all.length <= 3 ? `${examples}` : `${examples}...`;
-        const actualSize = all[0].length === 1 ? "singles" : `${arity}-tuples`;
+        const actualSize = all[0].length === 1 ? "elements" : `${arity}-tuples`;
         return {
           error: new Error(
             `Function is not fully defined, for example these ${actualSize} do not have assigned value: ${examplePrints}`
@@ -232,13 +232,13 @@ export const selectParsedFunction = createSelector(
 
       const interpretationText = interpretation.text;
       const parsed = parseTuples(interpretationText);
-      const size = arity === 1 ? "single" : `${arity + 1}-tuple`;
+      const size = arity === 1 ? "element" : `${arity + 1}-tuple`;
 
       let err: Error | undefined = undefined;
 
       parsed.forEach((tuple) => {
         if (arity !== undefined && tuple.length != arity + 1) {
-          const actual_size = tuple.length === 1 ? "single" : `${arity}-tuple`;
+          const actual_size = tuple.length === 1 ? "element" : `${arity}-tuple`;
           err = new Error(
             `(${tuple}) is a ${actual_size}, but should be a ${size}, becasue aritiy of ${name} is ${arity}. Format is: (n-elements,mapped_element)`
           );
@@ -264,7 +264,7 @@ export const selectParsedFunction = createSelector(
           ) {
             tuple = tuple.slice(0, -1);
             const actual_size =
-              tuple.length === 1 ? "single" : `${arity}-tuple`;
+              tuple.length === 1 ? "element" : `${arity}-tuple`;
             err = new Error(
               `${actual_size} (${tuple}) has already defined value.`
             );
@@ -286,7 +286,8 @@ export const selectParsedFunction = createSelector(
       if (err === undefined && all.length !== 0) {
         const examplePrints =
           all.length <= 3 ? `${examples}` : `${examples}...`;
-        const actual_size = all[0].length === 1 ? "singles" : `${arity}-tuples`;
+        const actual_size =
+          all[0].length === 1 ? "elements" : `${arity}-tuples`;
         err = new Error(
           `Function is not fully defined, for example these ${actual_size} do not have assigned value: ${examplePrints}`
         );
