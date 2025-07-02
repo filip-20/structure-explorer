@@ -4,10 +4,7 @@ import { useAppSelector } from "../../app/hooks";
 import type { InterpretationState } from "./structureSlice";
 import type { RootState } from "../../app/store";
 import type { ChangeEvent } from "react";
-import {
-  selectConstants,
-  selectParsedConstants,
-} from "../language/languageSlice";
+import { selectParsedConstants } from "../language/languageSlice";
 
 interface Props {
   name: string;

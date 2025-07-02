@@ -456,7 +456,9 @@ export const selectHistoryData = createSelector(
       history.push(step);
     };
 
-    addStep();
+    try {
+      addStep();
+    } catch (error) {}
 
     for (const { formula: formulaIndex, element, type } of choices) {
       if (type === "alpha" || type === "beta") {
@@ -475,7 +477,9 @@ export const selectHistoryData = createSelector(
         s = currentFormula.sign;
       }
 
-      addStep();
+      try {
+        addStep();
+      } catch (error) {}
     }
 
     return history;
@@ -503,8 +507,13 @@ export const selectIsVerifiedGame = createSelector(
 );
 
 export const selectGameResetIndex = createSelector(
-  [selectHistoryData, selectStructure],
-  (data, structure) => {
+  [
+    selectHistoryData,
+    selectStructure,
+    selectFormulaChoices,
+    selectParsedDomain,
+  ],
+  (data, structure, choices, domain) => {
     if (data.length === 0) return 0;
 
     let index = 0;
@@ -515,6 +524,15 @@ export const selectGameResetIndex = createSelector(
       if (prev === undefined) {
         index++;
         continue;
+      }
+
+      if (
+        choices[index - 1] &&
+        choices[index - 1].element !== undefined &&
+        domain.parsed &&
+        domain.parsed.includes(choices[index - 1].element!) === false
+      ) {
+        return index - 1;
       }
 
       const prevWinningFormula =

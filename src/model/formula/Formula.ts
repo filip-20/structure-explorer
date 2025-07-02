@@ -64,27 +64,22 @@ abstract class Formula extends Expression {
 
     for (const { sign, formula } of formulas) {
       let current = { sign: sign, formula: formula };
-      try {
-        if (formula.eval(structure, e) !== sign) {
-          if (!shortest) {
-            shortest = current;
-            winning.push(shortest);
-          }
-
-          if (
-            shortest.formula.gameDepth(shortest.sign) > formula.gameDepth(sign)
-          ) {
-            shortest = current;
-            winning = [shortest];
-          } else if (
-            shortest.formula.gameDepth(shortest.sign) ===
-            formula.gameDepth(sign)
-          ) {
-            winning.push(current);
-          }
+      if (formula.eval(structure, e) !== sign) {
+        if (!shortest) {
+          shortest = current;
+          winning.push(shortest);
         }
-      } catch (error) {
-        return winning;
+
+        if (
+          shortest.formula.gameDepth(shortest.sign) > formula.gameDepth(sign)
+        ) {
+          shortest = current;
+          winning = [shortest];
+        } else if (
+          shortest.formula.gameDepth(shortest.sign) === formula.gameDepth(sign)
+        ) {
+          winning.push(current);
+        }
       }
     }
 
