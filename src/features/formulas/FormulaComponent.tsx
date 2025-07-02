@@ -44,7 +44,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
         <Row>
           <InputGroup className="mb-3" hasValidation={!!error}>
             <InputGroup.Text>
-              <InlineMath>{String.raw`\varphi_{${real_id}}`}</InlineMath>
+              <InlineMath>{String.raw`\varphi_{${real_id}} =`}</InlineMath>
             </InputGroup.Text>
             <Form.Control
               placeholder="Formula"
