@@ -10,6 +10,7 @@ import { type DomainElement, Structure } from "./Structure";
 
 abstract class Expression {
   abstract toString(): string;
+  abstract toTex(): string;
 
   abstract eval(
     structure: Structure,

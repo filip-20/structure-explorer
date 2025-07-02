@@ -69,6 +69,10 @@ class FunctionTerm extends Term {
     return res;
   }
 
+  toTex(): string {
+    return this.toString();
+  }
+
   getVariables(): Set<Symbol> {
     const vars: Set<Symbol> = new Set();
     this.terms.forEach((term) =>

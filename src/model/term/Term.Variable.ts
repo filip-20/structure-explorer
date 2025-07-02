@@ -41,6 +41,10 @@ class Variable extends Term {
     return this.name;
   }
 
+  toTex(): string {
+    return this.toString();
+  }
+
   createCopy(): Variable {
     return new Variable(this.name);
   }

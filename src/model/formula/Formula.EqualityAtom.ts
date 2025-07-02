@@ -16,7 +16,7 @@ class EqualityAtom extends Formula {
    * @param {Term} subRight
    */
   constructor(public subLeft: Term, public subRight: Term) {
-    super([], ", ");
+    super([], "=", "=");
   }
 
   /**
@@ -35,6 +35,10 @@ class EqualityAtom extends Formula {
    */
   toString(): string {
     return `${this.subLeft.toString()} = ${this.subRight.toString()}`;
+  }
+
+  toTex(): string {
+    return this.toString();
   }
 
   getSubFormulas() {

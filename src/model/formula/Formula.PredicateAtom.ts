@@ -16,7 +16,7 @@ class PredicateAtom extends Formula {
    * @param {Term[]} terms
    */
   constructor(public name: string, public terms: Term[] = []) {
-    super([], "");
+    super([], "", "");
   }
 
   /**
@@ -67,6 +67,10 @@ class PredicateAtom extends Formula {
    */
   toString(): string {
     return `${this.name}(${this.terms.join(", ")})`;
+  }
+
+  toTex(): string {
+    return this.toString();
   }
 
   getSubFormulas(): Formula[] {

@@ -15,7 +15,7 @@ class Conjunction extends Formula {
    * @param {Formula} subRight
    */
   constructor(public subLeft: Formula, public subRight: Formula) {
-    super([subLeft, subRight], " ∧ ");
+    super([subLeft, subRight], " ∧ ", "\\land");
   }
 
   /**

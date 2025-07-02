@@ -16,7 +16,7 @@ class UniversalQuant extends QuantifiedFormula {
    * @param {Formula} subFormula
    */
   constructor(public variableName: string, public subFormula: Formula) {
-    super(variableName, subFormula, "∀");
+    super(variableName, subFormula, "∀", "\\forall");
   }
 
   /**

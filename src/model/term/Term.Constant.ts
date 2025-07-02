@@ -43,6 +43,10 @@ class Constant extends Term {
     return this.name;
   }
 
+  toTex(): string {
+    return this.toString();
+  }
+
   getVariables(): Set<Symbol> {
     return new Set();
   }

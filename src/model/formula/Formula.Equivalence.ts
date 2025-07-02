@@ -16,7 +16,7 @@ class Equivalence extends Formula {
    * @param {Formula} subRight
    */
   constructor(public subLeft: Formula, public subRight: Formula) {
-    super([subLeft, subRight], ", ");
+    super([subLeft, subRight], "↔", "\\leftrightarrow");
   }
 
   /**
@@ -37,6 +37,12 @@ class Equivalence extends Formula {
    */
   toString(): string {
     return `(${this.subLeft.toString()} ↔ ${this.subRight.toString()})`;
+  }
+
+  toTex(): string {
+    return `(${this.subLeft.toString()} ${
+      this.connective
+    } ${this.subRight.toString()})`;
   }
 
   getSubFormulas(): Formula[] {

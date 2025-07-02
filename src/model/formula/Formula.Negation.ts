@@ -15,7 +15,7 @@ class Negation extends Formula {
    * @param {Formula} subFormula
    */
   constructor(public subFormula: Formula) {
-    super([subFormula], ", ");
+    super([subFormula], "", "");
     this.subFormula = subFormula;
   }
 
@@ -36,6 +36,10 @@ class Negation extends Formula {
 
   toString(): string {
     return `¬${this.subFormula.toString()}`;
+  }
+
+  toTex(): string {
+    return `\\lnot${this.subFormula.toString()}`;
   }
 
   getSubFormulas() {

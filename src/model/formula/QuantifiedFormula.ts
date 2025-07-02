@@ -6,9 +6,10 @@ abstract class QuantifiedFormula extends Formula {
   constructor(
     public variableName: string,
     public subFormula: Formula,
-    public connective: string
+    public connective: string,
+    public connectiveTex: string
   ) {
-    super([subFormula], connective);
+    super([subFormula], connective, connectiveTex);
   }
 
   abstract eval(structure: Structure, e: Valuation): boolean;
@@ -23,6 +24,12 @@ abstract class QuantifiedFormula extends Formula {
     return `${this.connective}${
       this.variableName
     } ${this.subFormula.toString()}`;
+  }
+
+  toTex(): string {
+    return `${this.connectiveTex}${
+      this.variableName
+    } ${this.subFormula.toTex()}`;
   }
 
   getVariableName(): string {

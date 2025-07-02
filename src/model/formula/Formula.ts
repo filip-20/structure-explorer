@@ -23,7 +23,11 @@ export type SignedFormula = {
  * @extends Expression
  */
 abstract class Formula extends Expression {
-  constructor(protected subFormulas: Formula[], protected connective: string) {
+  constructor(
+    protected subFormulas: Formula[],
+    protected connective: string,
+    protected connectiveTex: string
+  ) {
     super();
   }
 
@@ -32,7 +36,11 @@ abstract class Formula extends Expression {
   }
 
   toString(): string {
-    return `(${this.getSubFormulas().join(this.connective)})`;
+    return `(${this.getSubFormulas().join(` ${this.connective} `)})`;
+  }
+
+  toTex(): string {
+    return `(${this.getSubFormulas().join(` ${this.connectiveTex} `)})`;
   }
 
   gameDepth(sign: boolean): number {
