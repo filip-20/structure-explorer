@@ -4,11 +4,13 @@ import StructureComponent from "./features/structure/StructureComponent";
 import VariablesComponent from "./features/variables/VariablesComponent";
 import { Col, Container, Row } from "react-bootstrap";
 import LanguageComponent from "./features/language/LanguageComponent";
+import GearButton from "./features/import/GearButton";
 
 function App() {
   return (
     <>
       <Container fluid>
+        <GearButton />
         <Row>
           <Col>
             <LanguageComponent />
