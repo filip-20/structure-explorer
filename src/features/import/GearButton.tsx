@@ -15,9 +15,13 @@ export default function GearButton() {
     >
       <Dropdown.Item> Import </Dropdown.Item>
       <Dropdown.Item> Export </Dropdown.Item>
-      <div className="px-3">
-        <Form.Check type="switch" id="custom-switch" label="Teacher mode" />
-      </div>
+
+      <Form.Switch
+        type="switch"
+        className="ms-3"
+        id="custom-switch"
+        label="Teacher mode"
+      />
       <Dropdown.Item> Lock to student mode </Dropdown.Item>
     </DropdownButton>
   );
