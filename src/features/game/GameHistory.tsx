@@ -12,6 +12,7 @@ import MessageBubble from "../../components_helper/MessageBubble";
 import { useEffect, useRef } from "react";
 import { selectValuation } from "../variables/variablesSlice";
 import EqualityAtom from "../../model/formula/Formula.EqualityAtom";
+import { InlineMath } from "react-katex";
 
 interface Props {
   id: number;
@@ -55,8 +56,8 @@ export default function GameHistory({ id }: Props) {
     bubbles.push({
       text: (
         <>
-          You assume that ℳ {sf?.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[
-          <var> e</var>
+          You assume that ℳ {sf?.sign ? " ⊨ " : " ⊭ "}{" "}
+          <InlineMath>{sf.formula.toTex()}</InlineMath>[<var> e</var>
           {valuationText} ]
         </>
       ),
@@ -93,7 +94,8 @@ export default function GameHistory({ id }: Props) {
           <>
             <strong>{satisfied ? "You win " : "You lose"}</strong>, ℳ
             {sf.sign === satisfied ? " ⊨ " : " ⊭ "}
-            {sf.formula.toString()}[<var> e</var> {valuationText}]{explanaiton}
+            <InlineMath>{sf.formula.toTex()}</InlineMath>[<var> e</var>{" "}
+            {valuationText}]{explanaiton}
           </>
         ),
         sender: "game",
@@ -112,7 +114,8 @@ export default function GameHistory({ id }: Props) {
               </>
             )}
             Your initial assumption that ℳ {data[0].sf.sign ? "⊨" : "⊭"}
-            {data[0].sf.formula.toString()}[<var> e</var> ] was
+            <InlineMath>{data[0].sf.formula.toTex()}</InlineMath>[<var> e</var>{" "}
+            ] was
             {originalGuess ? " correct." : " incorrect."}{" "}
             {originalGuess === true && satisfied === false && (
               <>
@@ -133,8 +136,8 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
-            Then ℳ {winFormula.sign ? "⊨" : "⊭"} {winFormula.formula.toString()}
-            [<var> e</var>
+            Then ℳ {winFormula.sign ? "⊨" : "⊭"}{" "}
+            <InlineMath>{winFormula.formula.toTex()}</InlineMath>[<var> e</var>
             {valuationText} ]
           </>
         ),
@@ -161,7 +164,8 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              ℳ {s.sign ? "⊨" : "⊭"} {s.formula.toString()}[<var> e</var>
+              ℳ {s.sign ? "⊨" : "⊭"}{" "}
+              <InlineMath>{s.formula.toTex()}</InlineMath>[<var> e</var>
               {valuationText} ]
             </>
           ),
@@ -174,8 +178,8 @@ export default function GameHistory({ id }: Props) {
         bubbles.push({
           text: (
             <>
-              ℳ {choice.sign ? "⊨" : "⊭"} {choice.formula.toString()}[
-              <var> e</var>
+              ℳ {choice.sign ? "⊨" : "⊭"}{" "}
+              <InlineMath>{choice.formula.toTex()}</InlineMath>[<var> e</var>
               {valuationText} ]
             </>
           ),
@@ -189,9 +193,10 @@ export default function GameHistory({ id }: Props) {
       bubbles.push({
         text: (
           <>
-            Then ℳ {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[
-            <var> e</var> {valuationText} ] also when we assign element{" "}
-            {winElement} to {sf.formula.variableName}
+            Then ℳ {sf.sign ? " ⊨ " : " ⊭ "}{" "}
+            <InlineMath>{sf.formula.toTex()}</InlineMath>[<var> e</var>{" "}
+            {valuationText} ] also when we assign element {winElement} to{" "}
+            {sf.formula.variableName}
           </>
         ),
         sender: "game",
@@ -211,7 +216,8 @@ export default function GameHistory({ id }: Props) {
           <>
             Which domain element should we assign to{" "}
             <var>{sf.formula.variableName}</var> to show that ℳ
-            {sf.sign ? " ⊨ " : " ⊭ "} {sf.formula.toString()}[<var> e</var>
+            {sf.sign ? " ⊨ " : " ⊭ "}{" "}
+            <InlineMath>{sf.formula.toTex()}</InlineMath>[<var> e</var>
             {valuationText} ]
           </>
         ),

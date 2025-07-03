@@ -1,4 +1,5 @@
 import { Button } from "react-bootstrap";
+import { InlineMath } from "react-katex";
 
 interface Props {
   id: number;
@@ -20,7 +21,7 @@ export default function ChoiceBubble({ choices, onclicks }: Props) {
                 onclicks[index]();
               }}
             >
-              {choice}
+              <InlineMath>{choice}</InlineMath>
             </Button>
           );
         })}

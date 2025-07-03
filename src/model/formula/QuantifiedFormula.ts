@@ -27,7 +27,7 @@ abstract class QuantifiedFormula extends Formula {
   }
 
   toTex(): string {
-    return `${this.connectiveTex}${
+    return `${this.connectiveTex} ${
       this.variableName
     } ${this.subFormula.toTex()}`;
   }
