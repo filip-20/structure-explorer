@@ -145,7 +145,6 @@ export const formulasSlice = createSlice({
     ) => {
       const { id, text } = action.payload;
       state.allFormulas[id].text = text;
-      state.allFormulas[id].gameChoices = [];
     },
 
     updateGuess: (

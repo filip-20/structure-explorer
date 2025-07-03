@@ -8,6 +8,8 @@ import {
   updateGuess,
   selectEvaluatedFormula,
   selectIsVerifiedGame,
+  selectGameResetIndex,
+  gameGoBack,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
@@ -17,7 +19,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import GameComponent from "../game/GameComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { selectParsedDomain } from "../structure/structureSlice";
 
 interface Props {
@@ -37,6 +39,12 @@ export default function FormulaComponent({ id, text, guess }: Props) {
   const domain = useAppSelector(selectParsedDomain);
 
   const isVerified = useAppSelector((state) => selectIsVerifiedGame(state, id));
+
+  const backIndex = useAppSelector((state) => selectGameResetIndex(state, id));
+
+  useEffect(() => {
+    dispatch(gameGoBack({ id, index: backIndex }));
+  });
 
   return (
     <>

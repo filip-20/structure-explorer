@@ -8,6 +8,7 @@ import { selectFormulas, type FormulaState, addFormula } from "./formulasSlice";
 import { InlineMath } from "react-katex";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import PrettifyButton from "./PrettifyButton";
 
 const help = (
   <>
@@ -112,6 +113,8 @@ export default function FormulaCard() {
           </Row>
         </Card.Header>
         <Card.Body>
+          {allFormulas.length > 0 && <PrettifyButton />}
+
           {allFormulas.map((formula: FormulaState, index: number) => (
             <FormulaComponent
               id={index}
