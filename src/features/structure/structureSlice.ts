@@ -8,6 +8,7 @@ import {
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {
   selectLanguage,
+  selectParsedConstants,
   selectParsedFunctions,
   selectParsedPredicates,
 } from "../language/languageSlice";
@@ -301,6 +302,39 @@ export const selectParsedFunction = createSelector(
 
       throw error;
     }
+  }
+);
+
+export const selectStructureErrors = createSelector(
+  [
+    (state: RootState) => state,
+    selectParsedConstants,
+    selectParsedPredicates,
+    selectParsedFunctions,
+    selectParsedDomain,
+  ],
+  (state, constants, predicates, functions, domain) => {
+    if (domain.error !== undefined) return false;
+
+    for (const name of constants.parsed ?? []) {
+      if (selectParsedConstant(state, name).error !== undefined) {
+        return false;
+      }
+    }
+
+    for (const [name, _] of predicates.parsed ?? []) {
+      if (selectParsedPredicate(state, name).error !== undefined) {
+        return false;
+      }
+    }
+
+    for (const [name, _] of functions.parsed ?? []) {
+      if (selectParsedFunction(state, name).error !== undefined) {
+        return false;
+      }
+    }
+
+    return true;
   }
 );
 

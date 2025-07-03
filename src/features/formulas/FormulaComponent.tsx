@@ -20,7 +20,11 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import GameComponent from "../game/GameComponent";
 import { useEffect, useState } from "react";
-import { selectParsedDomain } from "../structure/structureSlice";
+import {
+  selectParsedDomain,
+  selectStructureErrors,
+} from "../structure/structureSlice";
+import { selectParsedVariables } from "../variables/variablesSlice";
 
 interface Props {
   id: number;
@@ -37,10 +41,12 @@ export default function FormulaComponent({ id, text, guess }: Props) {
   const [begin, setBegin] = useState(false);
 
   const domain = useAppSelector(selectParsedDomain);
-
   const isVerified = useAppSelector((state) => selectIsVerifiedGame(state, id));
-
   const backIndex = useAppSelector((state) => selectGameResetIndex(state, id));
+  const structureErrors = useAppSelector(selectStructureErrors);
+  const variablesErrors = useAppSelector(selectParsedVariables);
+
+  const isPlayable = structureErrors && variablesErrors.error === undefined;
 
   useEffect(() => {
     dispatch(gameGoBack({ id, index: backIndex }));
@@ -125,7 +131,12 @@ export default function FormulaComponent({ id, text, guess }: Props) {
           <Col xs="auto">
             <Button
               variant={isVerified ? "success" : "danger"}
-              disabled={!!error || guess === null || domain.error !== undefined}
+              disabled={
+                !!error ||
+                guess === null ||
+                domain.error !== undefined ||
+                isPlayable === false
+              }
               onClick={() => {
                 setBegin(!begin);
               }}
@@ -138,9 +149,14 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             </Button>
           </Col>
         </Row>
-        {begin && guess !== null && formula && domain.error === undefined && (
-          <GameComponent id={id} guess={guess} originalFormula={formula} />
-        )}
+        {console.log(isPlayable)}
+        {begin &&
+          guess !== null &&
+          formula &&
+          domain.error === undefined &&
+          isPlayable === true && (
+            <GameComponent id={id} guess={guess} originalFormula={formula} />
+          )}
       </Form>
     </>
   );
