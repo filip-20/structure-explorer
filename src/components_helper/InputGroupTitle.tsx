@@ -1,5 +1,5 @@
 import type { ChangeEvent, ReactNode } from "react";
-import { Form, InputGroup, Col } from "react-bootstrap";
+import { Form, InputGroup, Col, Button } from "react-bootstrap";
 import { SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import ErrorFeedback from "./ErrorFeedback";
 
@@ -44,6 +44,7 @@ export default function InputGroupTitle({
         />
 
         {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
+        {/* <Button variant="secondary">Lock</Button> */}
 
         <ErrorFeedback error={error} text={text}></ErrorFeedback>
       </InputGroup>

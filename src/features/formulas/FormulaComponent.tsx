@@ -78,6 +78,8 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
+            {/* <Button variant="secondary">Lock</Button> */}
+
             <ErrorFeedback error={error} text={text}></ErrorFeedback>
           </InputGroup>
         </Row>
@@ -118,6 +120,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               <InputGroup.Text>
                 <InlineMath>{String.raw`\varphi_{${real_id}}[e]`}</InlineMath>
               </InputGroup.Text>
+              {/* <Button variant="secondary">Lock</Button> */}
 
               <Form.Control.Feedback type="valid">
                 Verified!

@@ -6,10 +6,15 @@ import Form from "react-bootstrap/Form";
 import { useRef } from "react";
 
 import { exportAppState, importAppState } from "./importThunk";
-import { useAppDispatch } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+  selectTeacherMode,
+  updateTeacherMode,
+} from "../teacherMode/teacherModeslice";
 
 export default function GearButton() {
   const dispatch = useAppDispatch();
+  const teacherMode = useAppSelector(selectTeacherMode);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImportClick = () => {
@@ -46,13 +51,21 @@ export default function GearButton() {
           Export
         </Dropdown.Item>
 
-        <Form.Switch
-          type="switch"
-          className="ms-3"
-          id="custom-switch"
-          label="Teacher mode"
-        />
-        <Dropdown.Item>Lock to student mode</Dropdown.Item>
+        {teacherMode !== undefined && (
+          <Form.Switch
+            checked={teacherMode}
+            type="switch"
+            className="ms-3"
+            id="custom-switch"
+            label="Teacher mode"
+            onChange={(e) => dispatch(updateTeacherMode(e.target.checked))}
+          />
+        )}
+        {teacherMode !== undefined && (
+          <Dropdown.Item onClick={() => dispatch(updateTeacherMode(undefined))}>
+            Lock to student mode
+          </Dropdown.Item>
+        )}
       </DropdownButton>
 
       <Form.Control
