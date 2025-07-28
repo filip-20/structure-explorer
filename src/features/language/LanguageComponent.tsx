@@ -4,16 +4,22 @@ import InputGroupTitle from "../../components_helper/InputGroupTitle";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
 import {
-  selectConstants,
+  selectConstantsText,
   selectParsedConstants,
   selectParsedFunctions,
   selectParsedPredicates,
-  selectFunctions,
-  selectPredicates,
+  selectFunctionsText,
+  selectPredicatesText,
   updateConstants,
   updateFunctions,
   updatePredicates,
   selectSymbolsClash,
+  selectConstantsLock,
+  selectPredicatesLock,
+  selectFunctionsLock,
+  lockPredicates,
+  lockConstants,
+  lockFunctions,
 } from "./languageSlice";
 
 const help = (
@@ -39,9 +45,12 @@ const help = (
 
 export default function LanguageComponent() {
   const dispatch = useAppDispatch();
-  const constantsText = useAppSelector(selectConstants);
-  const predicatesText = useAppSelector(selectPredicates);
-  const languageText = useAppSelector(selectFunctions);
+  const constantsText = useAppSelector(selectConstantsText);
+  const constantsLock = useAppSelector(selectConstantsLock);
+  const predicatesText = useAppSelector(selectPredicatesText);
+  const predicatesLock = useAppSelector(selectPredicatesLock);
+  const functionsText = useAppSelector(selectFunctionsText);
+  const functionsLock = useAppSelector(selectFunctionsLock);
   const constantsErorrs = useAppSelector(selectParsedConstants);
   const predicatesErorrs = useAppSelector(selectParsedPredicates);
   const functionsErrors = useAppSelector(selectParsedFunctions);
@@ -71,6 +80,8 @@ export default function LanguageComponent() {
               dispatch(updateConstants(e.target.value));
             }}
             error={constantsErorrs.error}
+            lockChecker={constantsLock}
+            locker={() => dispatch(lockConstants())}
           ></InputGroupTitle>
 
           <InputGroupTitle
@@ -86,6 +97,8 @@ export default function LanguageComponent() {
               dispatch(updatePredicates(e.target.value));
             }}
             error={predicatesErorrs.error}
+            lockChecker={predicatesLock}
+            locker={() => dispatch(lockPredicates())}
           ></InputGroupTitle>
 
           <InputGroupTitle
@@ -96,11 +109,13 @@ export default function LanguageComponent() {
             }
             suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Functions"
-            text={languageText}
+            text={functionsText}
             onChange={(e) => {
               dispatch(updateFunctions(e.target.value));
             }}
             error={functionsErrors.error}
+            lockChecker={functionsLock}
+            locker={() => dispatch(lockFunctions())}
           ></InputGroupTitle>
 
           {symbolsClash && <div className="text-danger">{symbolsClash}</div>}

@@ -4,12 +4,15 @@ import type { RootState } from "../../app/store";
 import { parseValuation, SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import { selectLanguage } from "../language/languageSlice";
 import { selectParsedDomain } from "../structure/structureSlice";
+
 export interface VariablesState {
   text: string;
+  locked: boolean;
 }
 
 const initialState: VariablesState = {
   text: "",
+  locked: false,
 };
 
 export const variablesSlice = createSlice({
@@ -22,17 +25,22 @@ export const variablesSlice = createSlice({
     updateVariables: (state, action: PayloadAction<string>) => {
       state.text = action.payload;
     },
+    lockVariables: (state) => {
+      state.locked = !state.locked;
+    },
   },
 });
 
-export const { updateVariables, importVariablesState } = variablesSlice.actions;
+export const { updateVariables, importVariablesState, lockVariables } =
+  variablesSlice.actions;
 
 export default variablesSlice.reducer;
 
-export const selectVariables = (state: RootState) => state.variables.text;
+export const selectVariablesText = (state: RootState) => state.variables.text;
+export const selectVariablesLock = (state: RootState) => state.variables.locked;
 
 export const selectParsedVariables = createSelector(
-  [selectVariables, selectLanguage, selectParsedDomain],
+  [selectVariablesText, selectLanguage, selectParsedDomain],
   (variables, language, domain) => {
     try {
       const vars = parseValuation(variables, language.getParserLanguage());

@@ -35,6 +35,8 @@ import type { ReactNode } from "react";
 export interface FormulaState {
   text: string;
   guess: boolean | null;
+  locked: boolean;
+  lockedGuess: boolean;
   gameChoices: {
     formula?: 0 | 1;
     element?: string;
@@ -51,7 +53,13 @@ const initialState: FormulasState = {
 };
 
 function newFormulaState() {
-  return { text: "", guess: null, gameChoices: [] };
+  return {
+    text: "",
+    locked: false,
+    lockedGuess: false,
+    guess: null,
+    gameChoices: [],
+  };
 }
 
 export const formulasSlice = createSlice({
@@ -64,6 +72,16 @@ export const formulasSlice = createSlice({
 
     addFormula: (state) => {
       state.allFormulas.push(newFormulaState());
+    },
+
+    lockFormula: (state, action: PayloadAction<number>) => {
+      state.allFormulas[action.payload].locked =
+        !state.allFormulas[action.payload].locked;
+    },
+
+    lockFormulaGuess: (state, action: PayloadAction<number>) => {
+      state.allFormulas[action.payload].lockedGuess =
+        !state.allFormulas[action.payload].lockedGuess;
     },
 
     gameGoBack: (
@@ -170,6 +188,8 @@ export const {
   updateText,
   updateGuess,
   importFormulasState,
+  lockFormula,
+  lockFormulaGuess,
 } = formulasSlice.actions;
 
 export const selectFormulaGuess = (state: RootState, id: number) =>
@@ -181,6 +201,12 @@ export const selectFormulaChoices = (state: RootState, id: number) =>
 export const selectFormulas = (state: RootState) => state.formulas.allFormulas;
 export const selectFormula = (state: RootState, id: number) =>
   state.formulas.allFormulas[id];
+
+export const selectFormulaLock = (state: RootState, id: number) =>
+  selectFormula(state, id).locked;
+
+export const selectFormulaGuessLock = (state: RootState, id: number) =>
+  selectFormula(state, id).lockedGuess;
 
 export const selectEvaluatedFormula = createSelector(
   [selectLanguage, selectStructure, selectFormula, selectValuation],

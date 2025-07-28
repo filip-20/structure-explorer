@@ -16,6 +16,10 @@ import {
   selectIpName,
   selectIfName,
   selectParsedFunction,
+  lockDomain,
+  lockInterpretationConstants,
+  lockInterpretationPredicates,
+  lockFunctionSymbols,
 } from "./structureSlice";
 import {
   selectParsedConstants,
@@ -77,11 +81,12 @@ const help = (
 
 export default function StructureComponent() {
   const dispatch = useAppDispatch();
-  const domainText = useAppSelector(selectDomain);
+  const domain = useAppSelector(selectDomain);
   const domainError = useAppSelector(selectParsedDomain);
   const constants = useAppSelector(selectParsedConstants);
   const predicates = useAppSelector(selectParsedPredicates);
   const functions = useAppSelector(selectParsedFunctions);
+
   return (
     <>
       <Card className="mb-3">
@@ -103,10 +108,12 @@ export default function StructureComponent() {
             prefix={<InlineMath>{String.raw`\mathcal{D} = \{`}</InlineMath>}
             suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
             placeholder="Domain"
-            text={domainText}
+            text={domain.text}
             onChange={(e) => {
               dispatch(updateDomain(e.target.value));
             }}
+            locker={() => dispatch(lockDomain())}
+            lockChecker={domain.locked}
             error={domainError.error}
           ></InputGroupTitle>
           {constants.parsed && constants.parsed.size > 0 && (
@@ -126,6 +133,9 @@ export default function StructureComponent() {
                     value: e.target.value,
                   })
                 );
+              }}
+              locker={() => {
+                dispatch(lockInterpretationConstants({ key: name }));
               }}
             ></InterpretationInput>
           ))}
@@ -147,6 +157,9 @@ export default function StructureComponent() {
                   })
                 );
               }}
+              locker={() =>
+                dispatch(lockInterpretationPredicates({ key: name }))
+              }
             ></InterpretationInput>
           ))}
           {functions.parsed && functions.parsed.size > 0 && (
@@ -167,6 +180,9 @@ export default function StructureComponent() {
                 );
               }}
               parser={selectParsedFunction}
+              locker={() => {
+                dispatch(lockFunctionSymbols({ key: from }));
+              }}
             ></InterpretationInput>
           ))}
         </Card.Body>

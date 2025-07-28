@@ -2,6 +2,8 @@ import type { ChangeEvent, ReactNode } from "react";
 import { Form, InputGroup, Col, Button } from "react-bootstrap";
 import { SyntaxError } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import ErrorFeedback from "./ErrorFeedback";
+import { useAppSelector } from "../app/hooks";
+import { selectTeacherMode } from "../features/teacherMode/teacherModeslice";
 
 interface Props {
   label: string;
@@ -11,6 +13,8 @@ interface Props {
   placeholder: string;
   text: string;
   onChange(event: ChangeEvent<HTMLInputElement>): void;
+  locker: () => void;
+  lockChecker: boolean | undefined;
   error?: Error | SyntaxError;
 }
 
@@ -22,8 +26,11 @@ export default function InputGroupTitle({
   placeholder,
   text,
   onChange,
+  locker,
+  lockChecker,
   error,
 }: Props) {
+  const teacherMode = useAppSelector(selectTeacherMode);
   return (
     <>
       {label != "" && (
@@ -41,10 +48,15 @@ export default function InputGroupTitle({
           onChange={onChange}
           id={`${id}-${label.toLowerCase()}`}
           isInvalid={!!error}
+          disabled={lockChecker === true}
         />
 
         {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
-        {/* <Button variant="secondary">Lock</Button> */}
+        {teacherMode === true && (
+          <Button variant="secondary" onClick={() => locker()}>
+            Lock
+          </Button>
+        )}
 
         <ErrorFeedback error={error} text={text}></ErrorFeedback>
       </InputGroup>

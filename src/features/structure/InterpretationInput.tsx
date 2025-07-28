@@ -12,6 +12,7 @@ interface Props {
   selector: (state: RootState, name: string) => InterpretationState;
   parser: (state: RootState, name: string) => { error?: Error };
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  locker: () => void;
 }
 
 export default function InterpretationInput({
@@ -20,6 +21,7 @@ export default function InterpretationInput({
   selector,
   parser,
   onChange,
+  locker,
 }: Props) {
   const interpretation = useAppSelector((state) => selector(state, name));
   const { error } = useAppSelector((state) => parser(state, name));
@@ -46,6 +48,8 @@ export default function InterpretationInput({
         }
         placeholder=""
         text={interpretation?.text ?? ""}
+        lockChecker={interpretation?.locked ?? false}
+        locker={locker}
         onChange={onChange}
         error={error}
       ></InputGroupTitle>

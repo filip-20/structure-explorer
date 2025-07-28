@@ -10,15 +10,24 @@ import {
 import Language from "../../model/Language";
 
 export interface LanguageState {
-  constants: string;
-  predicates: string;
-  functions: string;
+  constants: { text: string; locked: boolean };
+  predicates: { text: string; locked: boolean };
+  functions: { text: string; locked: boolean };
 }
 
 const initialState: LanguageState = {
-  constants: "",
-  predicates: "",
-  functions: "",
+  constants: {
+    text: "",
+    locked: false,
+  },
+  predicates: {
+    text: "",
+    locked: false,
+  },
+  functions: {
+    text: "",
+    locked: false,
+  },
 };
 
 export const languageSlice = createSlice({
@@ -30,15 +39,27 @@ export const languageSlice = createSlice({
     },
 
     updateConstants: (state, action: PayloadAction<string>) => {
-      state.constants = action.payload;
+      state.constants.text = action.payload;
+    },
+
+    lockConstants: (state) => {
+      state.constants.locked = !state.constants.locked;
     },
 
     updatePredicates: (state, action: PayloadAction<string>) => {
-      state.predicates = action.payload;
+      state.predicates.text = action.payload;
+    },
+
+    lockPredicates: (state) => {
+      state.predicates.locked = !state.predicates.locked;
     },
 
     updateFunctions: (state, action: PayloadAction<string>) => {
-      state.functions = action.payload;
+      state.functions.text = action.payload;
+    },
+
+    lockFunctions: (state) => {
+      state.functions.locked = !state.functions.locked;
     },
   },
 });
@@ -48,15 +69,27 @@ export const {
   updatePredicates,
   updateFunctions,
   importLanguageState,
+  lockConstants,
+  lockFunctions,
+  lockPredicates,
 } = languageSlice.actions;
 
 export default languageSlice.reducer;
-export const selectConstants = (state: RootState) => state.language.constants;
-export const selectPredicates = (state: RootState) => state.language.predicates;
-export const selectFunctions = (state: RootState) => state.language.functions;
+export const selectConstantsText = (state: RootState) =>
+  state.language.constants.text;
+export const selectConstantsLock = (state: RootState) =>
+  state.language.constants.locked;
+export const selectPredicatesText = (state: RootState) =>
+  state.language.predicates.text;
+export const selectPredicatesLock = (state: RootState) =>
+  state.language.predicates.locked;
+export const selectFunctionsText = (state: RootState) =>
+  state.language.functions.text;
+export const selectFunctionsLock = (state: RootState) =>
+  state.language.functions.locked;
 
 export const selectParsedConstants = createSelector(
-  [selectConstants],
+  [selectConstantsText],
   (constants) => {
     try {
       const parsed = parseConstants(constants);
@@ -77,7 +110,7 @@ export const selectParsedConstants = createSelector(
   }
 );
 export const selectParsedPredicates = createSelector(
-  [selectPredicates],
+  [selectPredicatesText],
   (predicates) => {
     try {
       const parsed = parsePredicates(predicates);
@@ -104,7 +137,7 @@ export const selectParsedPredicates = createSelector(
 );
 
 export const selectParsedFunctions = createSelector(
-  [selectFunctions],
+  [selectFunctionsText],
   (functions) => {
     try {
       const parsed = parseFunctions(functions);

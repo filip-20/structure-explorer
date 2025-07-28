@@ -4,8 +4,10 @@ import InputGroupTitle from "../../components_helper/InputGroupTitle";
 import { InlineMath } from "react-katex";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
+  lockVariables,
   selectParsedVariables,
-  selectVariables,
+  selectVariablesLock,
+  selectVariablesText,
   updateVariables,
 } from "./variablesSlice";
 
@@ -30,7 +32,8 @@ const help = (
 );
 export default function VariablesComponent() {
   const dispatch = useAppDispatch();
-  const text = useAppSelector(selectVariables);
+  const text = useAppSelector(selectVariablesText);
+  const lock = useAppSelector(selectVariablesLock);
   const { error } = useAppSelector(selectParsedVariables);
   return (
     <>
@@ -53,6 +56,8 @@ export default function VariablesComponent() {
             placeholder="assignments"
             onChange={(e) => dispatch(updateVariables(e.target.value))}
             error={error}
+            lockChecker={lock}
+            locker={() => dispatch(lockVariables())}
           ></InputGroupTitle>
         </Card.Body>
       </Card>

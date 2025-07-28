@@ -10,6 +10,10 @@ import {
   selectIsVerifiedGame,
   selectGameResetIndex,
   gameGoBack,
+  selectFormulaLock,
+  selectFormulaGuessLock,
+  lockFormula,
+  lockFormulaGuess,
 } from "./formulasSlice";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { InlineMath } from "react-katex";
@@ -25,6 +29,7 @@ import {
   selectStructureErrors,
 } from "../structure/structureSlice";
 import { selectParsedVariables } from "../variables/variablesSlice";
+import { selectTeacherMode } from "../teacherMode/teacherModeslice";
 
 interface Props {
   id: number;
@@ -45,6 +50,11 @@ export default function FormulaComponent({ id, text, guess }: Props) {
   const backIndex = useAppSelector((state) => selectGameResetIndex(state, id));
   const structureErrors = useAppSelector(selectStructureErrors);
   const variablesErrors = useAppSelector(selectParsedVariables);
+  const teacherMode = useAppSelector(selectTeacherMode);
+  const locked = useAppSelector((state) => selectFormulaLock(state, id));
+  const lockedGuess = useAppSelector((state) =>
+    selectFormulaGuessLock(state, id)
+  );
 
   const isPlayable = structureErrors && variablesErrors.error === undefined;
 
@@ -64,6 +74,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               placeholder="Formula"
               aria-label="Formula"
               aria-describedby="basic-addon2"
+              disabled={locked === true}
               value={text}
               onChange={(e) => {
                 dispatch(updateText({ id: id, text: e.target.value }));
@@ -74,11 +85,19 @@ export default function FormulaComponent({ id, text, guess }: Props) {
             <Button
               variant="outline-danger"
               id="button-addon2"
+              disabled={locked === true}
               onClick={() => dispatch(removeFormula(id))}
             >
               <FontAwesomeIcon icon={faTrash} />
             </Button>
-            {/* <Button variant="secondary">Lock</Button> */}
+            {teacherMode === true && (
+              <Button
+                variant="secondary"
+                onClick={() => dispatch(lockFormula(id))}
+              >
+                Lock
+              </Button>
+            )}
 
             <ErrorFeedback error={error} text={text}></ErrorFeedback>
           </InputGroup>
@@ -109,6 +128,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                     })
                   );
                 }}
+                disabled={lockedGuess === true}
                 isValid={isVerified && guess !== null}
                 isInvalid={!isVerified && guess !== null}
               >
@@ -120,7 +140,14 @@ export default function FormulaComponent({ id, text, guess }: Props) {
               <InputGroup.Text>
                 <InlineMath>{String.raw`\varphi_{${real_id}}[e]`}</InlineMath>
               </InputGroup.Text>
-              {/* <Button variant="secondary">Lock</Button> */}
+              {teacherMode === true && (
+                <Button
+                  onClick={() => dispatch(lockFormulaGuess(id))}
+                  variant="secondary"
+                >
+                  Lock
+                </Button>
+              )}
 
               <Form.Control.Feedback type="valid">
                 Verified!

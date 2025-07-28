@@ -17,17 +17,18 @@ import type { Symbol } from "../../model/Language";
 
 export interface InterpretationState {
   text: string;
+  locked: boolean;
 }
 
 export interface StructureState {
-  domain: string;
+  domain: { text: string; locked: boolean };
   iC: Record<string, InterpretationState>;
   iP: Record<string, InterpretationState>;
   iF: Record<string, InterpretationState>;
 }
 
 const initialState: StructureState = {
-  domain: "",
+  domain: { text: "", locked: false },
   iC: {},
   iP: {},
   iF: {},
@@ -41,28 +42,80 @@ export const structureSlice = createSlice({
       return JSON.parse(action.payload);
     },
     updateDomain: (state, action: PayloadAction<string>) => {
-      state.domain = action.payload;
+      state.domain.text = action.payload;
     },
+
+    lockDomain: (state) => {
+      state.domain.locked = !state.domain.locked;
+    },
+
     updateInterpretationConstants: (
       state,
       action: PayloadAction<{ key: string; value: string }>
     ) => {
       const { key, value } = action.payload;
-      state.iC[key] = { text: value };
+      if (state.iC[key] === undefined) {
+        state.iC[key] = { text: value, locked: false };
+      }
+
+      state.iC[key].text = value;
     },
+
+    lockInterpretationConstants: (
+      state,
+      action: PayloadAction<{ key: string }>
+    ) => {
+      const { key } = action.payload;
+      if (state.iC[key] === undefined) {
+        state.iC[key] = { text: "", locked: false };
+      }
+
+      state.iC[key].locked = !state.iC[key].locked;
+    },
+
     updateInterpretationPredicates: (
       state,
       action: PayloadAction<{ key: string; value: string }>
     ) => {
       const { key, value } = action.payload;
-      state.iP[key] = { text: value };
+      if (state.iP[key] === undefined) {
+        state.iP[key] = { text: value, locked: false };
+      }
+
+      state.iP[key].text = value;
     },
+
+    lockInterpretationPredicates: (
+      state,
+      action: PayloadAction<{ key: string }>
+    ) => {
+      const { key } = action.payload;
+      if (state.iP[key] === undefined) {
+        state.iP[key] = { text: "", locked: false };
+      }
+
+      state.iP[key].locked = !state.iP[key].locked;
+    },
+
     updateFunctionSymbols: (
       state,
       action: PayloadAction<{ key: string; value: string }>
     ) => {
       const { key, value } = action.payload;
-      state.iF[key] = { text: value };
+      if (state.iF[key] === undefined) {
+        state.iF[key] = { text: value, locked: false };
+      }
+
+      state.iF[key].text = value;
+    },
+
+    lockFunctionSymbols: (state, action: PayloadAction<{ key: string }>) => {
+      const { key } = action.payload;
+      if (state.iF[key] === undefined) {
+        state.iF[key] = { text: "", locked: false };
+      }
+
+      state.iF[key].locked = !state.iF[key].locked;
     },
   },
 });
@@ -73,9 +126,17 @@ export const {
   updateInterpretationPredicates,
   updateFunctionSymbols,
   importStructureState,
+  lockDomain,
+  lockInterpretationConstants,
+  lockInterpretationPredicates,
+  lockFunctionSymbols,
 } = structureSlice.actions;
 
 export const selectDomain = (state: RootState) => state.structure.domain;
+export const selectDomainText = (state: RootState) =>
+  state.structure.domain.text;
+export const selectDomainLock = (state: RootState) =>
+  state.structure.domain.locked;
 
 export const selectIc = (state: RootState) => state.structure.iC;
 export const selectIcName = (state: RootState, name: string) =>
@@ -89,23 +150,26 @@ export const selectIf = (state: RootState) => state.structure.iF;
 export const selectIfName = (state: RootState, name: string) =>
   state.structure.iF[name];
 
-export const selectParsedDomain = createSelector([selectDomain], (domain) => {
-  try {
-    let parsedDomain = parseDomain(domain);
-    if (parsedDomain.length === 0)
-      return {
-        error: new Error("Domain cannot be empty"),
-      };
+export const selectParsedDomain = createSelector(
+  [selectDomainText],
+  (domain) => {
+    try {
+      let parsedDomain = parseDomain(domain);
+      if (parsedDomain.length === 0)
+        return {
+          error: new Error("Domain cannot be empty"),
+        };
 
-    return { parsed: parsedDomain };
-  } catch (error) {
-    if (error instanceof SyntaxError) {
-      return { error: error };
+      return { parsed: parsedDomain };
+    } catch (error) {
+      if (error instanceof SyntaxError) {
+        return { error: error };
+      }
+
+      throw error;
     }
-
-    throw error;
   }
-});
+);
 
 export const selectParsedConstant = createSelector(
   [selectIcName, selectParsedDomain],
