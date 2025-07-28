@@ -54,7 +54,7 @@ export default function InputGroupTitle({
         {suffix && <InputGroup.Text>{suffix}</InputGroup.Text>}
         {teacherMode === true && (
           <Button variant="secondary" onClick={() => locker()}>
-            Lock
+            {`${lockChecker === true ? "Unlock" : "Lock"}`}
           </Button>
         )}
 
