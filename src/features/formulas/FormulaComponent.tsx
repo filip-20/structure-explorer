@@ -95,7 +95,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                 variant="secondary"
                 onClick={() => dispatch(lockFormula(id))}
               >
-                Lock
+                {locked === true ? "Unlock" : "Lock"}
               </Button>
             )}
 
@@ -145,7 +145,7 @@ export default function FormulaComponent({ id, text, guess }: Props) {
                   onClick={() => dispatch(lockFormulaGuess(id))}
                   variant="secondary"
                 >
-                  Lock
+                  {lockedGuess === true ? "Unlock" : "Lock"}
                 </Button>
               )}
 

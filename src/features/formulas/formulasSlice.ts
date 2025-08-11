@@ -560,14 +560,18 @@ export const selectGameResetIndex = createSelector(
         return index - 1;
       }
 
-      const prevWinningFormula =
-        prev.type === "alpha" || prev.type === "beta"
-          ? prev.sf.formula.winningSubformulas(
-              prev.sf.sign,
-              structure,
-              prev.valuation
-            )[0]
-          : undefined;
+      let prevWinningFormula = undefined;
+
+      try {
+        prevWinningFormula =
+          prev.type === "alpha" || prev.type === "beta"
+            ? prev.sf.formula.winningSubformulas(
+                prev.sf.sign,
+                structure,
+                prev.valuation
+              )[0]
+            : undefined;
+      } catch (error) {}
 
       const prevWinningElementValue =
         (prev.type === "gamma" || prev.type === "delta") &&
@@ -591,6 +595,7 @@ export const selectGameResetIndex = createSelector(
         : undefined;
       const currentFormulaStr = sf.formula.signedFormulaToString(sf.sign);
       if (
+        prevWinningFormula &&
         prevWinningFormulaStr !== currentFormulaStr &&
         prev.sf.formula.eval(structure, prev.valuation) !== prev.sf.sign &&
         prev.type === "alpha"
