@@ -554,6 +554,7 @@ export const selectGameResetIndex = createSelector(
       if (
         choices[index - 1] &&
         choices[index - 1].element !== undefined &&
+        domain.error === undefined &&
         domain.parsed &&
         domain.parsed.includes(choices[index - 1].element!) === false
       ) {
@@ -582,6 +583,18 @@ export const selectGameResetIndex = createSelector(
               prev.valuation
             )[0]
           : undefined;
+
+      const prevWinningElementValues =
+        (prev.type === "gamma" || prev.type === "delta") &&
+        prev.sf.formula instanceof QuantifiedFormula
+          ? prev.sf.formula.winningElements(
+              prev.sf.sign,
+              structure,
+              prev.valuation
+            )
+          : undefined;
+
+      console.log(prevWinningElementValues);
 
       const prevVariableName =
         prev.sf.formula instanceof QuantifiedFormula

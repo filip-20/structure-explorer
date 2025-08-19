@@ -14,13 +14,18 @@ export const teacherModeSlice = createSlice({
   name: "teacherMode",
   initialState,
   reducers: {
+    importTeacherMode: (_state, action: PayloadAction<string>) => {
+      return JSON.parse(action.payload);
+    },
+
     updateTeacherMode: (state, action: PayloadAction<boolean | undefined>) => {
       state.teacherMode = action.payload;
     },
   },
 });
 
-export const { updateTeacherMode } = teacherModeSlice.actions;
+export const { updateTeacherMode, importTeacherMode } =
+  teacherModeSlice.actions;
 
 export const selectTeacherMode = (state: RootState) =>
   state.teacherMode.teacherMode;
